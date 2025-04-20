@@ -41,6 +41,10 @@ static class DependencyInjectionClassEmitter
 		if (string.IsNullOrWhiteSpace(classNameToGenerate))
 			classNameToGenerate = implementationClassName + "DIExtension";
 
+		var classAccessModifier = (attribute.DependencyInjectionClassIsPublic.Value ?? false)
+			? "public static"
+			: "static";
+
 		logger?.Debug($"Generating service dependency class {classNameToGenerate} for: {fullyQualifiedNamespace}{sourceInterfaceName}");
 
 		context.CancellationToken.ThrowIfCancellationRequested();
@@ -54,7 +58,7 @@ static class DependencyInjectionClassEmitter
 		builder
 			.CodeGen(1)
 			.Append(1, "[global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never)]")
-			.Append(1, "static class ", withNewLine: false)
+			.Append(1, $"{classAccessModifier} class ", withNewLine: false)
 			.Append(classNameToGenerate)
 			.AppendLine()
 			.Append(1, '{')

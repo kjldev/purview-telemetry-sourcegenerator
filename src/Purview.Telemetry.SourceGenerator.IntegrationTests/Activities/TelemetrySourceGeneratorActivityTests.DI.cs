@@ -118,4 +118,33 @@ public interface ITestActivities {
 		// Assert
 		await TestHelpers.Verify(generationResult);
 	}
+
+	[Fact]
+	public async Task Generate_GivenAssemblyEnableDIAndClassIsPublic_GeneratesActivity()
+	{
+		// Arrange
+		const string basicActivity = @"
+using Purview.Telemetry.Activities;
+using System.Diagnostics;
+
+[assembly: TelemetryGeneration(GenerateDependencyExtension = true, DependencyInjectionClassIsPublic = true)]
+
+namespace Testing;
+
+[ActivitySource(""testing-activity-source"")]
+public interface ITestActivities {
+	[Activity]
+	Activity? Activity([Baggage]string stringParam, [Tag]int intParam, bool boolParam);
+
+	[Event]
+	void Event(Activity? activity, [Baggage]string stringParam, [Tag]int intParam, bool boolParam);
+}
+";
+
+		// Act
+		var generationResult = await GenerateAsync(basicActivity, disableDependencyInjection: false);
+
+		// Assert
+		await TestHelpers.Verify(generationResult);
+	}
 }
