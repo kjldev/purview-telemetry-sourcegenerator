@@ -8,5 +8,5 @@ record TagOrBaggageAttributeRecord(
 record TelemetryGenerationAttributeRecord(
 	AttributeValue<bool> GenerateDependencyExtension,
 	AttributeStringValue ClassName,
-	AttributeStringValue DependencyInjectionClassName
-);
+	AttributeStringValue DependencyInjectionClassName,
+	AttributeValue<bool> DependencyInjectionClassIsPublic);

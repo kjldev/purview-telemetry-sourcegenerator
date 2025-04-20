@@ -12,10 +12,6 @@
     <File Path=".build-system/Directory.Build.props" />
     <File Path=".build-system/Directory.Build.targets" />
   </Folder>
-  <Folder Name="/Solution Items/.github/" Id="bf8fdaac-1360-8f30-b285-60d9d37e7330" />
-  <Folder Name="/Solution Items/.github/workflows/" Id="844ea37f-fb6c-50a6-2124-643f6f5b2f36">
-    <File Path="../.github/workflows/publish.yml" />
-  </Folder>
   <Project Path="Purview.Telemetry.SourceGenerator.IntegrationTests/Purview.Telemetry.SourceGenerator.IntegrationTests.csproj" />
   <Project Path="Purview.Telemetry.SourceGenerator/Purview.Telemetry.SourceGenerator.csproj" />
 </Solution>

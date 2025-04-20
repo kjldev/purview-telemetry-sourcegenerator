@@ -75,4 +75,9 @@ sealed class TelemetryGenerationAttribute : global::System.Attribute
 	/// Optionally specifies the name of the dependency injection class to generation.
 	/// </summary>
 	public string? DependencyInjectionClassName { get; set; }
+
+	/// <summary>
+	/// Determines if the generated dependency injection class is generated as public. Defaults to false (internal).
+	/// </summary>
+	public bool DependencyInjectionClassIsPublic { get; set; }
 }

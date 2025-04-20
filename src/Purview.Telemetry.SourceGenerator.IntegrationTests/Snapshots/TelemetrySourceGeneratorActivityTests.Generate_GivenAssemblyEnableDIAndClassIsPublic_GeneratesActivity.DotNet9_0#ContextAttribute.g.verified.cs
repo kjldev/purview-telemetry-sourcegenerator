@@ -19,7 +19,7 @@ namespace Purview.Telemetry.Activities;
 /// Determines if the methods parameters should be
 /// added to the current <see cref="global::System.Diagnostics.Activity"/>, using
 /// either the <see cref="global::Purview.Telemetry.TagAttribute"/>,
-/// the <see cref="global::Purview.Telemetry.BaggageAttribute"/> or inferred.
+/// the <see cref="global::Purview.Telemetry.Activities.BaggageAttribute"/> or inferred.
 /// </summary>
 [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 [global::System.AttributeUsage(global::System.AttributeTargets.Method, AllowMultiple = false)]

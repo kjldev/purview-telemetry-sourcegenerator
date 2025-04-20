@@ -41,10 +41,10 @@ sealed class ExpandEnumerableAttribute : global::System.Attribute
 
 	/// <summary>
 	/// Optional. Determines the number of the elements to render in the logging
-	/// properties. If the value is <code>null</code>, then there is no limit to the
-	/// number of elements to include. However, this is NOT recommended.
+	/// properties. It is NOT recommended to use large numbers here, as it can
+	/// negatively impact performance.
 	/// </summary>
-	public int? MaximumValueCount { get; set; }
+	public int MaximumValueCount { get; set; }
 }
 
 #endif

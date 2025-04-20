@@ -63,8 +63,8 @@ sealed class ActivitySourceAttribute : global::System.Attribute
 	public string? BaggageAndTagPrefix { get; set; }
 
 	/// <summary>
-	/// Determines if the <see cref="Name"/> (or <see cref="global::Purview.Activities.ActivitySourceGenerationAttribute.BaggageAndTagPrefix"/>)
-	/// is used as a prefix, before the <see cref="global::Purview.Telemetry.BaggageAndTagPrefix"/>.
+	/// Determines if the <see cref="Name"/> (or <see cref="global::Purview.Telemetry.Activities.ActivitySourceGenerationAttribute.BaggageAndTagPrefix"/>)
+	/// is used as a prefix, before the <see cref="BaggageAndTagPrefix"/>.
 	/// </summary>
 	public bool IncludeActivitySourcePrefix { get; set; } = true;
 

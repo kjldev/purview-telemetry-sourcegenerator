@@ -218,14 +218,16 @@ static partial class SharedHelpers
 			: new(
 				GenerateDependencyExtension: typeGeneration?.GenerateDependencyExtension ?? assemblyTelemetryGeneration?.GenerateDependencyExtension ?? new(true),
 				ClassName: typeGeneration?.ClassName ?? assemblyTelemetryGeneration?.ClassName ?? new(),
-				DependencyInjectionClassName: typeGeneration?.DependencyInjectionClassName ?? assemblyTelemetryGeneration?.DependencyInjectionClassName ?? new()
+				DependencyInjectionClassName: typeGeneration?.DependencyInjectionClassName ?? assemblyTelemetryGeneration?.DependencyInjectionClassName ?? new(),
+				DependencyInjectionClassIsPublic: typeGeneration?.DependencyInjectionClassIsPublic ?? assemblyTelemetryGeneration?.DependencyInjectionClassIsPublic ?? new(false)
 			);
 
 		static TelemetryGenerationAttributeRecord CreateDefault()
 			=> new(
 				GenerateDependencyExtension: new(true),
 				ClassName: new(),
-				DependencyInjectionClassName: new()
+				DependencyInjectionClassName: new(),
+				DependencyInjectionClassIsPublic: new(false)
 			);
 	}
 
@@ -238,6 +240,7 @@ static partial class SharedHelpers
 		AttributeValue<bool>? generateDependencyExtension = null;
 		AttributeStringValue? className = null;
 		AttributeStringValue? dependencyInjectionClassName = null;
+		AttributeValue<bool>? dependencyInjectionClassIsPublic = null;
 
 		return AttributeParser(attributeData,
 				(name, value) =>
@@ -248,11 +251,14 @@ static partial class SharedHelpers
 						className = new((string)value);
 					else if (name.Equals(nameof(TelemetryGenerationAttributeRecord.DependencyInjectionClassName), StringComparison.OrdinalIgnoreCase))
 						dependencyInjectionClassName = new((string)value);
+					else if (name.Equals(nameof(TelemetryGenerationAttributeRecord.DependencyInjectionClassIsPublic), StringComparison.OrdinalIgnoreCase))
+						dependencyInjectionClassIsPublic = new((bool)value);
 				}, semanticModel, logger, token)
 			? new(
 				GenerateDependencyExtension: generateDependencyExtension ?? new(true),
 				ClassName: className ?? new(),
-				DependencyInjectionClassName: dependencyInjectionClassName ?? new()
+				DependencyInjectionClassName: dependencyInjectionClassName ?? new(),
+				DependencyInjectionClassIsPublic: dependencyInjectionClassIsPublic ?? new(false)
 			)
 			: null;
 	}

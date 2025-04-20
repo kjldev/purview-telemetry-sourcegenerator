@@ -40,7 +40,7 @@ sealed class LoggerAttribute : global::System.Attribute
 	/// </summary>
 	/// <param name="defaultLevel">The default <see cref="global::Microsoft.Extensions.Logging.LogLevel"/> to use
 	/// when one is not specified.</param>
-	/// <param name="customPrefix">If specified, also sets the <see cref="global::Purview.Telemetry.Logging.PrefixType"/> to <see cref="global::Purview.Telemetry.Logging.LogPrefixType.Custom"/>.</param>
+	/// <param name="customPrefix">If specified, also sets the <see cref="global::Purview.Telemetry.Logging.LogPrefixType"/> to <see cref="global::Purview.Telemetry.Logging.LogPrefixType.Custom"/>.</param>
 	/// <param name="disableMSLoggingTelemetryGeneration">Disables the generation of the new style of telemetry generation for Microsoft.Extensions.Logging.</param>
 	public LoggerAttribute(global::Microsoft.Extensions.Logging.LogLevel defaultLevel, string? customPrefix = null, bool disableMSLoggingTelemetryGeneration = false)
 	{
