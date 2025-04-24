@@ -4,11 +4,11 @@
     "": {
       "name": "purview-telemetry-sourcegenerator",
       "devDependencies": {
-        "@commitlint/cli": "^19.7.1",
-        "@commitlint/config-conventional": "^19.7.1",
-        "@types/node": "^22.13.5",
-        "commit-and-tag-version": "^12.5.0",
-        "commitlint": "^19.7.1",
+        "@commitlint/cli": "^19.8.0",
+        "@commitlint/config-conventional": "^19.8.0",
+        "@types/node": "^22.14.1",
+        "commit-and-tag-version": "^12.5.1",
+        "commitlint": "^19.8.0",
         "husky": "^9.1.7",
       },
     },
