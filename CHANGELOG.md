@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.0-prerelease.0](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.1.0...v3.2.0-prerelease.0) (2025-04-24)
+
+
+### Features
+
+* added another option for event inference ([e3c4678](https://github.com/purview-dev/purview-telemetry-sourcegenerator/commit/e3c467875293879fb5514f23f328dcf3561dfbc8))
+
 ## [3.1.0](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.0.0...v3.1.0) (2025-04-20)
 
 
