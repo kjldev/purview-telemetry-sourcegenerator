@@ -2,11 +2,46 @@
 
 partial class TelemetrySourceGeneratorActivityTests
 {
+	[Theory]
+	[InlineData("Activity")]
+	[InlineData("Activity?")]
+	[InlineData("System.Diagnostics.Activity")]
+	[InlineData("System.Diagnostics.Activity?")]
+	public async Task Generate_GivenEventWithFirstParameterAsActivityAndNoEventAttribute_GeneratesEventByInference(
+		string activityType
+	)
+	{
+		// Arrange
+		var basicActivity =
+			@$"
+using Purview.Telemetry.Activities;
+using System.Diagnostics;
+
+namespace Testing;
+
+[ActivitySource(""testing-activity-source"")]
+public interface ITestActivities 
+{{
+	[Activity]
+	System.Diagnostics.Activity? Activity();
+
+	void ThisIsAMethod({activityType} activity, [Baggage]string stringParam, [Tag]int intParam, bool boolParam);
+}}
+";
+
+		// Act
+		var generationResult = await GenerateAsync(basicActivity);
+
+		// Assert
+		await TestHelpers.Verify(generationResult);
+	}
+
 	[Fact]
 	public async Task Generate_GivenBasicEventWithActivityParameter_GeneratesEvent()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -34,7 +69,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicEventWithNullableActivityParameter_GeneratesEvent()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -62,7 +98,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicEventStatusCodeParameterSetToOk_GeneratesEvent()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -90,7 +127,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicEventStatusCodeParameterSetToError_GeneratesEvent()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -118,7 +156,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicEventStatusCodeParameterSetToErrorWithException_GeneratesEvent()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -146,7 +185,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicEventStatusCodeParameterSetToErrorWithStatusDescriptionOnEventAttribute_GeneratesEvent()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -174,7 +214,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicEventStatusCodeParameterSetToErrorWithStatusDescriptionOnParameter_GeneratesEvent()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
