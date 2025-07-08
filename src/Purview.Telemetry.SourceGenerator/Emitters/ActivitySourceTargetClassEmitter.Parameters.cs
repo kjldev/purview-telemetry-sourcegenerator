@@ -8,12 +8,16 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 
 partial class ActivitySourceTargetClassEmitter
 {
-	static void EmitTagsOrBaggageParameters(StringBuilder builder, int indent,
+	static void EmitTagsOrBaggageParameters(
+		StringBuilder builder,
+		int indent,
 		string activityVariableName,
 		bool populateTags,
 		ActivityBasedGenerationTarget method,
 		bool checkForNullableActivity,
-		SourceProductionContext context, GenerationLogger? logger)
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		var parameters = populateTags ? method.Tags : method.Baggage;
 		if (parameters.Length == 0)
@@ -46,8 +50,7 @@ partial class ActivitySourceTargetClassEmitter
 					.Append(indent, "if (", withNewLine: false)
 					.Append(param.ParameterName)
 					.AppendLine(" != default)")
-					.Append(indent, "{")
-				;
+					.Append(indent, "{");
 
 				indent++;
 			}
@@ -59,14 +62,17 @@ partial class ActivitySourceTargetClassEmitter
 				.Append('(')
 				.Append(param.GeneratedName.Wrap())
 				.Append(", ")
-				.Append(param.ParameterName)
-			;
+				.Append(param.ParameterName);
 
 			if (!populateTags && !Utilities.IsString(param.ParameterType))
 			{
 				logger?.Diagnostic("Found a baggage parameter type that is not a string.");
 
-				TelemetryDiagnostics.Report(context.ReportDiagnostic, TelemetryDiagnostics.Activities.BaggageParameterShouldBeString, param.Locations);
+				TelemetryDiagnostics.Report(
+					context.ReportDiagnostic,
+					TelemetryDiagnostics.Activities.BaggageParameterShouldBeString,
+					param.Locations
+				);
 
 				if (param.IsNullable)
 					builder.Append('?');
@@ -84,7 +90,10 @@ partial class ActivitySourceTargetClassEmitter
 			builder.Append(--indent, '}');
 	}
 
-	static bool GuardParameters(ActivityBasedGenerationTarget methodTarget, SourceProductionContext context, GenerationLogger? logger,
+	static bool GuardParameters(
+		ActivityBasedGenerationTarget methodTarget,
+		SourceProductionContext context,
+		GenerationLogger? logger,
 		out ActivityBasedParameterTarget? activityParam,
 		out ActivityBasedParameterTarget? parentContextOrId,
 		out ActivityBasedParameterTarget? tagsParam,
@@ -93,7 +102,7 @@ partial class ActivitySourceTargetClassEmitter
 		out ActivityBasedParameterTarget? timestampParam,
 		out ActivityBasedParameterTarget? escapeParam,
 		out ActivityBasedParameterTarget? statusDescriptionParam
-		)
+	)
 	{
 		activityParam = null;
 		parentContextOrId = null;
@@ -104,20 +113,45 @@ partial class ActivitySourceTargetClassEmitter
 		escapeParam = null;
 		statusDescriptionParam = null;
 
-		var activityParams = methodTarget.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.Activity).ToImmutableArray();
-		var parentContextOrIdParams = methodTarget.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.ParentContextOrId).ToImmutableArray();
-		var tagsParams = methodTarget.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.TagsEnumerable).ToImmutableArray();
-		var linksParams = methodTarget.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.LinksEnumerable).ToImmutableArray();
-		var startTimeParams = methodTarget.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.StartTime).ToImmutableArray();
-		var timestampParams = methodTarget.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.Timestamp).ToImmutableArray();
-		var escapeParams = methodTarget.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.Escape).ToImmutableArray();
-		var statusDescriptionParams = methodTarget.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.StatusDescription).ToImmutableArray();
+		var activityParams = methodTarget
+			.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.Activity)
+			.ToImmutableArray();
+		var parentContextOrIdParams = methodTarget
+			.Parameters.Where(m =>
+				m.ParamDestination == ActivityParameterDestination.ParentContextOrId
+			)
+			.ToImmutableArray();
+		var tagsParams = methodTarget
+			.Parameters.Where(m =>
+				m.ParamDestination == ActivityParameterDestination.TagsEnumerable
+			)
+			.ToImmutableArray();
+		var linksParams = methodTarget
+			.Parameters.Where(m =>
+				m.ParamDestination == ActivityParameterDestination.LinksEnumerable
+			)
+			.ToImmutableArray();
+		var startTimeParams = methodTarget
+			.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.StartTime)
+			.ToImmutableArray();
+		var timestampParams = methodTarget
+			.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.Timestamp)
+			.ToImmutableArray();
+		var escapeParams = methodTarget
+			.Parameters.Where(m => m.ParamDestination == ActivityParameterDestination.Escape)
+			.ToImmutableArray();
+		var statusDescriptionParams = methodTarget
+			.Parameters.Where(m =>
+				m.ParamDestination == ActivityParameterDestination.StatusDescription
+			)
+			.ToImmutableArray();
 
 		if (activityParams.Length > 1)
 		{
 			logger?.Diagnostic("More than one activity parameter defined.");
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic,
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
 				TelemetryDiagnostics.Activities.DuplicateParameterTypes,
 				activityParams.SelectMany(m => m.Locations),
 				string.Join(", ", activityParams.Select(m => m.ParameterName)),
@@ -133,7 +167,8 @@ partial class ActivitySourceTargetClassEmitter
 		{
 			logger?.Diagnostic("More than one parent context/ id defined.");
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic,
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
 				TelemetryDiagnostics.Activities.DuplicateParameterTypes,
 				parentContextOrIdParams.SelectMany(m => m.Locations),
 				string.Join(", ", parentContextOrIdParams.Select(m => m.ParameterName)),
@@ -149,7 +184,8 @@ partial class ActivitySourceTargetClassEmitter
 		{
 			logger?.Diagnostic("More than one tag IEnumerable defined.");
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic,
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
 				TelemetryDiagnostics.Activities.DuplicateParameterTypes,
 				tagsParams.SelectMany(m => m.Locations),
 				string.Join(", ", tagsParams.Select(m => m.ParameterName)),
@@ -163,9 +199,12 @@ partial class ActivitySourceTargetClassEmitter
 
 		if (linksParams.Length > 1)
 		{
-			logger?.Diagnostic("More than one ActivityLink/ IEnumerable of ActivityLink is defined.");
+			logger?.Diagnostic(
+				"More than one ActivityLink/ IEnumerable of ActivityLink is defined."
+			);
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic,
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
 				TelemetryDiagnostics.Activities.DuplicateParameterTypes,
 				linksParams.SelectMany(m => m.Locations),
 				string.Join(", ", linksParams.Select(m => m.ParameterName)),
@@ -181,7 +220,8 @@ partial class ActivitySourceTargetClassEmitter
 		{
 			logger?.Diagnostic("More than one Escape parameter defined.");
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic,
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
 				TelemetryDiagnostics.Activities.DuplicateParameterTypes,
 				escapeParams.SelectMany(m => m.Locations),
 				string.Join(", ", escapeParams.Select(m => m.ParameterName)),
@@ -197,7 +237,8 @@ partial class ActivitySourceTargetClassEmitter
 			{
 				if (!Utilities.IsBoolean(escapeParam.ParameterType))
 				{
-					TelemetryDiagnostics.Report(context.ReportDiagnostic,
+					TelemetryDiagnostics.Report(
+						context.ReportDiagnostic,
 						TelemetryDiagnostics.Activities.EscapedParameterInvalidType,
 						escapeParams.SelectMany(m => m.Locations),
 						string.Join(", ", escapeParams.Select(m => m.ParameterName)),
@@ -209,7 +250,8 @@ partial class ActivitySourceTargetClassEmitter
 
 				if (methodTarget.MethodType != ActivityMethodType.Event)
 				{
-					TelemetryDiagnostics.Report(context.ReportDiagnostic,
+					TelemetryDiagnostics.Report(
+						context.ReportDiagnostic,
 						TelemetryDiagnostics.Activities.EscapedParameterInvalidType,
 						escapeParams.SelectMany(m => m.Locations),
 						escapeParam.ParameterName
@@ -224,7 +266,8 @@ partial class ActivitySourceTargetClassEmitter
 		{
 			logger?.Diagnostic("More than one StatusDescription parameter defined.");
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic,
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
 				TelemetryDiagnostics.Activities.DuplicateParameterTypes,
 				statusDescriptionParams.SelectMany(m => m.Locations),
 				string.Join(", ", escapeParams.Select(m => m.ParameterName)),
@@ -240,7 +283,8 @@ partial class ActivitySourceTargetClassEmitter
 			{
 				if (!Utilities.IsString(statusDescriptionParam.ParameterType))
 				{
-					TelemetryDiagnostics.Report(context.ReportDiagnostic,
+					TelemetryDiagnostics.Report(
+						context.ReportDiagnostic,
 						TelemetryDiagnostics.Activities.StatusDescriptionMustBeString,
 						statusDescriptionParams.SelectMany(m => m.Locations),
 						string.Join(", ", escapeParams.Select(m => m.ParameterName)),
@@ -252,7 +296,8 @@ partial class ActivitySourceTargetClassEmitter
 
 				if (methodTarget.MethodType != ActivityMethodType.Event)
 				{
-					TelemetryDiagnostics.Report(context.ReportDiagnostic,
+					TelemetryDiagnostics.Report(
+						context.ReportDiagnostic,
 						TelemetryDiagnostics.Activities.StatusDescriptionParameterInvalidType,
 						statusDescriptionParams.SelectMany(m => m.Locations),
 						statusDescriptionParam.ParameterName

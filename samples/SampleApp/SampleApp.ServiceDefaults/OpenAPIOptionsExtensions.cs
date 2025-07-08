@@ -11,28 +11,38 @@ using Microsoft.OpenApi.Models;
 
 #pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace Microsoft.Extensions.Configuration;
+
 #pragma warning restore IDE0130 // Namespace does not match folder structure
 
 [EditorBrowsable(EditorBrowsableState.Always)]
 static class OpenApiOptionsExtensions
 {
-	public static OpenApiOptions ApplyAPIVersionInfo(this OpenApiOptions options, string title, string description)
+	public static OpenApiOptions ApplyAPIVersionInfo(
+		this OpenApiOptions options,
+		string title,
+		string description
+	)
 	{
-		options.AddDocumentTransformer((document, context, cancellationToken) =>
-		{
-			var versionedDescriptionProvider = context.ApplicationServices.GetService<IApiVersionDescriptionProvider>();
-			var apiDescription = versionedDescriptionProvider?.ApiVersionDescriptions
-				.SingleOrDefault(description => description.GroupName == context.DocumentName);
-
-			if (apiDescription is not null)
+		options.AddDocumentTransformer(
+			(document, context, cancellationToken) =>
 			{
-				document.Info.Version = apiDescription.ApiVersion.ToString();
-				document.Info.Title = title;
-				document.Info.Description = BuildDescription(apiDescription, description);
-			}
+				var versionedDescriptionProvider =
+					context.ApplicationServices.GetService<IApiVersionDescriptionProvider>();
+				var apiDescription =
+					versionedDescriptionProvider?.ApiVersionDescriptions.SingleOrDefault(
+						description => description.GroupName == context.DocumentName
+					);
 
-			return Task.CompletedTask;
-		});
+				if (apiDescription is not null)
+				{
+					document.Info.Version = apiDescription.ApiVersion.ToString();
+					document.Info.Title = title;
+					document.Info.Description = BuildDescription(apiDescription, description);
+				}
+
+				return Task.CompletedTask;
+			}
+		);
 
 		return options;
 	}
@@ -60,8 +70,7 @@ static class OpenApiOptionsExtensions
 				if (text.Length > 0)
 					text.Append(' ');
 
-				text
-					.Append("The API will be sunset on ")
+				text.Append("The API will be sunset on ")
 					.Append(when.Date.ToShortDateString())
 					.Append('.');
 			}
@@ -85,8 +94,9 @@ static class OpenApiOptionsExtensions
 					text.Append("\">");
 					text.Append(
 						StringSegment.IsNullOrEmpty(link.Title)
-						? link.LinkTarget.OriginalString
-						: link.Title.ToString());
+							? link.LinkTarget.OriginalString
+							: link.Title.ToString()
+					);
 					text.Append("</a></li>");
 				}
 
@@ -98,50 +108,54 @@ static class OpenApiOptionsExtensions
 		return text.ToString();
 	}
 
-	public static OpenApiOptions ApplySecuritySchemeDefinitions(this OpenApiOptions options)
-		=> options.AddDocumentTransformer<SecuritySchemeDefinitionsTransformer>();
+	public static OpenApiOptions ApplySecuritySchemeDefinitions(this OpenApiOptions options) =>
+		options.AddDocumentTransformer<SecuritySchemeDefinitionsTransformer>();
 
-	public static OpenApiOptions ApplyAuthorizationChecks(this OpenApiOptions options, string[] scopes)
+	public static OpenApiOptions ApplyAuthorizationChecks(
+		this OpenApiOptions options,
+		string[] scopes
+	)
 	{
-		options.AddOperationTransformer((operation, context, cancellationToken) =>
-		{
-			var metadata = context.Description.ActionDescriptor.EndpointMetadata;
-			if (!metadata.OfType<IAuthorizeData>().Any())
-				return Task.CompletedTask;
-
-			operation.Responses.TryAdd("401", new OpenApiResponse { Description = "Unauthorized" });
-			operation.Responses.TryAdd("403", new OpenApiResponse { Description = "Forbidden" });
-
-			OpenApiSecurityScheme oAuthScheme = new()
+		options.AddOperationTransformer(
+			(operation, context, cancellationToken) =>
 			{
-				Reference = new()
-				{
-					Type = ReferenceType.SecurityScheme,
-					Id = "oauth2"
-				}
-			};
+				var metadata = context.Description.ActionDescriptor.EndpointMetadata;
+				if (!metadata.OfType<IAuthorizeData>().Any())
+					return Task.CompletedTask;
 
-			operation.Security = [
-				new()
-				{
-					[oAuthScheme] = scopes
-				}
-			];
+				operation.Responses.TryAdd(
+					"401",
+					new OpenApiResponse { Description = "Unauthorized" }
+				);
+				operation.Responses.TryAdd(
+					"403",
+					new OpenApiResponse { Description = "Forbidden" }
+				);
 
-			return Task.CompletedTask;
-		});
+				OpenApiSecurityScheme oAuthScheme = new()
+				{
+					Reference = new() { Type = ReferenceType.SecurityScheme, Id = "oauth2" },
+				};
+
+				operation.Security = [new() { [oAuthScheme] = scopes }];
+
+				return Task.CompletedTask;
+			}
+		);
 		return options;
 	}
 
 	public static OpenApiOptions ApplyOperationDeprecatedStatus(this OpenApiOptions options)
 	{
-		options.AddOperationTransformer((operation, context, cancellationToken) =>
-		{
-			var apiDescription = context.Description;
-			operation.Deprecated |= apiDescription.IsDeprecated();
+		options.AddOperationTransformer(
+			(operation, context, cancellationToken) =>
+			{
+				var apiDescription = context.Description;
+				operation.Deprecated |= apiDescription.IsDeprecated();
 
-			return Task.CompletedTask;
-		});
+				return Task.CompletedTask;
+			}
+		);
 
 		return options;
 	}
@@ -154,20 +168,28 @@ static class OpenApiOptionsExtensions
 			int i => new OpenApiInteger(i),
 			double d => new OpenApiDouble(d),
 			string s => new OpenApiString(s),
-			_ => null
+			_ => null,
 		};
 	}
 
-	private sealed class SecuritySchemeDefinitionsTransformer(IConfiguration configuration) : IOpenApiDocumentTransformer
+	private sealed class SecuritySchemeDefinitionsTransformer(IConfiguration configuration)
+		: IOpenApiDocumentTransformer
 	{
-		public Task TransformAsync(OpenApiDocument document, OpenApiDocumentTransformerContext context, CancellationToken cancellationToken)
+		public Task TransformAsync(
+			OpenApiDocument document,
+			OpenApiDocumentTransformerContext context,
+			CancellationToken cancellationToken
+		)
 		{
 			var identitySection = configuration.GetSection("Identity");
 			if (!identitySection.Exists())
 				return Task.CompletedTask;
 
 			var identityUrlExternal = identitySection.GetRequiredValue("Url");
-			var scopes = identitySection.GetRequiredSection("Scopes").GetChildren().ToDictionary(p => p.Key, p => p.Value);
+			var scopes = identitySection
+				.GetRequiredSection("Scopes")
+				.GetChildren()
+				.ToDictionary(p => p.Key, p => p.Value);
 			OpenApiSecurityScheme securityScheme = new()
 			{
 				Type = SecuritySchemeType.OAuth2,
@@ -179,8 +201,8 @@ static class OpenApiOptionsExtensions
 						AuthorizationUrl = new Uri($"{identityUrlExternal}/connect/authorize"),
 						TokenUrl = new Uri($"{identityUrlExternal}/connect/token"),
 						Scopes = scopes,
-					}
-				}
+					},
+				},
 			};
 
 			document.Components ??= new();

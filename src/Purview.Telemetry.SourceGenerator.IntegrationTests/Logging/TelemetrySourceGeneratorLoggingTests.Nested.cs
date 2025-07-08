@@ -9,7 +9,8 @@ partial class TelemetrySourceGeneratorLoggingTests
 	public async Task Generate_GivenLoggerWithNamespaces_GeneratesScopedLogTarget(string @namespace)
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace {@namespace};
@@ -24,17 +25,23 @@ public interface ITestLogger {{
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids().UseParameters(@namespace));
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids().UseParameters(@namespace)
+		);
 	}
 
 	[Theory]
 	[InlineData("Testing.Test1")]
 	[InlineData("Testing.Test1.Test2")]
 	[InlineData("Testing.Test1.Test2.Test3")]
-	public async Task Generate_GivenLoggerWithNamespacesAndNestedClass_GeneratesScopedLogTarget(string @namespace)
+	public async Task Generate_GivenLoggerWithNamespacesAndNestedClass_GeneratesScopedLogTarget(
+		string @namespace
+	)
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace {@namespace};
@@ -51,17 +58,23 @@ public partial class TestClass1 {{
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids().UseParameters(@namespace));
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids().UseParameters(@namespace)
+		);
 	}
 
 	[Theory]
 	[InlineData("Testing.Test1")]
 	[InlineData("Testing.Test1.Test2")]
 	[InlineData("Testing.Test1.Test2.Test3")]
-	public async Task Generate_GivenLoggerWithNamespacesAndNestedClasses_GeneratesScopedLogTarget(string @namespace)
+	public async Task Generate_GivenLoggerWithNamespacesAndNestedClasses_GeneratesScopedLogTarget(
+		string @namespace
+	)
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace {@namespace};
@@ -82,6 +95,9 @@ public partial class TestClass1 {{
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids().UseParameters(@namespace));
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids().UseParameters(@namespace)
+		);
 	}
 }

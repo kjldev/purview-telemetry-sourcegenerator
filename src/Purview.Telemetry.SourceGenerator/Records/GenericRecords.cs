@@ -10,7 +10,7 @@ enum GenerationType
 	None,
 	Activities = 1,
 	Logging = 2,
-	Metrics = 4
+	Metrics = 4,
 }
 
 record TargetGeneration(
@@ -30,20 +30,15 @@ record AttributeValue<T>
 
 	public AttributeValue() => IsSet = false;
 
-	public T? Or(T value) =>
-		IsSet
-			? Value
-			: value;
+	public T? Or(T value) => IsSet ? Value : value;
 
 	public T? Value { get; }
 
 	public bool IsSet { get; }
 
-	public static implicit operator AttributeValue<T>(T? value)
-		=> new(value);
+	public static implicit operator AttributeValue<T>(T? value) => new(value);
 
-	public static implicit operator T?(AttributeValue<T> value)
-		=> value.Value;
+	public static implicit operator T?(AttributeValue<T> value) => value.Value;
 }
 
 record AttributeStringValue
@@ -56,20 +51,15 @@ record AttributeStringValue
 
 	public AttributeStringValue() => IsSet = false;
 
-	public string Or(string value)
-		=> IsSet && !string.IsNullOrWhiteSpace(Value)
-			? Value!
-			: value;
+	public string Or(string value) => IsSet && !string.IsNullOrWhiteSpace(Value) ? Value! : value;
 
 	public string? Value { get; }
 
 	public bool IsSet { get; }
 
-	public static implicit operator AttributeStringValue(string? value)
-		=> new(value);
+	public static implicit operator AttributeStringValue(string? value) => new(value);
 
-	public static implicit operator string?(AttributeStringValue value)
-		=> value.Value;
+	public static implicit operator string?(AttributeStringValue value) => value.Value;
 }
 
 public record struct MessageTemplateHole(
@@ -78,7 +68,8 @@ public record struct MessageTemplateHole(
 	int? Alignment,
 	string? Format,
 	bool Destructure,
-	bool Stringify)
+	bool Stringify
+)
 {
 	public readonly bool IsPositional => Ordinal.HasValue;
 
@@ -133,13 +124,10 @@ public record struct MessageTemplateHole(
 		if (match.Groups["format"].Success)
 			format = match.Groups["format"].Value;
 
-		return new(name,
-			ordinal == null
-				? null
-				: int.Parse(ordinal, CultureInfo.InvariantCulture),
-			alignment == null
-				? null
-				: int.Parse(alignment, CultureInfo.InvariantCulture),
+		return new(
+			name,
+			ordinal == null ? null : int.Parse(ordinal, CultureInfo.InvariantCulture),
+			alignment == null ? null : int.Parse(alignment, CultureInfo.InvariantCulture),
 			format,
 			destructure,
 			stringify

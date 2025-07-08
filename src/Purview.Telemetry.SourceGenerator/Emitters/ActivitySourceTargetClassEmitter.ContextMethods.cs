@@ -7,30 +7,47 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 
 partial class ActivitySourceTargetClassEmitter
 {
-	static void EmitContextMethodBody(StringBuilder builder, int indent, ActivityBasedGenerationTarget methodTarget, SourceProductionContext context, GenerationLogger? logger)
+	static void EmitContextMethodBody(
+		StringBuilder builder,
+		int indent,
+		ActivityBasedGenerationTarget methodTarget,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
-		if (!GuardParameters(methodTarget, context, logger,
-			out var activityParam,
-			out var _,
-			out var tagsParam,
-			out var linksParam,
-			out var _,
-			out var _,
-			out var _,
-			out var _))
+		if (
+			!GuardParameters(
+				methodTarget,
+				context,
+				logger,
+				out var activityParam,
+				out var _,
+				out var tagsParam,
+				out var linksParam,
+				out var _,
+				out var _,
+				out var _,
+				out var _
+			)
+		)
 		{
 			return;
 		}
 
-		var activityVariableName = activityParam?.ParameterName ?? (Constants.Activities.SystemDiagnostics.Activity + ".Current");
+		var activityVariableName =
+			activityParam?.ParameterName
+			?? (Constants.Activities.SystemDiagnostics.Activity + ".Current");
 
 		if (tagsParam != null)
 		{
-			logger?.Diagnostic("Tags parameter not allowed on context method, only activities or events.");
+			logger?.Diagnostic(
+				"Tags parameter not allowed on context method, only activities or events."
+			);
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic,
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
 				TelemetryDiagnostics.Activities.TagsParameterNotAllowed,
 				tagsParam.Locations,
 				tagsParam.ParameterName
@@ -43,7 +60,8 @@ partial class ActivitySourceTargetClassEmitter
 		{
 			logger?.Diagnostic("Links parameter not allowed on context method, only activities.");
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic,
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
 				TelemetryDiagnostics.Activities.LinksParameterNotAllowed,
 				linksParam.Locations,
 				linksParam.ParameterName
@@ -58,13 +76,30 @@ partial class ActivitySourceTargetClassEmitter
 			.Append(indent, "if (", withNewLine: false)
 			.Append(activityVariableName)
 			.AppendLine(" != null)")
-			.Append(indent, '{')
-		;
+			.Append(indent, '{');
 
 		indent++;
 
-		EmitTagsOrBaggageParameters(builder, indent, activityVariableName, true, methodTarget, false, context, logger);
-		EmitTagsOrBaggageParameters(builder, indent, activityVariableName, false, methodTarget, false, context, logger);
+		EmitTagsOrBaggageParameters(
+			builder,
+			indent,
+			activityVariableName,
+			true,
+			methodTarget,
+			false,
+			context,
+			logger
+		);
+		EmitTagsOrBaggageParameters(
+			builder,
+			indent,
+			activityVariableName,
+			false,
+			methodTarget,
+			false,
+			context,
+			logger
+		);
 
 		builder.Append(--indent, '}');
 
@@ -76,8 +111,7 @@ partial class ActivitySourceTargetClassEmitter
 				.AppendLine()
 				.Append(indent, "return ", withNewLine: false)
 				.Append(activityVariableName)
-				.AppendLine(';')
-			;
+				.AppendLine(';');
 		}
 	}
 }

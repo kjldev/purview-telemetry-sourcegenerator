@@ -5,11 +5,11 @@ using Purview.Telemetry.Metrics;
 
 namespace SampleApp.Host.Services;
 
-/* 
+/*
  * A multi-target interface that defines
  * the telemetry methods for the WeatherService, including
  * Activities, Events, Logs, and Metrics.
- * 
+ *
  * As it's multi-target, each target (method) needs to be
  * explicitly defined.
 */
@@ -22,7 +22,10 @@ public interface IWeatherServiceTelemetry
 	// --> Start: Activities
 
 	[Activity(ActivityKind.Client)]
-	Activity? GettingWeatherForecastFromUpstreamService([Baggage] string someRandomBaggageInfo, int requestedCount);
+	Activity? GettingWeatherForecastFromUpstreamService(
+		[Baggage] string someRandomBaggageInfo,
+		int requestedCount
+	);
 
 	[Event]
 	void ForecastReceived(Activity? activity, int minTempInC, int maxTempInC);

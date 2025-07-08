@@ -17,7 +17,8 @@ static class ConstructorEmitter
 		StringBuilder builder,
 		int indent,
 		SourceProductionContext context,
-		GenerationLogger? logger)
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -35,15 +36,11 @@ static class ConstructorEmitter
 			.CodeGen(indent)
 			.Append(indent, "public ", withNewLine: false)
 			.Append(classNameToGenerate)
-			.Append('(')
-		;
+			.Append('(');
 
 		EmitParameters(generationType, fullyQualifiedInterfaceName, builder);
 
-		builder
-			.AppendLine(')')
-			.Append(indent, '{')
-		;
+		builder.AppendLine(')').Append(indent, '{');
 
 		EmitBody(generationType, indent, builder);
 
@@ -52,7 +49,11 @@ static class ConstructorEmitter
 		return --indent;
 	}
 
-	static void EmitParameters(GenerationType generationType, string? loggerFullyQualifiedInterfaceName, StringBuilder builder)
+	static void EmitParameters(
+		GenerationType generationType,
+		string? loggerFullyQualifiedInterfaceName,
+		StringBuilder builder
+	)
 	{
 		if (generationType.HasFlag(GenerationType.Logging))
 		{
@@ -61,8 +62,7 @@ static class ConstructorEmitter
 				.Append('<')
 				.Append(loggerFullyQualifiedInterfaceName!.WithGlobal())
 				.Append("> ")
-				.Append(LoggerParameterName)
-			;
+				.Append(LoggerParameterName);
 		}
 
 		if (generationType.HasFlag(GenerationType.Metrics))
@@ -73,8 +73,7 @@ static class ConstructorEmitter
 			builder
 				.Append(Constants.Metrics.SystemDiagnostics.IMeterFactory.WithGlobal())
 				.Append(' ')
-				.Append(Constants.Metrics.MeterFactoryParameterName)
-			;
+				.Append(Constants.Metrics.MeterFactoryParameterName);
 		}
 	}
 
@@ -96,8 +95,7 @@ static class ConstructorEmitter
 				.Append(indent + 1, Constants.Metrics.MeterInitializationMethod, withNewLine: false)
 				.Append('(')
 				.Append(Constants.Metrics.MeterFactoryParameterName)
-				.AppendLine(");")
-			;
+				.AppendLine(");");
 		}
 	}
 }

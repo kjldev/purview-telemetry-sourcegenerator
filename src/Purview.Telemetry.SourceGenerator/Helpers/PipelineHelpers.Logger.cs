@@ -8,28 +8,34 @@ namespace Purview.Telemetry.SourceGenerator.Helpers;
 
 partial class PipelineHelpers
 {
-	static readonly string[] SuffixesToRemove = [
-		"Logs",
-		"Logger",
-		"Telemetry"
-	];
+	static readonly string[] SuffixesToRemove = ["Logs", "Logger", "Telemetry"];
 
 	public static bool HasLoggerTargetAttribute(SyntaxNode _, CancellationToken __) => true;
 
-	public static LoggerTarget? BuildLoggerTransform(GeneratorAttributeSyntaxContext context, GenerationLogger? logger, CancellationToken token)
+	public static LoggerTarget? BuildLoggerTransform(
+		GeneratorAttributeSyntaxContext context,
+		GenerationLogger? logger,
+		CancellationToken token
+	)
 	{
 		token.ThrowIfCancellationRequested();
 
-		var iLoggerTypeSymbol = context.SemanticModel.Compilation.GetTypeByMetadataName(Constants.Logging.MicrosoftExtensions.ILogger.FullName);
+		var iLoggerTypeSymbol = context.SemanticModel.Compilation.GetTypeByMetadataName(
+			Constants.Logging.MicrosoftExtensions.ILogger.FullName
+		);
 		if (iLoggerTypeSymbol is null)
 		{
-			logger?.Diagnostic($"Requested a Logger target to be generated, but could not find the ILogger symbol referenced '{context.TargetNode.Flatten()}'.");
+			logger?.Diagnostic(
+				$"Requested a Logger target to be generated, but could not find the ILogger symbol referenced '{context.TargetNode.Flatten()}'."
+			);
 			return LoggerTarget.Failed(TelemetryDiagnostics.Logging.MSLoggingNotReferenced, []);
 		}
 
 		if (context.TargetNode is not InterfaceDeclarationSyntax interfaceDeclaration)
 		{
-			logger?.Error($"Could not find interface syntax from the target node '{context.TargetNode.Flatten()}'.");
+			logger?.Error(
+				$"Could not find interface syntax from the target node '{context.TargetNode.Flatten()}'."
+			);
 			return null;
 		}
 
@@ -41,41 +47,67 @@ partial class PipelineHelpers
 
 		if (interfaceSymbol.Arity > 0)
 		{
-			logger?.Diagnostic($"Cannot generate a Logger target for a generic interface '{interfaceDeclaration.Flatten()}'.");
-			return LoggerTarget.Failed(TelemetryDiagnostics.General.GenericInterfacesNotSupported, interfaceSymbol.Locations);
+			logger?.Diagnostic(
+				$"Cannot generate a Logger target for a generic interface '{interfaceDeclaration.Flatten()}'."
+			);
+			return LoggerTarget.Failed(
+				TelemetryDiagnostics.General.GenericInterfacesNotSupported,
+				interfaceSymbol.Locations
+			);
 		}
 
 		var semanticModel = context.SemanticModel;
-		var loggerAttribute = SharedHelpers.GetLoggerAttribute(context.TargetSymbol, semanticModel, logger, token);
+		var loggerAttribute = SharedHelpers.GetLoggerAttribute(
+			context.TargetSymbol,
+			semanticModel,
+			logger,
+			token
+		);
 		if (loggerAttribute == null)
 		{
-			logger?.Error($"Could not find {Constants.Logging.LoggerAttribute} when one was expected '{interfaceDeclaration.Flatten()}'.");
+			logger?.Error(
+				$"Could not find {Constants.Logging.LoggerAttribute} when one was expected '{interfaceDeclaration.Flatten()}'."
+			);
 			return null;
 		}
 
-		var telemetryGeneration = SharedHelpers.GetTelemetryGenerationAttribute(interfaceSymbol, semanticModel, logger, token);
+		var telemetryGeneration = SharedHelpers.GetTelemetryGenerationAttribute(
+			interfaceSymbol,
+			semanticModel,
+			logger,
+			token
+		);
 		var className = telemetryGeneration.ClassName.IsSet
 			? telemetryGeneration.ClassName.Value!
 			: GenerateClassName(interfaceSymbol.Name);
 
-		var loggerGenerationAttribute = SharedHelpers.GetLoggerGenerationAttribute(semanticModel, logger, token);
-		var defaultLogLevel = loggerGenerationAttribute?.DefaultLevel.IsSet == true
-			? loggerGenerationAttribute.DefaultLevel.Value!.Value
-			: Constants.Logging.DefaultLevel;
-		var disableMSLoggingTelemetryGeneration = loggerAttribute.DisableMSLoggingTelemetryGeneration.Value
+		var loggerGenerationAttribute = SharedHelpers.GetLoggerGenerationAttribute(
+			semanticModel,
+			logger,
+			token
+		);
+		var defaultLogLevel =
+			loggerGenerationAttribute?.DefaultLevel.IsSet == true
+				? loggerGenerationAttribute.DefaultLevel.Value!.Value
+				: Constants.Logging.DefaultLevel;
+		var disableMSLoggingTelemetryGeneration =
+			loggerAttribute.DisableMSLoggingTelemetryGeneration.Value
 			?? loggerGenerationAttribute?.DisableMSLoggingTelemetryGeneration.Value
 			?? false;
-		var defaultPrefixType = loggerGenerationAttribute?.DefaultPrefixType.IsSet == true
-			? loggerGenerationAttribute.DefaultPrefixType.Value!.Value
-			: 0;
+		var defaultPrefixType =
+			loggerGenerationAttribute?.DefaultPrefixType.IsSet == true
+				? loggerGenerationAttribute.DefaultPrefixType.Value!.Value
+				: 0;
 
 		if (!disableMSLoggingTelemetryGeneration)
 		{
 			// We got to here which means we're trying to use the new generation type,
 			// so let's check if the LogPropertiesAttribute is referenced. If it's not,
 			// we'll disable the new telemetry generation.
-			disableMSLoggingTelemetryGeneration = context.SemanticModel.Compilation.GetTypeByMetadataName(
-					Constants.Logging.MicrosoftExtensions.LogPropertiesAttribute.FullName) == null;
+			disableMSLoggingTelemetryGeneration =
+				context.SemanticModel.Compilation.GetTypeByMetadataName(
+					Constants.Logging.MicrosoftExtensions.LogPropertiesAttribute.FullName
+				) == null;
 		}
 
 		var generationType = SharedHelpers.GetGenerationTypes(interfaceSymbol, token);
@@ -97,24 +129,18 @@ partial class PipelineHelpers
 		return new(
 			TelemetryGeneration: telemetryGeneration,
 			GenerationType: generationType,
-
 			ClassNameToGenerate: className,
 			ClassNamespace: Utilities.GetNamespace(interfaceDeclaration),
 			ParentClasses: Utilities.GetParentClasses(interfaceDeclaration),
 			FullNamespace: fullNamespace,
 			FullyQualifiedName: fullNamespace + className,
-
 			InterfaceName: interfaceSymbol.Name,
 			FullyQualifiedInterfaceName: fullNamespace + interfaceSymbol.Name,
-
 			LoggerAttribute: loggerAttribute,
 			DefaultLevel: defaultLogLevel,
-
 			LogMethods: logMethods,
-			DuplicateMethods: BuildDuplicateMethods(interfaceSymbol),
-
+			DuplicateMethods: BuildDuplicateMethods(interfaceSymbol, semanticModel, token),
 			UseMSLoggingTelemetryBasedGeneration: !disableMSLoggingTelemetryGeneration,
-
 			Failures: methodDiagnostics?.ToImmutableArray()
 		);
 	}
@@ -130,24 +156,32 @@ partial class PipelineHelpers
 		INamedTypeSymbol interfaceSymbol,
 		GenerationLogger? logger,
 		CancellationToken token,
-		out (TelemetryDiagnosticDescriptor, ImmutableArray<Location>)[]? telemetryDiagnostics)
+		out (TelemetryDiagnosticDescriptor, ImmutableArray<Location>)[]? telemetryDiagnostics
+	)
 	{
 		token.ThrowIfCancellationRequested();
 
-		List<(TelemetryDiagnosticDescriptor, ImmutableArray<Location>)>? telemetryDiagnosticsList = null;
+		List<(TelemetryDiagnosticDescriptor, ImmutableArray<Location>)>? telemetryDiagnosticsList =
+			null;
 		List<LogMethodTarget> methodTargets = [];
-		foreach (var method in interfaceSymbol.GetMembers().OfType<IMethodSymbol>())
+		foreach (
+			var method in GetAllInterfaceMethods(interfaceSymbol, semanticModel.Compilation, token)
+		)
 		{
 			if (Utilities.ContainsAttribute(method, Constants.Shared.ExcludeAttribute, token))
 			{
-				logger?.Debug($"Skipping {interfaceSymbol.Name}.{method.Name}, explicitly excluded.");
+				logger?.Debug(
+					$"Skipping {interfaceSymbol.Name}.{method.Name}, explicitly excluded."
+				);
 				continue;
 			}
 
 			if (method.Arity > 0)
 			{
 				telemetryDiagnosticsList ??= [];
-				telemetryDiagnosticsList.Add((TelemetryDiagnostics.General.GenericMethodsNotSupported, method.Locations));
+				telemetryDiagnosticsList.Add(
+					(TelemetryDiagnostics.General.GenericMethodsNotSupported, method.Locations)
+				);
 				continue;
 			}
 
@@ -159,7 +193,8 @@ partial class PipelineHelpers
 				semanticModel,
 				logger,
 				token,
-				out var parameterDiagnostic);
+				out var parameterDiagnostic
+			);
 			if (parameterDiagnostic != null)
 			{
 				telemetryDiagnosticsList ??= [];
@@ -173,31 +208,41 @@ partial class PipelineHelpers
 			{
 				// This is a warning, so we can continue.
 				telemetryDiagnosticsList ??= [];
-				telemetryDiagnosticsList.Add((TelemetryDiagnostics.Logging.ScopedMethodShouldNotHaveLevel, method.Locations));
+				telemetryDiagnosticsList.Add(
+					(TelemetryDiagnostics.Logging.ScopedMethodShouldNotHaveLevel, method.Locations)
+				);
 			}
 
-			var isKnownReturnType = method.ReturnsVoid || Constants.System.IDisposable.Equals(method.ReturnType);
+			var isKnownReturnType =
+				method.ReturnsVoid || Constants.System.IDisposable.Equals(method.ReturnType);
 			var loggerActionFieldName = $"_{Utilities.LowercaseFirstChar(method.Name)}Action";
 
-			var logName = GetLogName(interfaceSymbol.Name, className, loggerTarget, logAttribute, method.Name, defaultPrefixType);
-			var messageTemplate = logAttribute?.MessageTemplate.Value ?? GenerateTemplateMessage(logName, isScoped, methodParameters);
+			var logName = GetLogName(
+				interfaceSymbol.Name,
+				className,
+				loggerTarget,
+				logAttribute,
+				method.Name,
+				defaultPrefixType
+			);
+			var messageTemplate =
+				logAttribute?.MessageTemplate.Value
+				?? GenerateTemplateMessage(logName, isScoped, methodParameters);
 			var hasMultipleExceptions = !isScoped && methodParameters.Count(m => m.IsException) > 1;
-			var exceptionParam = hasMultipleExceptions
-				? null
-				: isScoped
-					? null
-					: methodParameters.FirstOrDefault(m => m.IsException);
+			var exceptionParam =
+				hasMultipleExceptions ? null
+				: isScoped ? null
+				: methodParameters.FirstOrDefault(m => m.IsException);
 
 			var inferredErrorLevel = exceptionParam != null;
 			if ((logAttribute?.Level.IsSet ?? false) == true)
 				inferredErrorLevel = false;
 
-			var level = (logAttribute?.Level.IsSet == true
-				? logAttribute.Level.Value!.Value
-				: exceptionParam == null
-					? defaultLogLevel
-					: 4 // Error
-				)!;
+			var level = (
+				logAttribute?.Level.IsSet == true ? logAttribute.Level.Value!.Value
+				: exceptionParam == null ? defaultLogLevel
+				: 4 // Error
+			)!;
 
 			var messageTemplateMatches = MessageTemplateHole.FromMatches(
 				Constants.MessageTemplateMatcher.Matches(messageTemplate)
@@ -215,19 +260,24 @@ partial class PipelineHelpers
 				if (templateIsOrdinalBased && templateIsNamedBased)
 				{
 					telemetryDiagnosticsList ??= [];
-					telemetryDiagnosticsList.Add((TelemetryDiagnostics.Logging.MixedOrdinalAndNamedProperties, method.Locations));
+					telemetryDiagnosticsList.Add(
+						(
+							TelemetryDiagnostics.Logging.MixedOrdinalAndNamedProperties,
+							method.Locations
+						)
+					);
 					continue;
 				}
 
 				var maxOrdinalValue = messageTemplateMatches.Any(m => m.IsPositional)
-					? messageTemplateMatches
-						.Where(m => m.IsPositional)
-						.Max(m => m.Ordinal!.Value)
+					? messageTemplateMatches.Where(m => m.IsPositional).Max(m => m.Ordinal!.Value)
 					: 0;
 				if (maxOrdinalValue > methodParameters.Length)
 				{
 					telemetryDiagnosticsList ??= [];
-					telemetryDiagnosticsList.Add((TelemetryDiagnostics.Logging.OrdinalsExceedParameters, method.Locations));
+					telemetryDiagnosticsList.Add(
+						(TelemetryDiagnostics.Logging.OrdinalsExceedParameters, method.Locations)
+					);
 					continue;
 				}
 
@@ -238,46 +288,49 @@ partial class PipelineHelpers
 					// ... as an ordinal, or as a named property?
 					// Remember, it may match more than one hole..
 
-					var templates = messageTemplateMatches.Where(m =>
-						(m.IsPositional && m.Ordinal == i) ||
-						(m.Name != null && m.Name.Equals(param.Name, StringComparison.OrdinalIgnoreCase))
-					).ToArray();
+					var templates = messageTemplateMatches
+						.Where(m =>
+							(m.IsPositional && m.Ordinal == i)
+							|| (
+								m.Name != null
+								&& m.Name.Equals(param.Name, StringComparison.OrdinalIgnoreCase)
+							)
+						)
+						.ToArray();
 
 					if (templates.Length > 0)
 						param.ReferencedHoles.AddRange(templates);
 				}
 			}
 
-			methodTargets.Add(new(
-				MethodName: method.Name,
-				IsScoped: isScoped,
-				LoggerActionFieldName: loggerActionFieldName,
-
-				UnknownReturnType: !isKnownReturnType,
-
-				LogName: logName, // This includes any prefix information
-				EventId: logAttribute?.EventId.Value,
-
-				MessageTemplate: messageTemplate,
-				TemplateProperties: messageTemplateMatches,
-				TemplateIsOrdinalBased: templateIsOrdinalBased,
-				TemplateIsNamedBased: templateIsNamedBased,
-
-				MSLevel: Constants.Logging.LogLevelTypeMap[level],
-
-				Parameters: methodParameters,
-				ParametersSansException: isScoped
-					? methodParameters
-					: [.. methodParameters.Where(m => !m.IsException)],
-				ExceptionParameter: exceptionParam,
-
-				HasMultipleExceptions: hasMultipleExceptions,
-				InferredErrorLevel: inferredErrorLevel,
-
-				MethodLocation: method.Locations.FirstOrDefault(),
-
-				TargetGenerationState: Utilities.IsValidGenerationTarget(method, generationType, GenerationType.Logging)
-			));
+			methodTargets.Add(
+				new(
+					MethodName: method.Name,
+					IsScoped: isScoped,
+					LoggerActionFieldName: loggerActionFieldName,
+					UnknownReturnType: !isKnownReturnType,
+					LogName: logName, // This includes any prefix information
+					EventId: logAttribute?.EventId.Value,
+					MessageTemplate: messageTemplate,
+					TemplateProperties: messageTemplateMatches,
+					TemplateIsOrdinalBased: templateIsOrdinalBased,
+					TemplateIsNamedBased: templateIsNamedBased,
+					MSLevel: Constants.Logging.LogLevelTypeMap[level],
+					Parameters: methodParameters,
+					ParametersSansException: isScoped
+						? methodParameters
+						: [.. methodParameters.Where(m => !m.IsException)],
+					ExceptionParameter: exceptionParam,
+					HasMultipleExceptions: hasMultipleExceptions,
+					InferredErrorLevel: inferredErrorLevel,
+					MethodLocation: method.Locations.FirstOrDefault(),
+					TargetGenerationState: Utilities.IsValidGenerationTarget(
+						method,
+						generationType,
+						GenerationType.Logging
+					)
+				)
+			);
 		}
 
 		telemetryDiagnostics = telemetryDiagnosticsList?.ToArray();
@@ -285,7 +338,14 @@ partial class PipelineHelpers
 		return [.. methodTargets];
 	}
 
-	static string GetLogName(string interfaceName, string className, LoggerAttributeRecord loggerAttribute, LogAttributeRecord? logAttribute, string methodName, int defaultPrefixType)
+	static string GetLogName(
+		string interfaceName,
+		string className,
+		LoggerAttributeRecord loggerAttribute,
+		LogAttributeRecord? logAttribute,
+		string methodName,
+		int defaultPrefixType
+	)
 	{
 		if (logAttribute?.Name.IsSet == true)
 			methodName = logAttribute!.Name.Value!;
@@ -314,9 +374,15 @@ partial class PipelineHelpers
 
 			foreach (var suffix in SuffixesToRemove)
 			{
-				if (interfaceName.EndsWith(suffix, StringComparison.Ordinal) && interfaceName.Length > suffix.Length)
+				if (
+					interfaceName.EndsWith(suffix, StringComparison.Ordinal)
+					&& interfaceName.Length > suffix.Length
+				)
 				{
-					interfaceName = interfaceName.Substring(0, interfaceName.Length - suffix.Length);
+					interfaceName = interfaceName.Substring(
+						0,
+						interfaceName.Length - suffix.Length
+					);
 					break;
 				}
 			}
@@ -329,7 +395,11 @@ partial class PipelineHelpers
 		return methodName;
 	}
 
-	static string GenerateTemplateMessage(string logEntryName, bool isScoped, ImmutableArray<LogParameterTarget> methodParameters)
+	static string GenerateTemplateMessage(
+		string logEntryName,
+		bool isScoped,
+		ImmutableArray<LogParameterTarget> methodParameters
+	)
 	{
 		StringBuilder builder = new();
 
@@ -350,8 +420,7 @@ partial class PipelineHelpers
 				.Append(" = ")
 				.Append('{')
 				.Append(parameter.UpperCasedName)
-				.Append("}, ")
-			;
+				.Append("}, ");
 
 			index++;
 		}
@@ -362,12 +431,14 @@ partial class PipelineHelpers
 
 		return builder.ToString();
 	}
+
 	static ImmutableArray<LogParameterTarget> GetLogMethodParameters(
 		IMethodSymbol method,
 		SemanticModel semanticModel,
 		GenerationLogger? logger,
 		CancellationToken token,
-		out (TelemetryDiagnosticDescriptor, ImmutableArray<Location>)? parameterDiagnostic)
+		out (TelemetryDiagnosticDescriptor, ImmutableArray<Location>)? parameterDiagnostic
+	)
 	{
 		parameterDiagnostic = null;
 
@@ -378,13 +449,24 @@ partial class PipelineHelpers
 			token.ThrowIfCancellationRequested();
 
 			var logPropertiesAttribute = SharedHelpers.GetLogPropertiesAttribute(
-				parameter, semanticModel, logger, token);
+				parameter,
+				semanticModel,
+				logger,
+				token
+			);
 			var expandEnumerableAttribute = SharedHelpers.GetExpandEnumerableAttribute(
-				parameter, semanticModel, logger, token);
+				parameter,
+				semanticModel,
+				logger,
+				token
+			);
 
 			if (logPropertiesAttribute != null && expandEnumerableAttribute != null)
 			{
-				parameterDiagnostic = (TelemetryDiagnostics.Logging.ExpandEnumerableAndLogPropertiesNotSupported, parameter.Locations);
+				parameterDiagnostic = (
+					TelemetryDiagnostics.Logging.ExpandEnumerableAndLogPropertiesNotSupported,
+					parameter.Locations
+				);
 				break;
 			}
 
@@ -398,46 +480,52 @@ partial class PipelineHelpers
 				foreach (var property in type.GetMembers().OfType<IPropertySymbol>())
 				{
 					var propertyName = property.Name;
-					if (Utilities.ContainsAttribute(property, Constants.Logging.MicrosoftExtensions.LogPropertyIgnoreAttribute, token))
+					if (
+						Utilities.ContainsAttribute(
+							property,
+							Constants.Logging.MicrosoftExtensions.LogPropertyIgnoreAttribute,
+							token
+						)
+					)
 					{
-						logger?.Debug($"Skipping property {propertyName} on {parameter.Name} as it is marked with {Constants.Logging.MicrosoftExtensions.LogPropertyIgnoreAttribute}.");
+						logger?.Debug(
+							$"Skipping property {propertyName} on {parameter.Name} as it is marked with {Constants.Logging.MicrosoftExtensions.LogPropertyIgnoreAttribute}."
+						);
 						continue;
 					}
 
-					var isNullable = property.Type.IsReferenceType
-						|| property.Type.OriginalDefinition.SpecialType == SpecialType.System_Nullable_T;
+					var isNullable =
+						property.Type.IsReferenceType
+						|| property.Type.OriginalDefinition.SpecialType
+							== SpecialType.System_Nullable_T;
 
 					logProperties ??= [];
 
-					logProperties.Add(new(
-						PropertyName: propertyName,
-						IsNullable: isNullable
-					));
+					logProperties.Add(new(PropertyName: propertyName, IsNullable: isNullable));
 				}
 			}
 
 			var isException = Utilities.IsExceptionType(parameter.Type);
-			parameters.Add(new(
-				Name: parameter.Name,
-				UpperCasedName: Utilities.UppercaseFirstChar(parameter.Name),
-				FullyQualifiedType: Utilities.GetFullyQualifiedOrSystemName(parameter.Type),
-
-				IsNullable: parameter.NullableAnnotation == NullableAnnotation.Annotated,
-				IsException: isException,
-				IsFirstException: isException && isFirstException,
-
-				IsIEnumerable: Utilities.IsIEnumerable(parameter.Type, semanticModel.Compilation),
-				IsArray: Utilities.IsArray(parameter.Type),
-
-				IsComplexType: Utilities.IsComplexType(parameter.Type),
-
-				Locations: parameter.Locations,
-
-				LogPropertiesAttribute: logPropertiesAttribute,
-				LogProperties: logProperties?.ToImmutableArray(),
-
-				ExpandEnumerableAttribute: expandEnumerableAttribute
-			));
+			parameters.Add(
+				new(
+					Name: parameter.Name,
+					UpperCasedName: Utilities.UppercaseFirstChar(parameter.Name),
+					FullyQualifiedType: Utilities.GetFullyQualifiedOrSystemName(parameter.Type),
+					IsNullable: parameter.NullableAnnotation == NullableAnnotation.Annotated,
+					IsException: isException,
+					IsFirstException: isException && isFirstException,
+					IsIEnumerable: Utilities.IsIEnumerable(
+						parameter.Type,
+						semanticModel.Compilation
+					),
+					IsArray: Utilities.IsArray(parameter.Type),
+					IsComplexType: Utilities.IsComplexType(parameter.Type),
+					Locations: parameter.Locations,
+					LogPropertiesAttribute: logPropertiesAttribute,
+					LogProperties: logProperties?.ToImmutableArray(),
+					ExpandEnumerableAttribute: expandEnumerableAttribute
+				)
+			);
 
 			if (isException)
 				isFirstException = false;

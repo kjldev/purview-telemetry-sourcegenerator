@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorLoggingGen2Tests
 	public async Task Generate_GivenMethodWithLogProperty_GeneratesIndividualProperties()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -27,7 +28,10 @@ public class WeatherForecast
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -37,7 +41,8 @@ public class WeatherForecast
 	public async Task Generate_GivenMethodWithLogPropertyAndExpandEnumerable_GeneratesDiagnostic()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -58,7 +63,10 @@ public class WeatherForecast
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult, validateNonEmptyDiagnostics: true);
@@ -68,7 +76,8 @@ public class WeatherForecast
 	public async Task Generate_GivenMethodWithExceptionUsedInTemplate_UsesPassInException()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -83,7 +92,10 @@ public interface ITestLogger
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -93,7 +105,8 @@ public interface ITestLogger
 	public async Task Generate_GivenMethodWithLogPropertyOmit_GeneratesIndividualProperties()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -114,18 +127,21 @@ public class WeatherForecast
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
 	}
 
-
 	[Fact]
 	public async Task Generate_GivenMethodWithLogPropertySkipNull_GeneratesIndividualProperties()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -146,7 +162,10 @@ public class WeatherForecast
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -156,7 +175,8 @@ public class WeatherForecast
 	public async Task Generate_GivenMethodWithLogPropertySkipNullAndOmit_GeneratesIndividualProperties()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -177,7 +197,10 @@ public class WeatherForecast
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -187,7 +210,8 @@ public class WeatherForecast
 	public async Task Generate_GivenMethodWithLogPropertyIgnore_GeneratesIndividualProperties()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -211,7 +235,10 @@ public class WeatherForecast
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);

@@ -64,13 +64,14 @@ partial class TelemetryDiagnostics
 			Severity: DiagnosticSeverity.Error
 		);
 
-		public static readonly TelemetryDiagnosticDescriptor ParentContextOrIdParameterNotAllowed = new(
-			Id: "TSG3007",
-			Title: "Parent context or Parent Id parameter is not valid on event",
-			Description: "The {0} parameter is not allowed when defining an activity event, only on the activity start/ create method.",
-			Category: Constants.Diagnostics.Activity.Usage,
-			Severity: DiagnosticSeverity.Error
-		);
+		public static readonly TelemetryDiagnosticDescriptor ParentContextOrIdParameterNotAllowed =
+			new(
+				Id: "TSG3007",
+				Title: "Parent context or Parent Id parameter is not valid on event",
+				Description: "The {0} parameter is not allowed when defining an activity event, only on the activity start/ create method.",
+				Category: Constants.Diagnostics.Activity.Usage,
+				Severity: DiagnosticSeverity.Error
+			);
 
 		public static readonly TelemetryDiagnosticDescriptor LinksParameterNotAllowed = new(
 			Id: "TSG3008",
@@ -96,13 +97,14 @@ partial class TelemetryDiagnostics
 			Severity: DiagnosticSeverity.Error
 		);
 
-		public static readonly TelemetryDiagnosticDescriptor EscapedParameterIsOnlyValidOnEvent = new(
-			Id: "TSG3011",
-			Title: "Escaped parameters are only valid on Events, not Activity or Context methods",
-			Description: "The parameters {0} is not valid on Activity or Context methods, only on Events.",
-			Category: Constants.Diagnostics.Activity.Usage,
-			Severity: DiagnosticSeverity.Error
-		);
+		public static readonly TelemetryDiagnosticDescriptor EscapedParameterIsOnlyValidOnEvent =
+			new(
+				Id: "TSG3011",
+				Title: "Escaped parameters are only valid on Events, not Activity or Context methods",
+				Description: "The parameters {0} is not valid on Activity or Context methods, only on Events.",
+				Category: Constants.Diagnostics.Activity.Usage,
+				Severity: DiagnosticSeverity.Error
+			);
 
 		public static readonly TelemetryDiagnosticDescriptor NoActivityMethodsDefined = new(
 			Id: "TSG3012",
@@ -128,13 +130,14 @@ partial class TelemetryDiagnostics
 			Severity: DiagnosticSeverity.Warning
 		);
 
-		public static readonly TelemetryDiagnosticDescriptor ActivityShouldBeTheFirstParameter = new(
-			Id: "TSG3015",
-			Title: "Activity should be the first parameter",
-			Description: "For readability, ensure the Activity parameter is the first one defined.",
-			Category: Constants.Diagnostics.Activity.Usage,
-			Severity: DiagnosticSeverity.Info
-		);
+		public static readonly TelemetryDiagnosticDescriptor ActivityShouldBeTheFirstParameter =
+			new(
+				Id: "TSG3015",
+				Title: "Activity should be the first parameter",
+				Description: "For readability, ensure the Activity parameter is the first one defined.",
+				Category: Constants.Diagnostics.Activity.Usage,
+				Severity: DiagnosticSeverity.Info
+			);
 
 		public static readonly TelemetryDiagnosticDescriptor StatusDescriptionMustBeString = new(
 			Id: "TSG3016",
@@ -144,12 +147,13 @@ partial class TelemetryDiagnostics
 			Severity: DiagnosticSeverity.Error
 		);
 
-		public static readonly TelemetryDiagnosticDescriptor StatusDescriptionParameterInvalidType = new(
-			Id: "TSG3017",
-			Title: "Status Description parameters are only valid on Events, not Activity or Context methods",
-			Description: "The parameters {0} is not valid on Activity or Context methods, only on Events.",
-			Category: Constants.Diagnostics.Activity.Usage,
-			Severity: DiagnosticSeverity.Error
-		);
+		public static readonly TelemetryDiagnosticDescriptor StatusDescriptionParameterInvalidType =
+			new(
+				Id: "TSG3017",
+				Title: "Status Description parameters are only valid on Events, not Activity or Context methods",
+				Description: "The parameters {0} is not valid on Activity or Context methods, only on Events.",
+				Category: Constants.Diagnostics.Activity.Usage,
+				Severity: DiagnosticSeverity.Error
+			);
 	}
 }

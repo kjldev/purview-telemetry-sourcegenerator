@@ -4,12 +4,10 @@
 		<LangVersion>13.0</LangVersion>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 		<AnalysisLevel>latest</AnalysisLevel>
-
 		<NoWarn>$(NoWarn);CA1031;CA1515;CA1724;CA2007;CA2201;</NoWarn>
 	</PropertyGroup>
 </Project>

@@ -2,12 +2,12 @@
 
 partial class TelemetrySourceGeneratorMetricsTests
 {
-
 	[Fact]
 	public async Task Generate_GivenBasicUpDown_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -33,7 +33,8 @@ public interface ITestMetrics {
 	public async Task Generate_GivenBasicObservableUpDown_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 using System.Diagnostics.Metrics;
 using System.Collections.Generic;

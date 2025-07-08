@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorTests
 	public async Task Generate_GivenICacheServiceProviderTelemetry_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using System.Diagnostics;
 using Purview.Telemetry.Activities;
 using Purview.Telemetry.Logging;
@@ -81,9 +82,16 @@ public interface ICacheServiceProviderTelemetry
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicTelemetry, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicTelemetry,
+			disableDependencyInjection: false
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, s => s.ScrubInlineGuids(), whenValidatingDiagnosticsIgnoreNonErrors: true);
+		await TestHelpers.Verify(
+			generationResult,
+			s => s.ScrubInlineGuids(),
+			whenValidatingDiagnosticsIgnoreNonErrors: true
+		);
 	}
 }

@@ -7,7 +7,13 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 
 partial class MeterTargetClassEmitter
 {
-	static int EmitMethods(MeterTarget target, StringBuilder builder, int indent, SourceProductionContext context, GenerationLogger? logger)
+	static int EmitMethods(
+		MeterTarget target,
+		StringBuilder builder,
+		int indent,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		indent++;
 
@@ -26,7 +32,13 @@ partial class MeterTargetClassEmitter
 		return --indent;
 	}
 
-	static void EmitPartialMethods(StringBuilder builder, int indent, MeterTarget target, SourceProductionContext context, GenerationLogger? logger)
+	static void EmitPartialMethods(
+		StringBuilder builder,
+		int indent,
+		MeterTarget target,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -38,13 +50,16 @@ partial class MeterTargetClassEmitter
 			.Append(indent, "partial void ", withNewLine: false)
 			.Append(PartialMeterTagsMethod)
 			.Append('(')
-			.Append(Constants.System.Dictionary
-				.MakeGeneric(Constants.System.StringKeyword, Constants.System.ObjectKeyword + "?")
-				.WithGlobal()
+			.Append(
+				Constants
+					.System.Dictionary.MakeGeneric(
+						Constants.System.StringKeyword,
+						Constants.System.ObjectKeyword + "?"
+					)
+					.WithGlobal()
 			)
 			.AppendLine(" meterTags);")
-			.AppendLine()
-		;
+			.AppendLine();
 
 		foreach (var instrument in target.InstrumentationMethods)
 		{
@@ -59,24 +74,36 @@ partial class MeterTargetClassEmitter
 				.Append(indent, "partial void ", withNewLine: false)
 				.Append(instrument.TagPopulateMethodName)
 				.Append('(')
-				.Append(Constants.System.Dictionary
-					.MakeGeneric(Constants.System.StringKeyword, Constants.System.ObjectKeyword + "?")
-					.WithGlobal()
+				.Append(
+					Constants
+						.System.Dictionary.MakeGeneric(
+							Constants.System.StringKeyword,
+							Constants.System.ObjectKeyword + "?"
+						)
+						.WithGlobal()
 				)
 				.AppendLine(" instrumentTags);")
-				.AppendLine()
-			;
+				.AppendLine();
 		}
 	}
 
-	static void EmitMethod(StringBuilder builder, int indent, InstrumentTarget methodTarget, SourceProductionContext context, GenerationLogger? logger)
+	static void EmitMethod(
+		StringBuilder builder,
+		int indent,
+		InstrumentTarget methodTarget,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
 		if (methodTarget.InstrumentAttribute == null)
 			return;
 
-		if (!methodTarget.InstrumentAttribute!.IsAutoIncrement && methodTarget.MeasurementParameter == null)
+		if (
+			!methodTarget.InstrumentAttribute!.IsAutoIncrement
+			&& methodTarget.MeasurementParameter == null
+		)
 			return;
 
 		logger?.Debug($"Emitting instrument method: {methodTarget.MethodName}.");
@@ -85,17 +112,12 @@ partial class MeterTargetClassEmitter
 			.CodeGen(indent)
 			.AggressiveInlining(indent)
 			.Append(indent, "public ", withNewLine: false)
-			.Append(methodTarget.ReturnType)
-	;
+			.Append(methodTarget.ReturnType);
 
 		if (methodTarget.IsNullableReturn)
 			builder.Append('?');
 
-		builder
-			.Append(' ')
-			.Append(methodTarget.MethodName)
-			.Append('(')
-		;
+		builder.Append(' ').Append(methodTarget.MethodName).Append('(');
 
 		var index = 0;
 		foreach (var parameter in methodTarget.Parameters)
@@ -106,7 +128,9 @@ partial class MeterTargetClassEmitter
 			{
 				var type = methodTarget.InstrumentMeasurementType;
 				if (methodTarget.MeasurementParameter!.IsMeasurement)
-					type = Constants.Metrics.SystemDiagnostics.Measurement.MakeGeneric(type).WithGlobal();
+					type = Constants
+						.Metrics.SystemDiagnostics.Measurement.MakeGeneric(type)
+						.WithGlobal();
 
 				if (methodTarget.MeasurementParameter!.IsIEnumerable)
 					type = Constants.System.GenericIEnumerable.MakeGeneric(type).WithGlobal();
@@ -121,10 +145,7 @@ partial class MeterTargetClassEmitter
 			if (parameter.IsNullable)
 				builder.Append('?');
 
-			builder
-				.Append(' ')
-				.Append(parameter.ParameterName)
-			;
+			builder.Append(' ').Append(parameter.ParameterName);
 
 			if (index < methodTarget.Parameters.Length - 1)
 				builder.Append(", ");
@@ -132,10 +153,7 @@ partial class MeterTargetClassEmitter
 			index++;
 		}
 
-		builder
-			.AppendLine(')')
-			.Append(indent, '{')
-		;
+		builder.AppendLine(')').Append(indent, '{');
 
 		if (methodTarget.IsObservable)
 			EmitObservableInstrumentBodyTest(builder, indent, methodTarget);
@@ -152,7 +170,11 @@ partial class MeterTargetClassEmitter
 		builder.Append(indent, '}');
 	}
 
-	static void EmitObservableInstrumentBodyTest(StringBuilder builder, int indent, InstrumentTarget method)
+	static void EmitObservableInstrumentBodyTest(
+		StringBuilder builder,
+		int indent,
+		InstrumentTarget method
+	)
 	{
 		indent++;
 
@@ -160,8 +182,7 @@ partial class MeterTargetClassEmitter
 			.Append(indent, "if (", withNewLine: false)
 			.Append(method.FieldName)
 			.AppendLine(" != null)")
-			.Append(indent, '{')
-		;
+			.Append(indent, '{');
 
 		if (method.InstrumentAttribute?.ThrowOnAlreadyInitialized?.Value == true)
 		{
@@ -170,8 +191,7 @@ partial class MeterTargetClassEmitter
 				.Append(Constants.System.Exception.WithGlobal())
 				.Append("(\"")
 				.Append(method.MetricName)
-				.AppendLine(" has already been initialized.\");")
-			;
+				.AppendLine(" has already been initialized.\");");
 		}
 		else
 		{
@@ -183,10 +203,7 @@ partial class MeterTargetClassEmitter
 				builder.AppendLine(';');
 		}
 
-		builder
-			.Append(indent, '}')
-			.AppendLine()
-		;
+		builder.Append(indent, '}').AppendLine();
 	}
 
 	static void EmitInstrumentBodyTest(StringBuilder builder, int indent, InstrumentTarget method)
@@ -197,8 +214,7 @@ partial class MeterTargetClassEmitter
 			.Append(indent, "if (", withNewLine: false)
 			.Append(method.FieldName)
 			.AppendLine(" == null)")
-			.Append(indent, '{')
-		;
+			.Append(indent, '{');
 
 		builder.Append(indent + 1, "return", withNewLine: false);
 
@@ -207,13 +223,15 @@ partial class MeterTargetClassEmitter
 		else
 			builder.AppendLine(';');
 
-		builder
-			.Append(indent, '}')
-			.AppendLine()
-		;
+		builder.Append(indent, '}').AppendLine();
 	}
 
-	static void EmitObservableInstrumentBody(StringBuilder builder, int indent, InstrumentTarget method, string? tagVariableName)
+	static void EmitObservableInstrumentBody(
+		StringBuilder builder,
+		int indent,
+		InstrumentTarget method,
+		string? tagVariableName
+	)
 	{
 		indent++;
 
@@ -235,8 +253,7 @@ partial class MeterTargetClassEmitter
 			.Append(", unit: ")
 			.Append(unit ?? Constants.System.NullKeyword)
 			.Append(", description: ")
-			.Append(description ?? Constants.System.NullKeyword)
-		;
+			.Append(description ?? Constants.System.NullKeyword);
 
 		if (tagVariableName != null)
 		{
@@ -244,28 +261,30 @@ partial class MeterTargetClassEmitter
 				.AppendLine()
 				.Append(indent + 1, ", tags: ", withNewLine: false)
 				.AppendLine(tagVariableName)
-				.WithIndent(indent)
-			;
+				.WithIndent(indent);
 		}
 
 		builder.AppendLine(");");
 
 		if (method.ReturnsBool)
 		{
-			builder
-				.AppendLine()
-				.Append(indent, "return true;")
-			;
+			builder.AppendLine().Append(indent, "return true;");
 		}
 	}
 
-	static void EmitInstrumentBody(StringBuilder builder, int indent, InstrumentTarget methodTarget, string? tagVariableName)
+	static void EmitInstrumentBody(
+		StringBuilder builder,
+		int indent,
+		InstrumentTarget methodTarget,
+		string? tagVariableName
+	)
 	{
 		indent++;
 
-		var instrumentMeasureMethodName = methodTarget.InstrumentAttribute!.InstrumentType == InstrumentTypes.Histogram
-			? "Record"
-			: "Add";
+		var instrumentMeasureMethodName =
+			methodTarget.InstrumentAttribute!.InstrumentType == InstrumentTypes.Histogram
+				? "Record"
+				: "Add";
 
 		builder
 			.Append(indent, methodTarget.FieldName, withNewLine: false)
@@ -273,8 +292,7 @@ partial class MeterTargetClassEmitter
 			.Append(instrumentMeasureMethodName)
 			.Append('(')
 			.Append(methodTarget.MeasurementParameter?.ParameterName ?? "1")
-			.Append(", tagList: ")
-		;
+			.Append(", tagList: ");
 
 		if (tagVariableName == null)
 			builder.Append("default");
@@ -285,10 +303,7 @@ partial class MeterTargetClassEmitter
 
 		if (methodTarget.ReturnsBool)
 		{
-			builder
-				.AppendLine()
-				.Append(indent, "return true;")
-			;
+			builder.AppendLine().Append(indent, "return true;");
 		}
 	}
 
@@ -306,8 +321,7 @@ partial class MeterTargetClassEmitter
 			.Append(tagVariableName)
 			.Append(" = new")
 			.AppendLine("();")
-			.AppendLine()
-		;
+			.AppendLine();
 
 		foreach (var param in methodTarget.Tags)
 		{
@@ -317,8 +331,7 @@ partial class MeterTargetClassEmitter
 					.Append(indent, "if (", withNewLine: false)
 					.Append(param.ParameterName)
 					.AppendLine(" != default)")
-					.Append(indent, "{")
-				;
+					.Append(indent, "{");
 
 				indent++;
 			}
@@ -329,17 +342,13 @@ partial class MeterTargetClassEmitter
 				.Append(param.GeneratedName.Wrap())
 				.Append(", ")
 				.Append(param.ParameterName)
-				.AppendLine(");")
-			;
+				.AppendLine(");");
 
 			if (param.SkipOnNullOrEmpty)
 			{
 				indent--;
 
-				builder
-					.Append(indent, "}")
-					.AppendLine()
-				;
+				builder.Append(indent, "}").AppendLine();
 			}
 		}
 

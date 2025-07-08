@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorMetricsTests
 	public async Task Generate_GivenNameWithInterfacePrefix_GeneratesMetricsWithPrefix()
 	{
 		// Arrange
-		var basicMetric = @$"
+		var basicMetric =
+			@$"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -30,7 +31,8 @@ interface ITestMetrics
 	public async Task Generate_GivenNameWithAssemblyPrefix_GeneratesMetricsWithPrefix()
 	{
 		// Arrange
-		var basicMetric = @$"
+		var basicMetric =
+			@$"
 using Purview.Telemetry.Metrics;
 
 [assembly: MeterGeneration(InstrumentPrefix = ""This.Is.An.Assembly.Prefix"")]
@@ -56,7 +58,8 @@ interface ITestMetrics
 	public async Task Generate_GivenNameWithAssemblyAndInterfacePrefix_GeneratesMetricsWithPrefix()
 	{
 		// Arrange
-		var basicMetric = @$"
+		var basicMetric =
+			@$"
 using Purview.Telemetry.Metrics;
 
 [assembly: MeterGeneration(InstrumentPrefix = ""This.Is.An.Assembly.Prefix"")]
@@ -82,7 +85,8 @@ interface ITestMetrics
 	public async Task Generate_GivenNameWithAssemblyAndInterfacePrefixAndName_GeneratesMetricsWithPrefix()
 	{
 		// Arrange
-		var basicMetric = @$"
+		var basicMetric =
+			@$"
 using Purview.Telemetry.Metrics;
 
 [assembly: MeterGeneration(InstrumentPrefix = ""This.Is.An.Assembly.Prefix"")]
@@ -108,7 +112,8 @@ interface ITestMetrics
 	public async Task Generate_GivenNameShouldBeLowerCase_GeneratesMetricsWithLowercaseName()
 	{
 		// Arrange
-		var basicMetric = @$"
+		var basicMetric =
+			@$"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -132,7 +137,8 @@ interface ITestMetrics
 	public async Task Generate_GivenNameShouldBeDefaultLowerCase_GeneratesMetricsWithLowercaseName()
 	{
 		// Arrange
-		var basicMetric = @$"
+		var basicMetric =
+			@$"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -156,7 +162,8 @@ interface ITestMetrics
 	public async Task Generate_GivenNameShouldBeDefinedCase_GeneratesMetricsWithLowercaseName()
 	{
 		// Arrange
-		var basicMetric = @$"
+		var basicMetric =
+			@$"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;

@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorTests
 	public async Task Generate_GivenDuplicateActivityMethodNames_GeneratesDiagnostic()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 
 [ActivitySource(""activity-source"")]
@@ -24,14 +25,19 @@ public interface ITestTelemetry
 		var generationResult = await GenerateAsync(basicTelemetry);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids(), validateNonEmptyDiagnostics: true);
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true
+		);
 	}
 
 	[Fact]
 	public async Task Generate_GivenDuplicateActivityEventContextMethodNames_GeneratesDiagnostic()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 
 [ActivitySource(""activity-source"")]
@@ -52,16 +58,23 @@ public interface ITestTelemetry
 		var generationResult = await GenerateAsync(basicTelemetry);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids(), validateNonEmptyDiagnostics: true);
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true
+		);
 	}
 
 	[Theory]
 	[InlineData(IncludeLoggerTypes.LoggerOnly)]
 	[InlineData(IncludeLoggerTypes.Telemetry)]
-	public async Task Generate_GivenDuplicateLoggingMethodNames_GeneratesDiagnostic(IncludeLoggerTypes includeLoggerTypes)
+	public async Task Generate_GivenDuplicateLoggingMethodNames_GeneratesDiagnostic(
+		IncludeLoggerTypes includeLoggerTypes
+	)
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Logging;
 
 [Logger]
@@ -76,10 +89,14 @@ public interface ITestTelemetry
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicTelemetry, includeLoggerTypes: includeLoggerTypes);
+		var generationResult = await GenerateAsync(
+			basicTelemetry,
+			includeLoggerTypes: includeLoggerTypes
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult,
+		await TestHelpers.Verify(
+			generationResult,
 			c => c.ScrubInlineGuids().UseParameters(includeLoggerTypes),
 			validateNonEmptyDiagnostics: true
 		);
@@ -89,7 +106,8 @@ public interface ITestTelemetry
 	public async Task Generate_GivenDuplicateMetricsMethodNames_GeneratesDiagnostic()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Metrics;
 
 [Meter]
@@ -107,16 +125,23 @@ public interface ITestTelemetry
 		var generationResult = await GenerateAsync(basicTelemetry);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids(), validateNonEmptyDiagnostics: true);
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true
+		);
 	}
 
 	[Theory]
 	[InlineData(IncludeLoggerTypes.LoggerOnly)]
 	[InlineData(IncludeLoggerTypes.Telemetry)]
-	public async Task Generate_GivenDuplicateMultiTargetMethodNames_GeneratesDiagnostic(IncludeLoggerTypes includeLoggerType)
+	public async Task Generate_GivenDuplicateMultiTargetMethodNames_GeneratesDiagnostic(
+		IncludeLoggerTypes includeLoggerType
+	)
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 using Purview.Telemetry.Logging;
 using Purview.Telemetry.Metrics;
@@ -150,13 +175,15 @@ public interface ITestTelemetry
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicTelemetry, includeLoggerTypes: includeLoggerType);
+		var generationResult = await GenerateAsync(
+			basicTelemetry,
+			includeLoggerTypes: includeLoggerType
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult,
-			c => c
-				.ScrubInlineGuids()
-				.UseParameters(includeLoggerType),
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids().UseParameters(includeLoggerType),
 			validateNonEmptyDiagnostics: true
 		);
 	}

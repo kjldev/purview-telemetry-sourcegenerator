@@ -7,13 +7,9 @@ builder
 	.AddServiceDefaults()
 	.AddDefaultOpenAPI(
 	//builder.Services.AddApiVersioning()
-	)
-;
+	);
 
-builder.Services
-	.AddScoped<IWeatherService, WeatherService>()
-	.AddWeatherServiceTelemetry()
-;
+builder.Services.AddScoped<IWeatherService, WeatherService>().AddWeatherServiceTelemetry();
 
 var app = builder.Build();
 

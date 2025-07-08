@@ -10,14 +10,14 @@ static partial class TestHelpers
 	static readonly Assembly OwnerAssembly = typeof(TestHelpers).Assembly;
 	static readonly string NamespaceRoot = typeof(TestHelpers).Namespace!;
 
-	public const string DefaultUsingSet = @"
+	public const string DefaultUsingSet =
+		@"
 using System;
 using Purview.Telemetry;
 
 ";
 
-	public static string Wrap(this string value, char c = '"')
-		=> c + value + c;
+	public static string Wrap(this string value, char c = '"') => c + value + c;
 
 	public static string LoadEmbeddedResource(string folder, string resourceName)
 	{
@@ -27,7 +27,9 @@ using Purview.Telemetry;
 		if (resourceStream is null)
 		{
 			var existingResources = OwnerAssembly.GetManifestResourceNames();
-			throw new ArgumentException($"Could not find embedded resource {resourceName}. Available resource names: {string.Join(", ", existingResources)}");
+			throw new ArgumentException(
+				$"Could not find embedded resource {resourceName}. Available resource names: {string.Join(", ", existingResources)}"
+			);
 		}
 
 		using StreamReader reader = new(resourceStream, Encoding.UTF8);
@@ -35,8 +37,8 @@ using Purview.Telemetry;
 		return reader.ReadToEnd();
 	}
 
-	public static bool IsModifierPresent(MemberDeclarationSyntax member, SyntaxKind modifier)
-		=> member.Modifiers.Any(m => m.IsKind(modifier));
+	public static bool IsModifierPresent(MemberDeclarationSyntax member, SyntaxKind modifier) =>
+		member.Modifiers.Any(m => m.IsKind(modifier));
 
 	public static List<string> GetCasePermutations(string input)
 	{
@@ -56,8 +58,12 @@ using Purview.Telemetry;
 		{
 			foreach (var s in remainderPermutations)
 			{
-				result.Add(char.ToLower(currentChar, System.Globalization.CultureInfo.InvariantCulture) + s);
-				result.Add(char.ToUpper(currentChar, System.Globalization.CultureInfo.InvariantCulture) + s);
+				result.Add(
+					char.ToLower(currentChar, System.Globalization.CultureInfo.InvariantCulture) + s
+				);
+				result.Add(
+					char.ToUpper(currentChar, System.Globalization.CultureInfo.InvariantCulture) + s
+				);
 			}
 		}
 		else
@@ -69,8 +75,7 @@ using Purview.Telemetry;
 		return result;
 	}
 
-	public static string GetFriendlyTypeName<T>()
-		=> GetFriendlyTypeName(typeof(T));
+	public static string GetFriendlyTypeName<T>() => GetFriendlyTypeName(typeof(T));
 
 	public static string GetFriendlyTypeName(Type type, bool useSystemType = true)
 	{
@@ -123,11 +128,7 @@ using Purview.Telemetry;
 		var index = name.IndexOf('`', StringComparison.OrdinalIgnoreCase);
 
 		StringBuilder builder = new();
-		builder
-			.Append(type.Namespace)
-			.Append('.')
-			.Append(name[..index])
-			.Append('<');
+		builder.Append(type.Namespace).Append('.').Append(name[..index]).Append('<');
 
 		var first = true;
 		foreach (var arg in type.GetGenericArguments())
@@ -143,12 +144,14 @@ using Purview.Telemetry;
 		return builder.ToString();
 	}
 
-	public static async Task Verify(GenerationResult generationResult,
+	public static async Task Verify(
+		GenerationResult generationResult,
 		Action<SettingsTask>? config = null,
 		bool validateNonEmptyDiagnostics = false,
 		bool whenValidatingDiagnosticsIgnoreNonErrors = false,
 		bool validationCompilation = true,
-		bool autoVerifyTemplates = true)
+		bool autoVerifyTemplates = true
+	)
 	{
 		var verifierTask = Verifier
 			.Verify(generationResult.Result)
@@ -197,9 +200,17 @@ using Purview.Telemetry;
 		if (!result.Success)
 		{
 			result
-				.Diagnostics
-				.Where(m => !m.Id.StartsWith("TSG", StringComparison.Ordinal))
-				.ShouldBeEmpty(string.Join(Environment.NewLine, result.Diagnostics.Select(d => d.ToString() + Environment.NewLine + "-----------------------------------------------------")));
+				.Diagnostics.Where(m => !m.Id.StartsWith("TSG", StringComparison.Ordinal))
+				.ShouldBeEmpty(
+					string.Join(
+						Environment.NewLine,
+						result.Diagnostics.Select(d =>
+							d.ToString()
+							+ Environment.NewLine
+							+ "-----------------------------------------------------"
+						)
+					)
+				);
 		}
 	}
 }

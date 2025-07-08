@@ -9,7 +9,8 @@ static partial class Constants
 	public const string SystemDiagnosticsNamespace = "System.Diagnostics";
 	public const string EmbedAttributesHashDefineName = "PURVIEW_TELEMETRY_ATTRIBUTES";
 
-	public const string MessageTemplateRegex = @"\{
+	public const string MessageTemplateRegex =
+		@"\{
     # Optional destructuring (@) or stringify ($)
     (?: (?<destructure>@) | (?<stringify>\$) )?
     # Capture 'identifier' as either an 'ordinal' or a 'named' identifier
@@ -24,39 +25,52 @@ static partial class Constants
     (?::(?<format>[^}]+))?
 \}";
 
-	public static readonly Regex MessageTemplateMatcher = new(MessageTemplateRegex,
-		RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace);
+	public static readonly Regex MessageTemplateMatcher = new(
+		MessageTemplateRegex,
+		RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace
+	);
 
 	public static TemplateInfo[] GetAllTemplates()
 	{
-		return [
+		return
+		[
 			.. Activities.GetTemplates(),
 			.. Logging.GetTemplates(),
 			.. Metrics.GetTemplates(),
-			.. Shared.GetTemplates()
+			.. Shared.GetTemplates(),
 		];
 	}
 
 	public static partial class Shared
 	{
-		public static readonly TemplateInfo TagAttribute = TemplateInfo.Create("Purview.Telemetry.TagAttribute");
-		public static readonly TemplateInfo ExcludeAttribute = TemplateInfo.Create("Purview.Telemetry.ExcludeAttribute");
-		public static readonly TemplateInfo TelemetryGenerationAttribute = TemplateInfo.Create("Purview.Telemetry.TelemetryGenerationAttribute");
+		public static readonly TemplateInfo TagAttribute = TemplateInfo.Create(
+			"Purview.Telemetry.TagAttribute"
+		);
+		public static readonly TemplateInfo ExcludeAttribute = TemplateInfo.Create(
+			"Purview.Telemetry.ExcludeAttribute"
+		);
+		public static readonly TemplateInfo TelemetryGenerationAttribute = TemplateInfo.Create(
+			"Purview.Telemetry.TelemetryGenerationAttribute"
+		);
 
-		public static TemplateInfo[] GetTemplates() => [
-			TagAttribute,
-			ExcludeAttribute,
-			TelemetryGenerationAttribute,
-		];
+		public static TemplateInfo[] GetTemplates() =>
+			[TagAttribute, ExcludeAttribute, TelemetryGenerationAttribute];
 	}
 
 	public static partial class DependencyInjection
 	{
-		public const string DependencyInjectionNamespace = "Microsoft.Extensions.DependencyInjection";
+		public const string DependencyInjectionNamespace =
+			"Microsoft.Extensions.DependencyInjection";
 
-		public static readonly TypeInfo IServiceCollection = TypeInfo.Create(DependencyInjectionNamespace + ".IServiceCollection");
-		public static readonly TypeInfo ServiceDescriptor = TypeInfo.Create(DependencyInjectionNamespace + ".ServiceDescriptor");
-		public static readonly TypeInfo ServiceLifetime = TypeInfo.Create(DependencyInjectionNamespace + ".ServiceLifetime");
+		public static readonly TypeInfo IServiceCollection = TypeInfo.Create(
+			DependencyInjectionNamespace + ".IServiceCollection"
+		);
+		public static readonly TypeInfo ServiceDescriptor = TypeInfo.Create(
+			DependencyInjectionNamespace + ".ServiceDescriptor"
+		);
+		public static readonly TypeInfo ServiceLifetime = TypeInfo.Create(
+			DependencyInjectionNamespace + ".ServiceLifetime"
+		);
 
 		public static readonly string Singleton = ServiceLifetime + "." + nameof(Singleton);
 	}

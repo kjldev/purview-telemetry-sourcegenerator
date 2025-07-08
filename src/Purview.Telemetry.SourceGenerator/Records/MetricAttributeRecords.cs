@@ -26,5 +26,9 @@ record InstrumentAttributeRecord(
 {
 	public bool IsAutoIncrement => AutoIncrement?.Value ?? false;
 
-	public bool IsObservable => InstrumentType is InstrumentTypes.ObservableCounter or InstrumentTypes.ObservableGauge or InstrumentTypes.ObservableUpDownCounter;
+	public bool IsObservable =>
+		InstrumentType
+			is InstrumentTypes.ObservableCounter
+				or InstrumentTypes.ObservableGauge
+				or InstrumentTypes.ObservableUpDownCounter;
 }

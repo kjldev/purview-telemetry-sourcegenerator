@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorMetricsTests
 	public async Task Generate_GivenBasicAutoCounterWithInferredTagsOfInstrumentType_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -30,7 +31,8 @@ public interface ITestMetrics
 	public async Task Generate_GivenBasicAutoCounterWithSpecifiedInstrumentMeasurement_GeneratesDiagnostic()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -47,14 +49,20 @@ public interface ITestMetrics
 		var generationResult = await GenerateAsync(basicMetric);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, config: c => c.ScrubInlineGuids(), validateNonEmptyDiagnostics: true, validationCompilation: false);
+		await TestHelpers.Verify(
+			generationResult,
+			config: c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			validationCompilation: false
+		);
 	}
 
 	[Fact]
 	public async Task Generate_GivenBasicAutoCounter_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -78,7 +86,8 @@ public interface ITestMetrics
 	public async Task Generate_GivenAutoCounterWithInstrumentationValue_GeneratesDiagnostic()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -95,14 +104,20 @@ public interface ITestMetrics
 		var generationResult = await GenerateAsync(basicMetric);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids(), validateNonEmptyDiagnostics: true, validationCompilation: false);
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			validationCompilation: false
+		);
 	}
 
 	[Fact]
 	public async Task Generate_GivenBasicCounters_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -143,7 +158,8 @@ public interface ITestMetrics {
 	public async Task Generate_GivenBasicCountersWithAutoIncrement_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -172,7 +188,8 @@ public interface ITestMetrics {
 	public async Task Generate_GivenBasicObservableCounters_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 using System.Diagnostics.Metrics;
 using System.Collections.Generic;

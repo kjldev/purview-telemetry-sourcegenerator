@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorMetricsTests
 	public async Task Generate_GivenAssemblyEnableDI_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry;
 using Purview.Telemetry.Metrics;
 
@@ -32,7 +33,8 @@ public interface ITestMetrics {
 	public async Task Generate_GivenInterfaceEnableDI_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry;
 using Purview.Telemetry.Metrics;
 
@@ -57,7 +59,8 @@ public interface ITestMetrics {
 	public async Task Generate_GivenDIDisabledAtAssemblyAndInterfaceEnableDI_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry;
 using Purview.Telemetry.Metrics;
 
@@ -84,7 +87,8 @@ public interface ITestMetrics {
 	public async Task Generate_GivenDIEnabledAtAssemblyAndInterfaceDisabledDI_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry;
 using Purview.Telemetry.Metrics;
 

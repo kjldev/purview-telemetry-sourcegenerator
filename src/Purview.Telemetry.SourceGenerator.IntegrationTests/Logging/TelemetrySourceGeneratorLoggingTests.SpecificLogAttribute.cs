@@ -4,10 +4,13 @@ partial class TelemetrySourceGeneratorLoggingTests
 {
 	[Theory]
 	[MemberData(nameof(SpecificLogAttributeTypes))]
-	public async Task Generate_GivenInterfaceWithSpecificLogAttribute_GenerateLoggerWithThatLevel(string attribute)
+	public async Task Generate_GivenInterfaceWithSpecificLogAttribute_GenerateLoggerWithThatLevel(
+		string attribute
+	)
 	{
 		// Arrange
-		string basicLogger = @$"
+		string basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -29,10 +32,13 @@ public interface ITestLogger
 
 	[Theory]
 	[MemberData(nameof(SpecificLogAttributeTypes))]
-	public async Task Generate_GivenInterfaceWithSpecificTypesAndSpecificParameters_GenerateLoggerWithThatLevelAndParameter(string attribute)
+	public async Task Generate_GivenInterfaceWithSpecificTypesAndSpecificParameters_GenerateLoggerWithThatLevelAndParameter(
+		string attribute
+	)
 	{
 		// Arrange
-		string basicLogger = @$"
+		string basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;

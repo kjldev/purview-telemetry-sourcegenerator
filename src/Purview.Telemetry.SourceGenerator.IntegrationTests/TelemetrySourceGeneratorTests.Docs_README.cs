@@ -8,7 +8,8 @@ partial class TelemetrySourceGeneratorTests
 	public async Task Generate_FromREADMESection_GeneratesTelemetry(IncludeLoggerTypes loggerTypes)
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 using Purview.Telemetry.Logging;
 using Purview.Telemetry.Metrics;
@@ -84,7 +85,8 @@ interface IEntityStoreTelemetry
 	public async Task Generate_FromWikiActivitiesSection_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -109,7 +111,10 @@ interface IActivityTelemetry
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicTelemetry, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicTelemetry,
+			disableDependencyInjection: false
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -119,7 +124,8 @@ interface IActivityTelemetry
 	public async Task Generate_FromWikiLoggingSection_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -149,7 +155,10 @@ enum ItemTypes
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicTelemetry, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicTelemetry,
+			disableDependencyInjection: false
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -159,7 +168,8 @@ enum ItemTypes
 	public async Task Generate_FromWikiMetricsSection_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Metrics;
 using System.Collections.Generic;
 using System.Diagnostics.Metrics;
@@ -194,7 +204,10 @@ interface IMeterTelemetry
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicTelemetry, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicTelemetry,
+			disableDependencyInjection: false
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -204,7 +217,8 @@ interface IMeterTelemetry
 	public async Task Generate_FromWikiMultiTargetingSection_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 using Purview.Telemetry.Logging;
 using Purview.Telemetry.Metrics;
@@ -233,7 +247,10 @@ interface IServiceTelemetry
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicTelemetry, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicTelemetry,
+			disableDependencyInjection: false
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);

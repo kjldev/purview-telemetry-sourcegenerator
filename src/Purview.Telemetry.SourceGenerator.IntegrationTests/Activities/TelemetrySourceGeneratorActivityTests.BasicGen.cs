@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorActivityTests
 	public async Task Generate_GivenBasicGen_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -32,7 +33,8 @@ public interface ITestActivities {
 	public async Task Generate_GivenInterfaceWithNoActivityButOtherActivityBasedMethods_GeneratesDiagnostic()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -51,14 +53,19 @@ public interface ITestActivities {
 		var generationResult = await GenerateAsync(basicActivity);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, config: s => s.ScrubInlineGuids(), validateNonEmptyDiagnostics: true);
+		await TestHelpers.Verify(
+			generationResult,
+			config: s => s.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true
+		);
 	}
 
 	[Fact]
 	public async Task Generate_GivenBasicGenAndNoActivityName_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -85,7 +92,8 @@ public interface ITestActivities
 	public async Task Generate_GivenWithNonStringBaggage_RaisesDiagnosticAndGenerates()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -107,14 +115,19 @@ public interface ITestActivities {
 		var generationResult = await GenerateAsync(basicActivity);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, s => s.ScrubInlineGuids(), validateNonEmptyDiagnostics: true);
+		await TestHelpers.Verify(
+			generationResult,
+			s => s.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true
+		);
 	}
 
 	[Fact]
 	public async Task Generate_GivenBasicGenWithReturningActivity_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -141,7 +154,8 @@ public interface ITestActivities {
 	public async Task Generate_GivenBasicGenWithReturningNullableActivity_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -168,7 +182,8 @@ public interface ITestActivities {
 	public async Task Generate_GivenBasicGenWithNullableParams_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 

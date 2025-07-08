@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorMetricsTests
 	public async Task Generate_GivenObservablesReturnBool_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;
@@ -36,7 +37,8 @@ public interface ITestMetrics
 	public async Task Generate_GivenObservablesReturnBoolAndThrowsOnAlreadyInitialized_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 
 namespace Testing;

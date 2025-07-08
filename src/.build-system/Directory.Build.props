@@ -1,54 +1,46 @@
 ﻿<Project>
 	<Import Project="./BuildVariables.props" />
-
 	<!-- All C# Projects -->
 	<PropertyGroup Label="C# Project Property Groups" Condition="'$(IsCSharpProject)' == 'true'">
 		<TargetFramework>net9.0</TargetFramework>
 		<LangVersion>13.0</LangVersion>
-
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<AccelerateBuildsInVisualStudio>true</AccelerateBuildsInVisualStudio>
 		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-
 		<Deterministic>true</Deterministic>
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<IsPackable>false</IsPackable>
 		<PathMap>source=dest</PathMap>
-
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
 		<EnableNETAnalyzers>true</EnableNETAnalyzers>
 		<AnalysisMode>AllEnabledByDefault</AnalysisMode>
 		<AnalysisLevel>latest</AnalysisLevel>
-
 		<NoWarn>AD0001;$(NoWarn)</NoWarn>
 		<NoWarn>IDE2001;$(NoWarn)</NoWarn>
 		<NoWarn>CS1591;$(NoWarn)</NoWarn>
 		<NoWarn>CA1014;CA1848;CA2007;CA2201;CA2234;CA2225;CA2254;$(NoWarn)</NoWarn>
 		<NoWarn>RCS1090;RCS1108;$(NoWarn)</NoWarn>
-
 		<!-- Default, for running locally - overriden on build. -->
 		<VersionSuffix>0.0.1.0</VersionSuffix>
-
 		<!-- This should be in your executable/ buildable project? -->
 		<!-- <FileVersion>$(VersionSuffix)</FileVersion>
 		<Version>$(VersionSuffix)</Version> -->
-
 		<GenerateAssemblyCompanyAttribute>false</GenerateAssemblyCompanyAttribute>
 		<GenerateAssemblyCopyrightAttribute>false</GenerateAssemblyCopyrightAttribute>
 	</PropertyGroup>
-
 	<ItemGroup>
 		<Using Include="$(RootNamespace)" />
 	</ItemGroup>
-
-	<ItemGroup Label="C# Project Item Groups" Condition="'$(IsCSharpProject)' == 'true' AND $(IsTestProject) != 'true'">
+	<ItemGroup
+		Label="C# Project Item Groups"
+		Condition="'$(IsCSharpProject)' == 'true' AND $(IsTestProject) != 'true'"
+	>
 		<!-- Embedded Resources -->
 		<None Remove="Resources/**/*" />
 		<EmbeddedResource Include="Resources/**/*" />
 	</ItemGroup>
-
 	<ItemGroup Label="Dynamic Versioning" Condition="'$(IsCSharpProject)' == 'true'">
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
 			<_Parameter1>"DynamicProxyGenAssembly2"</_Parameter1>
@@ -60,89 +52,72 @@
 			<_Parameter1>"KJL Solutions Ltd. © 2025 | All Rights Reserved"</_Parameter1>
 		</AssemblyAttribute>
 	</ItemGroup>
-
 	<!-- Package Projects -->
 	<PropertyGroup Label="NuGet Package Project Properties" Condition="'$(IsPackable)' == 'true'">
 		<GenerateDocumentationFile>true</GenerateDocumentationFile>
-
 		<!-- Include symbol files (*.pdb) in the built .nupkg -->
 		<AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
-
 		<!--<PublishRepositoryUrl>true</PublishRepositoryUrl>-->
 		<IncludeSymbols>true</IncludeSymbols>
 		<IncludeSource>true</IncludeSource>
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<PackageTags>$(PackageTags);purview;</PackageTags>
 	</PropertyGroup>
-
 	<ItemGroup Label="NuGet Package References" Condition="$(IsTestProject) != 'true'">
 		<PackageReference Include="Microsoft.SourceLink.GitHub">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
-
 	<!-- Test Projects. -->
 	<PropertyGroup Label="Testing Project Properties" Condition="'$(IsTestProject)' == 'true'">
 		<OutputType>Exe</OutputType>
 		<UseAppHost>true</UseAppHost>
-
 		<UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
 		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
-
 		<NoWarn>$(NoWarn);CA1515;CA1707;CA1822</NoWarn>
-
 		<CollectCoverage>true</CollectCoverage>
 		<Exclude>[NSubstitute*]*,[Shouldly*]*,[xunit.*]*,[TUnit.*]*,[Microsoft.Testing.*]*,[Microsoft.NET.Test*]*[NCrunch*]*</Exclude>
 		<ExcludeByAttribute>System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute</ExcludeByAttribute>
-
 		<Packable>false</Packable>
 		<IsPackable>false</IsPackable>
 		<IsPublishable>false</IsPublishable>
-
 		<EnableStaticNativeInstrumentation>False</EnableStaticNativeInstrumentation>
 		<EnableDynamicNativeInstrumentation>False</EnableDynamicNativeInstrumentation>
 	</PropertyGroup>
-
 	<!-- Exclude any ncrunch settings and xml comment files. -->
 	<ItemGroup Label="C# File Content Options" Condition="'$(IsCSharpProject)' == 'true'">
 		<None Remove="$(MSBuildProjectName).v3.ncrunchproject" />
 		<None Remove="$(AssemblyName).xml" />
-
 		<Compile Remove="TestResults/**" />
 		<Content Remove="TestResults/**" />
 		<EmbeddedResource Remove="TestResults/**" />
 		<None Remove="TestResults/**" />
 	</ItemGroup>
-
 	<ItemGroup Label="Testing NuGet Packages" Condition="'$(IsTestProject)' == 'true'">
 		<Using Include="Shouldly" />
 		<Using Include="Xunit" />
 		<Using Include="NSubstitute" />
-
-		<Content Include="$(MSBuildThisFileDirectory)xunit/xunit.runner.json" Link="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
-
+		<Content
+			Include="$(MSBuildThisFileDirectory)xunit/xunit.runner.json"
+			Link="xunit.runner.json"
+			CopyToOutputDirectory="PreserveNewest"
+		/>
 		<AssemblyAttribute Include="Xunit.Trait">
 			<_Parameter1>Category</_Parameter1>
 			<_Parameter2>$(TestingType)</_Parameter2>
 		</AssemblyAttribute>
-
 		<AssemblyAttribute Include="System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute" />
-
 		<PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
 		<PackageReference Include="Microsoft.Testing.Extensions.TrxReport" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" />
-
 		<PackageReference Include="Shouldly" />
-
 		<PackageReference Include="NSubstitute" />
 		<PackageReference Include="NSubstitute.Analyzers.CSharp">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
-
 		<PackageReference Include="NCrunch.Framework" />
-
 		<PackageReference Include="xunit.v3" />
 		<PackageReference Include="xunit.analyzers">
 			<PrivateAssets>all</PrivateAssets>

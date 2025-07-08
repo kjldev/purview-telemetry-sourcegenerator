@@ -3,15 +3,29 @@ using System.Security.Cryptography;
 
 namespace SampleApp.Host.Services;
 
-sealed class WeatherService(IWeatherServiceTelemetry telemetry, Func<int>? rng = null) : IWeatherService
+sealed class WeatherService(IWeatherServiceTelemetry telemetry, Func<int>? rng = null)
+	: IWeatherService
 {
 	const int TooColdTempInC = -10;
 
-	static readonly string[] Summaries = [
-		"Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+	static readonly string[] Summaries =
+	[
+		"Freezing",
+		"Bracing",
+		"Chilly",
+		"Cool",
+		"Mild",
+		"Warm",
+		"Balmy",
+		"Hot",
+		"Sweltering",
+		"Scorching",
 	];
 
-	public Task<IEnumerable<WeatherForecast>> GetWeatherForecastsAsync(int requestCount, CancellationToken cancellationToken = default)
+	public Task<IEnumerable<WeatherForecast>> GetWeatherForecastsAsync(
+		int requestCount,
+		CancellationToken cancellationToken = default
+	)
 	{
 		const int minRequestCount = 5;
 		const int maxRequestCount = 20;
@@ -20,11 +34,17 @@ sealed class WeatherService(IWeatherServiceTelemetry telemetry, Func<int>? rng =
 		{
 			telemetry.RequestedCountIsTooSmall(requestCount);
 
-			throw new ArgumentOutOfRangeException(nameof(requestCount), $"Requested count must be at least {minRequestCount}, and no greater than {maxRequestCount}.");
+			throw new ArgumentOutOfRangeException(
+				nameof(requestCount),
+				$"Requested count must be at least {minRequestCount}, and no greater than {maxRequestCount}."
+			);
 		}
 
 		var sw = Stopwatch.StartNew();
-		using var activity = telemetry.GettingWeatherForecastFromUpstreamService($"{Guid.NewGuid()}", requestCount);
+		using var activity = telemetry.GettingWeatherForecastFromUpstreamService(
+			$"{Guid.NewGuid()}",
+			requestCount
+		);
 
 		telemetry.WeatherForecastRequested();
 
@@ -42,21 +62,21 @@ sealed class WeatherService(IWeatherServiceTelemetry telemetry, Func<int>? rng =
 			throw ex;
 		}
 
-		var results = Enumerable.Range(1, requestCount).Select(index => new WeatherForecast
-		{
-			Date = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(--index)),
-			TemperatureC = RandomNumberGenerator.GetInt32(-20, 55),
-			Summary = Summaries[RandomNumberGenerator.GetInt32(Summaries.Length)]
-		}).ToArray();
+		var results = Enumerable
+			.Range(1, requestCount)
+			.Select(index => new WeatherForecast
+			{
+				Date = DateOnly.FromDateTime(DateTime.UtcNow.AddDays(--index)),
+				TemperatureC = RandomNumberGenerator.GetInt32(-20, 55),
+				Summary = Summaries[RandomNumberGenerator.GetInt32(Summaries.Length)],
+			})
+			.ToArray();
 
 		foreach (var wf in results)
 			telemetry.HistogramOfTemperature(wf.TemperatureC);
 
 		var minTempInC = results.Min(m => m.TemperatureC);
-		telemetry.ForecastReceived(activity,
-			minTempInC,
-			results.Max(wf => wf.TemperatureC)
-		);
+		telemetry.ForecastReceived(activity, minTempInC, results.Max(wf => wf.TemperatureC));
 
 		if (minTempInC < TooColdTempInC)
 		{

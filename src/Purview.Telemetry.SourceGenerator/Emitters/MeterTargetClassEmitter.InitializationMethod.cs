@@ -7,7 +7,12 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 
 partial class MeterTargetClassEmitter
 {
-	static int EmitInitializationMethod(MeterTarget target, StringBuilder builder, int indent, SourceProductionContext context)
+	static int EmitInitializationMethod(
+		MeterTarget target,
+		StringBuilder builder,
+		int indent,
+		SourceProductionContext context
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -26,8 +31,7 @@ partial class MeterTargetClassEmitter
 			.Append(' ')
 			.Append(Constants.Metrics.MeterFactoryParameterName)
 			.AppendLine(')')
-			.Append(indent, '{')
-		;
+			.Append(indent, '{');
 
 		indent++;
 
@@ -40,24 +44,21 @@ partial class MeterTargetClassEmitter
 			.Append(Constants.System.Exception.WithGlobal())
 			.AppendLine("(\"The meters have already been initialized.\");")
 			.Append(indent, '}')
-			.AppendLine()
-		;
+			.AppendLine();
 
 		builder
 			.Append(indent, DictionaryStringObject, withNewLine: false)
 			.Append(' ')
 			.Append(meterTagsVariableName)
 			.AppendLine(" = new();")
-			.AppendLine()
-		;
+			.AppendLine();
 
 		builder
 			.Append(indent, PartialMeterTagsMethod, withNewLine: false)
 			.Append('(')
 			.Append(meterTagsVariableName)
 			.AppendLine(");")
-			.AppendLine()
-		;
+			.AppendLine();
 
 		builder
 			.Append(indent, MeterFieldName, withNewLine: false)
@@ -74,8 +75,7 @@ partial class MeterTargetClassEmitter
 			.Append(indent + 1, "Tags = ", withNewLine: false)
 			.AppendLine(meterTagsVariableName)
 			.Append(indent, "});")
-			.AppendLine()
-		;
+			.AppendLine();
 
 		foreach (var method in target.InstrumentationMethods)
 			EmitInitialiseInstrumentVariable(method, builder, indent);
@@ -87,18 +87,28 @@ partial class MeterTargetClassEmitter
 		return --indent;
 	}
 
-	static void EmitInitialiseInstrumentVariable(InstrumentTarget method, StringBuilder builder, int indent)
+	static void EmitInitialiseInstrumentVariable(
+		InstrumentTarget method,
+		StringBuilder builder,
+		int indent
+	)
 	{
 		if (!method.TargetGenerationState.IsValid)
 			return;
 
 		if (!method.IsObservable)
 		{
-			var unit = method.InstrumentAttribute?.Unit?.Value?.Wrap() ?? Constants.System.NullKeyword;
-			var description = method.InstrumentAttribute?.Description?.Value?.Wrap() ?? Constants.System.NullKeyword;
-			var tagVariableType = Constants.System.Dictionary
-					.MakeGeneric(Constants.System.StringKeyword, Constants.System.ObjectKeyword + "?")
-					.WithGlobal();
+			var unit =
+				method.InstrumentAttribute?.Unit?.Value?.Wrap() ?? Constants.System.NullKeyword;
+			var description =
+				method.InstrumentAttribute?.Description?.Value?.Wrap()
+				?? Constants.System.NullKeyword;
+			var tagVariableType = Constants
+				.System.Dictionary.MakeGeneric(
+					Constants.System.StringKeyword,
+					Constants.System.ObjectKeyword + "?"
+				)
+				.WithGlobal();
 			var tagVariableName = Utilities.LowercaseFirstChar(method.MethodName) + "Tags";
 
 			builder
@@ -112,8 +122,7 @@ partial class MeterTargetClassEmitter
 				.Append('(')
 				.Append(tagVariableName)
 				.AppendLine(");")
-				.AppendLine()
-			;
+				.AppendLine();
 
 			builder
 				.Append(indent, method.FieldName, withNewLine: false)
@@ -131,8 +140,7 @@ partial class MeterTargetClassEmitter
 				.Append(description)
 				.Append(", tags: ")
 				.Append(tagVariableName)
-				.AppendLine(");")
-			;
+				.AppendLine(");");
 		}
 	}
 }

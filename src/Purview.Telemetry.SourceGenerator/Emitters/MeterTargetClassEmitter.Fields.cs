@@ -7,7 +7,13 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 
 partial class MeterTargetClassEmitter
 {
-	static int EmitFields(MeterTarget target, StringBuilder builder, int indent, SourceProductionContext context, GenerationLogger? logger)
+	static int EmitFields(
+		MeterTarget target,
+		StringBuilder builder,
+		int indent,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -16,12 +22,15 @@ partial class MeterTargetClassEmitter
 		indent++;
 
 		builder
-			.Append(indent, Constants.Metrics.SystemDiagnostics.Meter.WithGlobal(), withNewLine: false)
+			.Append(
+				indent,
+				Constants.Metrics.SystemDiagnostics.Meter.WithGlobal(),
+				withNewLine: false
+			)
 			.Append(' ')
 			.Append(MeterFieldName)
 			.AppendLine(" = default!;")
-			.AppendLine()
-		;
+			.AppendLine();
 
 		foreach (var method in target.InstrumentationMethods)
 		{
@@ -29,16 +38,16 @@ partial class MeterTargetClassEmitter
 				// We've already 'reported' this error, so we can skip it.
 				continue;
 
-			var type = Constants.Metrics.InstrumentTypeMap[method.InstrumentAttribute.InstrumentType]
-					.MakeGeneric(method.InstrumentMeasurementType)
-					.WithGlobal();
+			var type = Constants
+				.Metrics.InstrumentTypeMap[method.InstrumentAttribute.InstrumentType]
+				.MakeGeneric(method.InstrumentMeasurementType)
+				.WithGlobal();
 
 			builder
 				.Append(indent, type, withNewLine: false)
 				.Append("? ")
 				.Append(method.FieldName)
-				.AppendLine(" = null;")
-			;
+				.AppendLine(" = null;");
 		}
 
 		return --indent;

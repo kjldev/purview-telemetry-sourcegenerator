@@ -5,6 +5,4 @@
 /// </summary>
 [global::System.AttributeUsage(global::System.AttributeTargets.Method, AllowMultiple = false)]
 [global::System.Diagnostics.Conditional("PURVIEW_TELEMETRY_ATTRIBUTES")]
-sealed class ExcludeAttribute : global::System.Attribute
-{
-}
+sealed class ExcludeAttribute : global::System.Attribute { }
