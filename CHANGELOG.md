@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.1](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.2.0...v3.2.1) (2025-07-08)
+
+
+### Bug Fixes
+
+* fixed issue [#73](https://github.com/purview-dev/purview-telemetry-sourcegenerator/issues/73), also finally used CSharpier for formatting ([e0f4cc1](https://github.com/purview-dev/purview-telemetry-sourcegenerator/commit/e0f4cc114786cf99a80b96233abcde256b6c96a1))
+
 ## [3.2.0](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.2.0-prerelease.0...v3.2.0) (2025-04-24)
 
 ### Features
