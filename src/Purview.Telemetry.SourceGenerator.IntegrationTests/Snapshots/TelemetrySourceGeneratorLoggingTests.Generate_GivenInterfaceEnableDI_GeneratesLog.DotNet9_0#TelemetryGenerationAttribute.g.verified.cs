@@ -18,17 +18,21 @@ namespace Purview.Telemetry;
 /// <summary>
 /// Marker attribute to control the generation of telemetry-based classes.
 /// </summary>
-[global::System.AttributeUsage(global::System.AttributeTargets.Assembly | global::System.AttributeTargets.Interface, AllowMultiple = false)]
+[global::System.AttributeUsage(
+	global::System.AttributeTargets.Assembly | global::System.AttributeTargets.Interface,
+	AllowMultiple = false
+)]
 [global::System.Diagnostics.Conditional("PURVIEW_TELEMETRY_ATTRIBUTES")]
-[global::System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1019:Define accessors for attribute arguments")]
+[global::System.Diagnostics.CodeAnalysis.SuppressMessage(
+	"Design",
+	"CA1019:Define accessors for attribute arguments"
+)]
 sealed class TelemetryGenerationAttribute : global::System.Attribute
 {
 	/// <summary>
 	/// Initializes a new instance of the <see cref="TelemetryGenerationAttribute"/> class.
 	/// </summary>
-	public TelemetryGenerationAttribute()
-	{
-	}
+	public TelemetryGenerationAttribute() { }
 
 	/// <summary>
 	/// Initializes a new instance of the <see cref="TelemetryGenerationAttribute"/> class, and
@@ -38,7 +42,11 @@ sealed class TelemetryGenerationAttribute : global::System.Attribute
 	/// <param name="generateDependencyExtension">Specifies the <see cref="GenerateDependencyExtension"/>.</param>
 	/// <param name="className">Optionally specifies the <see cref="ClassName"/>.</param>
 	/// <param name="dependencyInjectionClassName">Optionally specifies the <see cref="DependencyInjectionClassName"/>.</param>
-	public TelemetryGenerationAttribute(bool generateDependencyExtension, string? className = null, string? dependencyInjectionClassName = null)
+	public TelemetryGenerationAttribute(
+		bool generateDependencyExtension,
+		string? className = null,
+		string? dependencyInjectionClassName = null
+	)
 	{
 		GenerateDependencyExtension = generateDependencyExtension;
 		ClassName = className;
@@ -51,7 +59,10 @@ sealed class TelemetryGenerationAttribute : global::System.Attribute
 	/// </summary>
 	/// <param name="className">Specifies the <see cref="ClassName"/>.</param>
 	/// <param name="dependencyInjectionClassName">Optionally specifies the <see cref="DependencyInjectionClassName"/>.</param>
-	public TelemetryGenerationAttribute(string className, string? dependencyInjectionClassName = null)
+	public TelemetryGenerationAttribute(
+		string className,
+		string? dependencyInjectionClassName = null
+	)
 	{
 		ClassName = className;
 		DependencyInjectionClassName = dependencyInjectionClassName;

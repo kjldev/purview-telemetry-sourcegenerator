@@ -20,7 +20,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {{
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -33,7 +33,7 @@ public interface ITestActivities
 		var generationResult = await GenerateAsync(basicActivity);
 
 		// Assert
-		await TestHelpers.Verify(generationResult);
+		await TestHelpers.Verify(generationResult, parameters: activityType);
 	}
 
 	[Fact]
@@ -48,7 +48,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -77,7 +77,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -106,7 +106,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -135,7 +135,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -164,7 +164,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -193,7 +193,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -222,7 +222,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();

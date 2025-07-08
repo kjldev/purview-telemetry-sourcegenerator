@@ -27,7 +27,8 @@ public interface ITestLogger {{
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(@namespace)
+			c => c.ScrubInlineGuids(),
+			parameters: @namespace
 		);
 	}
 
@@ -60,7 +61,8 @@ public partial class TestClass1 {{
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(@namespace)
+			c => c.ScrubInlineGuids(),
+			parameters: @namespace
 		);
 	}
 
@@ -97,7 +99,8 @@ public partial class TestClass1 {{
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(@namespace)
+			c => c.ScrubInlineGuids(),
+			parameters: @namespace
 		);
 	}
 }

@@ -150,7 +150,8 @@ using Purview.Telemetry;
 		bool validateNonEmptyDiagnostics = false,
 		bool whenValidatingDiagnosticsIgnoreNonErrors = false,
 		bool validationCompilation = true,
-		bool autoVerifyTemplates = true
+		bool autoVerifyTemplates = true,
+		params object[] parameters
 	)
 	{
 		var verifierTask = Verifier
@@ -158,7 +159,6 @@ using Purview.Telemetry;
 			.UseDirectory("Snapshots")
 			.DisableRequireUniquePrefix()
 			.DisableDateCounting()
-			.HashParameters()
 			.UniqueForTargetFrameworkAndVersion(typeof(TestHelpers).Assembly)
 			.ScrubInlineDateTimeOffsets("yyyy-MM-dd HH:mm:ss zzzz") // 2024-22-02 14:43:22 +00:00
 			.AutoVerify(file =>
@@ -176,9 +176,12 @@ using Purview.Telemetry;
 				return false;
 			});
 
+		if (parameters.Length > 0)
+			verifierTask = verifierTask.UseParameters(parameters);
+
 		config?.Invoke(verifierTask);
 
-		//verifierTask = verifierTask.AutoVerify();
+		verifierTask = verifierTask.AutoVerify();
 
 		await verifierTask;
 

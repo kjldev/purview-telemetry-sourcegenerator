@@ -20,7 +20,7 @@ using Purview.Telemetry.Metrics;
 namespace Testing;
 
 [Meter(""testing-meter"")]
-public interface ITestMetrics 
+public interface ITestMetrics
 {{
 	[AutoCounter]
 	void AutoCounter({parameterType} genericParameter);
@@ -54,7 +54,8 @@ public interface ITestMetrics
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(parameterType)
+			c => c.ScrubInlineGuids(),
+			parameters: parameterType
 		);
 	}
 
@@ -89,8 +90,9 @@ public interface ITestMetrics<{genericTypeDef}>  {{
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(genericTypeCount),
-			validateNonEmptyDiagnostics: true
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: genericTypeCount
 		);
 	}
 
@@ -125,8 +127,9 @@ public interface ITestMetrics<{genericTypeDef}>  {{
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(genericTypeCount),
-			validateNonEmptyDiagnostics: true
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: genericTypeCount
 		);
 	}
 }

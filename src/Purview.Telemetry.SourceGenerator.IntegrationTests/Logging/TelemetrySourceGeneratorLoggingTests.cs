@@ -31,7 +31,8 @@ public interface ITestLogger {{
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(parameterType)
+			c => c.ScrubInlineGuids(),
+			parameters: parameterType
 		);
 	}
 
@@ -65,8 +66,9 @@ public interface ITestLogger<{genericTypeDef}> {{
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(genericTypeCount),
-			validateNonEmptyDiagnostics: true
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: genericTypeCount
 		);
 	}
 
@@ -100,8 +102,9 @@ public interface ITestLogger<{genericTypeDef}> {{
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(genericTypeCount),
-			validateNonEmptyDiagnostics: true
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: genericTypeCount
 		);
 	}
 }

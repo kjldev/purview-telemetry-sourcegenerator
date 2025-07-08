@@ -78,7 +78,7 @@ interface IEntityStoreTelemetry
 		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(loggerTypes));
+		await TestHelpers.Verify(generationResult, parameters: loggerTypes);
 	}
 
 	[Fact]

@@ -24,7 +24,7 @@ public interface ITestLogger {{
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(logTargetName));
+		await TestHelpers.Verify(generationResult, parameters: logTargetName);
 	}
 
 	[Theory]
@@ -58,7 +58,7 @@ public interface ITestLogger {{
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(prefixType, logTargetName));
+		await TestHelpers.Verify(generationResult, parameters: [prefixType, logTargetName]);
 	}
 
 	public static TheoryData<string, string> GetPrefixAndEntryNames()

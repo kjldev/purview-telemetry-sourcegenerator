@@ -20,15 +20,16 @@ namespace Purview.Telemetry;
 /// </summary>
 [global::System.AttributeUsage(global::System.AttributeTargets.Parameter, AllowMultiple = false)]
 [global::System.Diagnostics.Conditional("PURVIEW_TELEMETRY_ATTRIBUTES")]
-[global::System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1019:Define accessors for attribute arguments")]
+[global::System.Diagnostics.CodeAnalysis.SuppressMessage(
+	"Design",
+	"CA1019:Define accessors for attribute arguments"
+)]
 sealed class TagAttribute : global::System.Attribute
 {
 	/// <summary>
 	/// Creates a new instance of a <see cref="TagAttribute"/>.
 	/// </summary>
-	public TagAttribute()
-	{
-	}
+	public TagAttribute() { }
 
 	/// <summary>
 	/// Creates a new instance of a <see cref="TagAttribute"/> and specifies the

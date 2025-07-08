@@ -33,7 +33,8 @@ public interface ITestLogger
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(nullableDisposable)
+			c => c.ScrubInlineGuids(),
+			parameters: nullableDisposable
 		);
 	}
 

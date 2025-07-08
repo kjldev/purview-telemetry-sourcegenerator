@@ -29,7 +29,7 @@ public interface ITestLogger
 		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(parameter));
+		await TestHelpers.Verify(generationResult, parameters: parameter);
 	}
 
 	[Theory]
@@ -63,8 +63,9 @@ public interface ITestLogger
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.UseParameters(maxCount).ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: maxCount
 		);
 	}
 

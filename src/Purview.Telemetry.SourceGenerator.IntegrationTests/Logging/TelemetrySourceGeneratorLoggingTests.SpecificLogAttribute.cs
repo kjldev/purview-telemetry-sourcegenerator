@@ -16,7 +16,7 @@ using Purview.Telemetry.Logging;
 namespace Testing;
 
 [Logger]
-public interface ITestLogger 
+public interface ITestLogger
 {{
 	[{attribute}]
 	void Log(string stringParam, int intParam, bool boolParam);
@@ -27,7 +27,7 @@ public interface ITestLogger
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(attribute));
+		await TestHelpers.Verify(generationResult, parameters: attribute);
 	}
 
 	[Theory]
@@ -44,7 +44,7 @@ using Purview.Telemetry.Logging;
 namespace Testing;
 
 [Logger]
-public interface ITestLogger 
+public interface ITestLogger
 {{
 	[{attribute}]
 	void Log(string stringParam, int intParam, bool boolParam);
@@ -70,7 +70,7 @@ public interface ITestLogger
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(attribute));
+		await TestHelpers.Verify(generationResult, parameters: attribute);
 	}
 
 	public static TheoryData<string> SpecificLogAttributeTypes

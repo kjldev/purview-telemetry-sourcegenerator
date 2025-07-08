@@ -20,7 +20,7 @@ using Purview.Telemetry.Activities;
 namespace Testing;
 
 [ActivitySource]
-public interface ITestActivities 
+public interface ITestActivities
 {{
 	[Activity]
 	System.Diagnostics.Activity? Activity({parameterType} paramName);
@@ -39,7 +39,8 @@ public interface ITestActivities
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(parameterType)
+			c => c.ScrubInlineGuids(),
+			parameters: parameterType
 		);
 	}
 
@@ -75,8 +76,9 @@ public interface ITestActivities<{genericTypeDef}>
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(genericTypeCount),
-			validateNonEmptyDiagnostics: true
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: genericTypeCount
 		);
 	}
 
@@ -112,8 +114,9 @@ public interface ITestActivities
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(genericTypeCount),
-			validateNonEmptyDiagnostics: true
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: genericTypeCount
 		);
 	}
 }

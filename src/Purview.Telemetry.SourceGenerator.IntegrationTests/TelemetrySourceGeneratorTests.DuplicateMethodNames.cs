@@ -97,8 +97,9 @@ public interface ITestTelemetry
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(includeLoggerTypes),
-			validateNonEmptyDiagnostics: true
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: [includeLoggerTypes]
 		);
 	}
 
@@ -183,8 +184,9 @@ public interface ITestTelemetry
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			c => c.ScrubInlineGuids().UseParameters(includeLoggerType),
-			validateNonEmptyDiagnostics: true
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: [includeLoggerType]
 		);
 	}
 }

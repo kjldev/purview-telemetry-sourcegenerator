@@ -75,7 +75,7 @@ public interface ITestLogger {{
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids().UseParameters(level));
+		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids(), parameters: level);
 	}
 
 	[Fact]

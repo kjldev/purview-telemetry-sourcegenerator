@@ -29,10 +29,7 @@ public interface ITestMetrics {{
 		var generationResult = await GenerateAsync(basicMetric);
 
 		// Assert
-		await TestHelpers.Verify(
-			generationResult,
-			s => s.UseParameters(attribute, measurementParameter)
-		);
+		await TestHelpers.Verify(generationResult, parameters: [attribute, measurementParameter]);
 	}
 
 	public static TheoryData<string, string> NameUnitsDescriptorData
