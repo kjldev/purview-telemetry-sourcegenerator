@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.Json;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -7,6 +9,12 @@ namespace Purview.Telemetry.SourceGenerator;
 
 static partial class TestHelpers
 {
+	static readonly JsonSerializerOptions JsonOptions = new()
+	{
+		WriteIndented = false,
+		PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+	};
+
 	static readonly Assembly OwnerAssembly = typeof(TestHelpers).Assembly;
 	static readonly string NamespaceRoot = typeof(TestHelpers).Namespace!;
 
@@ -159,7 +167,7 @@ using Purview.Telemetry;
 			.UseDirectory("Snapshots")
 			.DisableRequireUniquePrefix()
 			.DisableDateCounting()
-			.UniqueForTargetFrameworkAndVersion(typeof(TestHelpers).Assembly)
+			//.UniqueForTargetFrameworkAndVersion(typeof(TestHelpers).Assembly)
 			.ScrubInlineDateTimeOffsets("yyyy-MM-dd HH:mm:ss zzzz") // 2024-22-02 14:43:22 +00:00
 			.AutoVerify(file =>
 			{
@@ -177,7 +185,9 @@ using Purview.Telemetry;
 			});
 
 		if (parameters.Length > 0)
-			verifierTask = verifierTask.UseParameters(parameters);
+			verifierTask = verifierTask.UseTextForParameters(
+				ComputeParameterFilenameHash(parameters)
+			);
 
 		config?.Invoke(verifierTask);
 
@@ -215,5 +225,18 @@ using Purview.Telemetry;
 					)
 				);
 		}
+	}
+
+	static string ComputeParameterFilenameHash(IEnumerable<object> items)
+	{
+		var json = JsonSerializer.Serialize(items, JsonOptions);
+		var digest = SHA256.HashData(Encoding.UTF8.GetBytes(json));
+		var base64 = Convert
+			.ToBase64String(digest)
+			.TrimEnd('=') // remove padding
+			.Replace('+', '-') // URL-safe
+			.Replace('/', '_');
+
+		return base64;
 	}
 }

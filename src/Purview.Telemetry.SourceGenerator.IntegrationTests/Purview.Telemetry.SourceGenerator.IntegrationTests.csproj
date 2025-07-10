@@ -2,9 +2,9 @@
 	<ItemGroup>
 		<Compile Remove="Resources/**/*" />
 		<EmbeddedResource Include="Resources/**/*" />
-		<Compile Remove="Snapshots/**/*" />
-		<EmbeddedResource Remove="Snapshots/**/*" />
-		<None Remove="Snapshots/**/*" />
+		<None Update="Snapshots/**/*" Visible="false" />
+		<Compile Update="Snapshots/**/*" Visible="false" />
+		<Content Update="Snapshots/**/*" Visible="false" />
 	</ItemGroup>
 	<ItemGroup>
 		<ProjectReference Include="..\Purview.Telemetry.SourceGenerator\Purview.Telemetry.SourceGenerator.csproj" />
