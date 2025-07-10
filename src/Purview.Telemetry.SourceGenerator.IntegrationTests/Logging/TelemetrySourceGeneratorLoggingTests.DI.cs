@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorLoggingTests
 	public async Task Generate_GivenAssemblyEnableDI_GeneratesLog()
 	{
 		// Arrange
-		const string basicLog = @"
+		const string basicLog =
+			@"
 using Purview.Telemetry;
 using Purview.Telemetry.Logging;
 
@@ -32,7 +33,8 @@ public interface ITestLogger {
 	public async Task Generate_GivenInterfaceEnableDI_GeneratesLog()
 	{
 		// Arrange
-		const string basicLog = @"
+		const string basicLog =
+			@"
 using Purview.Telemetry;
 using Purview.Telemetry.Logging;
 
@@ -57,7 +59,8 @@ public interface ITestLogger {
 	public async Task Generate_GivenDIDisabledAtAssemblyAndInterfaceEnableDI_GeneratesLog()
 	{
 		// Arrange
-		const string basicLog = @"
+		const string basicLog =
+			@"
 using Purview.Telemetry;
 using Purview.Telemetry.Logging;
 
@@ -84,7 +87,8 @@ public interface ITestLogger {
 	public async Task Generate_GivenDIEnabledAtAssemblyAndInterfaceDisabledDI_GeneratesLog()
 	{
 		// Arrange
-		const string basicLog = @"
+		const string basicLog =
+			@"
 using Purview.Telemetry;
 using Purview.Telemetry.Logging;
 

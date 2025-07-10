@@ -16,4 +16,10 @@ sealed class GenerationLogger(Action<string, OutputType> logger)
 	public void Error(string message) => logger(message, OutputType.Error);
 }
 
-enum OutputType { Debug, Diagnostic, Warning, Error }
+enum OutputType
+{
+	Debug,
+	Diagnostic,
+	Warning,
+	Error,
+}

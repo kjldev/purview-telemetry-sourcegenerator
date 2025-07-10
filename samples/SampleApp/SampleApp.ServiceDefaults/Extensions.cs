@@ -11,12 +11,15 @@ using OpenTelemetry.Trace;
 
 #pragma warning disable IDE0130 // Namespace does not match folder structure
 namespace Microsoft.Extensions.Hosting;
+
 #pragma warning restore IDE0130 // Namespace does not match folder structure
 
 [EditorBrowsable(EditorBrowsableState.Never)]
 public static class Extensions
 {
-	public static IHostApplicationBuilder AddServiceDefaults([NotNull] this IHostApplicationBuilder builder)
+	public static IHostApplicationBuilder AddServiceDefaults(
+		[NotNull] this IHostApplicationBuilder builder
+	)
 	{
 		builder.ConfigureOpenTelemetry();
 
@@ -36,7 +39,9 @@ public static class Extensions
 		return builder;
 	}
 
-	public static IHostApplicationBuilder ConfigureOpenTelemetry([NotNull] this IHostApplicationBuilder builder)
+	public static IHostApplicationBuilder ConfigureOpenTelemetry(
+		[NotNull] this IHostApplicationBuilder builder
+	)
 	{
 		builder.Logging.AddOpenTelemetry(logging =>
 		{
@@ -44,15 +49,20 @@ public static class Extensions
 			logging.IncludeScopes = true;
 		});
 
-		builder.Services.AddOpenTelemetry()
-			.WithMetrics(metrics => metrics
-				.AddAspNetCoreInstrumentation()
-				.AddHttpClientInstrumentation()
-				.AddProcessInstrumentation()
-				.AddRuntimeInstrumentation()
-				.AddMeter([
-					"WeatherServiceTelemetry" // This is the name of the meter
-				]))
+		builder
+			.Services.AddOpenTelemetry()
+			.WithMetrics(metrics =>
+				metrics
+					.AddAspNetCoreInstrumentation()
+					.AddHttpClientInstrumentation()
+					.AddProcessInstrumentation()
+					.AddRuntimeInstrumentation()
+					.AddMeter(
+						[
+							"WeatherServiceTelemetry", // This is the name of the meter
+						]
+					)
+			)
 			.WithTracing(tracing =>
 			{
 				if (builder.Environment.IsDevelopment())
@@ -63,9 +73,11 @@ public static class Extensions
 					.AddAspNetCoreInstrumentation()
 					.AddGrpcClientInstrumentation()
 					.AddHttpClientInstrumentation()
-					.AddSource([
-						"sample-weather-app" // This is the name of the activity source
-					]);
+					.AddSource(
+						[
+							"sample-weather-app", // This is the name of the activity source
+						]
+					);
 			});
 
 		builder.AddOpenTelemetryExporters();
@@ -75,13 +87,21 @@ public static class Extensions
 
 	static IHostApplicationBuilder AddOpenTelemetryExporters(this IHostApplicationBuilder builder)
 	{
-		var useOtlpExporter = !string.IsNullOrWhiteSpace(builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]);
+		var useOtlpExporter = !string.IsNullOrWhiteSpace(
+			builder.Configuration["OTEL_EXPORTER_OTLP_ENDPOINT"]
+		);
 
 		if (useOtlpExporter)
 		{
-			builder.Services.Configure<OpenTelemetryLoggerOptions>(logging => logging.AddOtlpExporter());
-			builder.Services.ConfigureOpenTelemetryMeterProvider(metrics => metrics.AddOtlpExporter());
-			builder.Services.ConfigureOpenTelemetryTracerProvider(tracing => tracing.AddOtlpExporter());
+			builder.Services.Configure<OpenTelemetryLoggerOptions>(logging =>
+				logging.AddOtlpExporter()
+			);
+			builder.Services.ConfigureOpenTelemetryMeterProvider(metrics =>
+				metrics.AddOtlpExporter()
+			);
+			builder.Services.ConfigureOpenTelemetryTracerProvider(tracing =>
+				tracing.AddOtlpExporter()
+			);
 		}
 
 		// Uncomment the following lines to enable the Prometheus exporter (requires the OpenTelemetry.Exporter.Prometheus.AspNetCore package)
@@ -98,9 +118,12 @@ public static class Extensions
 		return builder;
 	}
 
-	public static IHostApplicationBuilder AddDefaultHealthChecks([NotNull] this IHostApplicationBuilder builder)
+	public static IHostApplicationBuilder AddDefaultHealthChecks(
+		[NotNull] this IHostApplicationBuilder builder
+	)
 	{
-		builder.Services.AddHealthChecks()
+		builder
+			.Services.AddHealthChecks()
 			// Add a default liveness check to ensure app is responsive
 			.AddCheck("self", () => HealthCheckResult.Healthy(), ["live"]);
 
@@ -116,10 +139,10 @@ public static class Extensions
 		app.MapHealthChecks("/health");
 
 		// Only health checks tagged with the "live" tag must pass for app to be considered alive
-		app.MapHealthChecks("/alive", new HealthCheckOptions
-		{
-			Predicate = r => r.Tags.Contains("live")
-		});
+		app.MapHealthChecks(
+			"/alive",
+			new HealthCheckOptions { Predicate = r => r.Tags.Contains("live") }
+		);
 
 		return app;
 	}

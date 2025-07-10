@@ -5,11 +5,14 @@ partial class TelemetrySourceGeneratorLoggingGen2Tests
 	[Theory]
 	[InlineData(true)]
 	[InlineData(false)]
-	public async Task Generate_GivenBasicScopedMethod_GeneratesLogMethodCorrectly(bool nullableDisposable)
+	public async Task Generate_GivenBasicScopedMethod_GeneratesLogMethodCorrectly(
+		bool nullableDisposable
+	)
 	{
 		// Arrange
 		char? suffix = nullableDisposable ? '?' : null;
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -22,12 +25,16 @@ public interface ITestLogger
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c
-			.ScrubInlineGuids()
-			.UseParameters(nullableDisposable)
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids(),
+			parameters: nullableDisposable
 		);
 	}
 
@@ -35,7 +42,8 @@ public interface ITestLogger
 	public async Task Generate_GivenBasicScopedMethodWithOtherParameters_GeneratesLogMethodCorrectly()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -48,19 +56,21 @@ public interface ITestLogger
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c
-			.ScrubInlineGuids()
-		);
+		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids());
 	}
 
 	[Fact]
 	public async Task Generate_GivenBasicScopedMethodWithOtherParametersAndUsedInMessageTemplate_GeneratesLogMethodCorrectly()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -74,19 +84,21 @@ public interface ITestLogger
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c
-			.ScrubInlineGuids()
-		);
+		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids());
 	}
 
 	[Fact]
 	public async Task Generate_GivenBasicScopedMethodWithOtherParametersPartiallyUsedInMessageTemplate_GeneratesLogMethodCorrectly()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -100,19 +112,21 @@ public interface ITestLogger
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c
-			.ScrubInlineGuids()
-		);
+		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids());
 	}
 
 	[Fact]
 	public async Task Generate_GivenBasicScopedAndLogHasLevelSet_GeneratesDiagnostic()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -127,7 +141,10 @@ public interface ITestLogger
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult, validateNonEmptyDiagnostics: true);
@@ -137,7 +154,8 @@ public interface ITestLogger
 	public async Task Generate_GivenBasicScopedAndLevelSetBySpecificAttribute_GeneratesDiagnostic()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 using Microsoft.Extensions.Logging;
 
@@ -152,7 +170,10 @@ public interface ITestLogger
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult, validateNonEmptyDiagnostics: true);

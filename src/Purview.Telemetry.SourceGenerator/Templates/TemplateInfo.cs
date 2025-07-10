@@ -3,14 +3,22 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Purview.Telemetry.SourceGenerator.Templates;
 
-record TemplateInfo(string Name, string FullName, string Namespace, string? Source, string TemplateData)
-	: IEquatable<NameSyntax>, IEquatable<AttributeSyntax>, IEquatable<ISymbol>, IEquatable<string>, IEquatable<AttributeData>
+record TemplateInfo(
+	string Name,
+	string FullName,
+	string Namespace,
+	string? Source,
+	string TemplateData
+)
+	: IEquatable<NameSyntax>,
+		IEquatable<AttributeSyntax>,
+		IEquatable<ISymbol>,
+		IEquatable<string>,
+		IEquatable<AttributeData>
 {
-	public string GetGeneratedFilename()
-		=> $"{Name}.g.cs";
+	public string GetGeneratedFilename() => $"{Name}.g.cs";
 
-	public bool Equals(string other)
-		=> other == FullName || other == Name;
+	public bool Equals(string other) => other == FullName || other == Name;
 
 	public bool Equals(NameSyntax other)
 	{
@@ -25,20 +33,18 @@ record TemplateInfo(string Name, string FullName, string Namespace, string? Sour
 		return result;
 	}
 
-	public bool Equals(AttributeSyntax other)
-		=> Equals(other.Name);
+	public bool Equals(AttributeSyntax other) => Equals(other.Name);
 
-	public bool Equals(ISymbol other)
-		=> Equals(other.ToString());
+	public bool Equals(ISymbol other) => Equals(other.ToString());
 
-	public bool Equals(AttributeData other)
-		=> (other.AttributeClass != null) && Equals(other.AttributeClass);
+	public bool Equals(AttributeData other) =>
+		(other.AttributeClass != null) && Equals(other.AttributeClass);
 
-	public string MakeGeneric(params string[] types)
-		=> FullName + "<" + string.Join(", ", types) + ">";
+	public string MakeGeneric(params string[] types) =>
+		FullName + "<" + string.Join(", ", types) + ">";
 
-	public static TemplateInfo Create<T>(bool attachHeader = true)
-		=> Create(typeof(T).FullName, attachHeader);
+	public static TemplateInfo Create<T>(bool attachHeader = true) =>
+		Create(typeof(T).FullName, attachHeader);
 
 	public static TemplateInfo Create(string fullTypeName, bool attachHeader = true)
 	{
@@ -52,7 +58,11 @@ record TemplateInfo(string Name, string FullName, string Namespace, string? Sour
 		var isRootSources = source.Length == 2;
 		var sourceToUse = isRootSources ? null : source.Last();
 
-		var template = EmbeddedResources.Instance.LoadTemplateForEmitting(sourceToUse, typeName, attachHeader);
+		var template = EmbeddedResources.Instance.LoadTemplateForEmitting(
+			sourceToUse,
+			typeName,
+			attachHeader
+		);
 		TemplateInfo templateInfo = new(typeName, fullTypeName, @namespace, sourceToUse, template);
 
 		return templateInfo;
@@ -67,6 +77,5 @@ record TemplateInfo(string Name, string FullName, string Namespace, string? Sour
 		return identifier;
 	}
 
-	public static implicit operator string(TemplateInfo templateInfo)
-		=> templateInfo.FullName;
+	public static implicit operator string(TemplateInfo templateInfo) => templateInfo.FullName;
 }

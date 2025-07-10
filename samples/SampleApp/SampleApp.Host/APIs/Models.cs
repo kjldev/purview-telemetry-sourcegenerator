@@ -3,9 +3,11 @@ using SampleApp.Host.Services;
 
 record DefaultWeatherRequest(
 	[FromServices] IWeatherService WeatherService,
-	CancellationToken Token);
+	CancellationToken Token
+);
 
 record WeatherRequest(
 	int RequestCount,
 	[FromServices] IWeatherService WeatherService,
-	CancellationToken Token);
+	CancellationToken Token
+);

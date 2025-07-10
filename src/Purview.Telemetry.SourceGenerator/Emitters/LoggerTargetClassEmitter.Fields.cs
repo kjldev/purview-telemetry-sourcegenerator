@@ -7,7 +7,13 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 
 partial class LoggerTargetClassEmitter
 {
-	static int EmitFields(LoggerTarget target, StringBuilder builder, int indent, SourceProductionContext context, GenerationLogger? logger)
+	static int EmitFields(
+		LoggerTarget target,
+		StringBuilder builder,
+		int indent,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -23,8 +29,7 @@ partial class LoggerTargetClassEmitter
 			.Append(Constants.Logging.LoggerFieldName)
 			.Append(';')
 			.AppendLine()
-			.AppendLine()
-		;
+			.AppendLine();
 
 		foreach (var methodTarget in target.LogMethods)
 		{
@@ -34,13 +39,27 @@ partial class LoggerTargetClassEmitter
 			{
 				if (methodTarget.TargetGenerationState.RaiseMultiGenerationTargetsNotSupported)
 				{
-					logger?.Debug($"Identified {target.InterfaceName}.{methodTarget.MethodName} as problematic as it has another target types.");
-					TelemetryDiagnostics.Report(context.ReportDiagnostic, TelemetryDiagnostics.General.MultiGenerationTargetsNotSupported, methodTarget.MethodLocation);
+					logger?.Debug(
+						$"Identified {target.InterfaceName}.{methodTarget.MethodName} as problematic as it has another target types."
+					);
+					TelemetryDiagnostics.Report(
+						context.ReportDiagnostic,
+						TelemetryDiagnostics.General.MultiGenerationTargetsNotSupported,
+						methodTarget.MethodLocation
+					);
 				}
-				else if (methodTarget.TargetGenerationState.RaiseInferenceNotSupportedWithMultiTargeting)
+				else if (
+					methodTarget.TargetGenerationState.RaiseInferenceNotSupportedWithMultiTargeting
+				)
 				{
-					logger?.Debug($"Identified {target.InterfaceName}.{methodTarget.MethodName} as problematic as it is inferred.");
-					TelemetryDiagnostics.Report(context.ReportDiagnostic, TelemetryDiagnostics.General.InferenceNotSupportedWithMultiTargeting, methodTarget.MethodLocation);
+					logger?.Debug(
+						$"Identified {target.InterfaceName}.{methodTarget.MethodName} as problematic as it is inferred."
+					);
+					TelemetryDiagnostics.Report(
+						context.ReportDiagnostic,
+						TelemetryDiagnostics.General.InferenceNotSupportedWithMultiTargeting,
+						methodTarget.MethodLocation
+					);
 				}
 
 				continue;
@@ -48,16 +67,29 @@ partial class LoggerTargetClassEmitter
 
 			if (methodTarget.HasMultipleExceptions)
 			{
-				logger?.Diagnostic($"Method has multiple exception parameters, only a single one is permitted.");
-				TelemetryDiagnostics.Report(context.ReportDiagnostic, TelemetryDiagnostics.Logging.MultipleExceptionsDefined, methodTarget.MethodLocation);
+				logger?.Diagnostic(
+					$"Method has multiple exception parameters, only a single one is permitted."
+				);
+				TelemetryDiagnostics.Report(
+					context.ReportDiagnostic,
+					TelemetryDiagnostics.Logging.MultipleExceptionsDefined,
+					methodTarget.MethodLocation
+				);
 
 				continue;
 			}
 
-			if (methodTarget.ParameterCountSansException > Constants.Logging.MaxNonExceptionParameters)
+			if (
+				methodTarget.ParameterCountSansException
+				> Constants.Logging.MaxNonExceptionParameters
+			)
 			{
 				logger?.Diagnostic($"Method has more than 6 parameters.");
-				TelemetryDiagnostics.Report(context.ReportDiagnostic, TelemetryDiagnostics.Logging.MaximumLogEntryParametersExceeded, methodTarget.MethodLocation);
+				TelemetryDiagnostics.Report(
+					context.ReportDiagnostic,
+					TelemetryDiagnostics.Logging.MaximumLogEntryParametersExceeded,
+					methodTarget.MethodLocation
+				);
 
 				continue;
 			}
@@ -65,7 +97,11 @@ partial class LoggerTargetClassEmitter
 			if (methodTarget.InferredErrorLevel)
 			{
 				logger?.Diagnostic($"Inferring error log level.");
-				TelemetryDiagnostics.Report(context.ReportDiagnostic, TelemetryDiagnostics.Logging.InferringErrorLogLevel, methodTarget.MethodLocation);
+				TelemetryDiagnostics.Report(
+					context.ReportDiagnostic,
+					TelemetryDiagnostics.Logging.InferringErrorLogLevel,
+					methodTarget.MethodLocation
+				);
 			}
 
 			EmitLogActionField(builder, indent, methodTarget);
@@ -78,11 +114,14 @@ partial class LoggerTargetClassEmitter
 	{
 		builder
 			.Append(indent, "static readonly ", withNewLine: false)
-			.Append(methodTarget.IsScoped ? Constants.System.Func.WithGlobal() : Constants.System.Action.WithGlobal())
+			.Append(
+				methodTarget.IsScoped
+					? Constants.System.Func.WithGlobal()
+					: Constants.System.Action.WithGlobal()
+			)
 			.Append('<')
 			.Append(Constants.Logging.MicrosoftExtensions.ILogger.WithGlobal())
-			.Append(", ")
-		;
+			.Append(", ");
 
 		foreach (var parameter in methodTarget.ParametersSansException)
 		{
@@ -95,25 +134,18 @@ partial class LoggerTargetClassEmitter
 
 		if (methodTarget.IsScoped)
 		{
-			builder
-				.Append(Constants.System.IDisposable.WithGlobal())
-				.Append("?> ")
-			;
+			builder.Append(Constants.System.IDisposable.WithGlobal()).Append("?> ");
 		}
 		else
 		{
-			builder
-				.Append(Constants.System.Exception.WithGlobal())
-				.Append("?> ")
-			;
+			builder.Append(Constants.System.Exception.WithGlobal()).Append("?> ");
 		}
 
 		builder
 			.Append(methodTarget.LoggerActionFieldName)
 			.Append(" = ")
 			.Append(Constants.Logging.MicrosoftExtensions.LoggerMessage.WithGlobal())
-			.Append(".Define")
-		;
+			.Append(".Define");
 
 		if (methodTarget.IsScoped)
 			builder.Append("Scope");
@@ -143,12 +175,11 @@ partial class LoggerTargetClassEmitter
 
 		if (!methodTarget.IsScoped)
 		{
-			builder
-				.Append(methodTarget.MSLevel.WithGlobal())
-				.Append(", ")
-			;
+			builder.Append(methodTarget.MSLevel.WithGlobal()).Append(", ");
 
-			var eventId = methodTarget.EventId ?? SharedHelpers.GetNonRandomizedHashCode(methodTarget.MethodName);
+			var eventId =
+				methodTarget.EventId
+				?? SharedHelpers.GetNonRandomizedHashCode(methodTarget.MethodName);
 			builder
 				.Append("new ")
 				.Append(Constants.Logging.MicrosoftExtensions.EventId.WithGlobal())
@@ -156,15 +187,9 @@ partial class LoggerTargetClassEmitter
 				.Append(eventId)
 				.Append(", \"")
 				.Append(methodTarget.LogName)
-				.Append("\"), ")
-			;
+				.Append("\"), ");
 		}
 
-		builder
-			.Append('"')
-			.Append(methodTarget.MessageTemplate)
-			.Append('"')
-			.AppendLine(");")
-		;
+		builder.Append('"').Append(methodTarget.MessageTemplate).Append('"').AppendLine(");");
 	}
 }

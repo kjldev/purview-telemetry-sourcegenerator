@@ -13,7 +13,9 @@ static partial class SharedHelpers
 
 		var generationType = GenerationType.None;
 
-		if (Utilities.ContainsAttribute(symbol, Constants.Activities.ActivitySourceAttribute, token))
+		if (
+			Utilities.ContainsAttribute(symbol, Constants.Activities.ActivitySourceAttribute, token)
+		)
 			generationType |= GenerationType.Activities;
 
 		if (Utilities.ContainsAttribute(symbol, Constants.Logging.LoggerAttribute, token))
@@ -52,11 +54,15 @@ static partial class SharedHelpers
 		Action<string, object> namedArguments,
 		SemanticModel? semanticModel,
 		GenerationLogger? logger,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		logger?.Debug($"Found attribute: {attributeData}");
 
-		if (semanticModel != null && HasErrors(attributeData, semanticModel, logger, cancellationToken))
+		if (
+			semanticModel != null
+			&& HasErrors(attributeData, semanticModel, logger, cancellationToken)
+		)
 		{
 			logger?.Warning($"Attribute has error: {attributeData}");
 			return false;
@@ -110,7 +116,9 @@ static partial class SharedHelpers
 				var value = Utilities.GetTypedConstantValue(namedArgument.Value)!;
 				if (namedArgument.Value.Type == null)
 				{
-					logger?.Error($"Named argument {namedArgument.Key}'s type could not be determined.");
+					logger?.Error(
+						$"Named argument {namedArgument.Key}'s type could not be determined."
+					);
 					continue;
 				}
 
@@ -131,7 +139,8 @@ static partial class SharedHelpers
 		AttributeSyntax attributeSyntax,
 		Action<string, string> namedArguments,
 		Action<string, OutputType>? logger,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
 		logger?.Invoke($"Found attribute (syntax): {attributeSyntax}", OutputType.Debug);
 
@@ -140,7 +149,13 @@ static partial class SharedHelpers
 			foreach (var argument in arguments)
 			{
 				cancellationToken.ThrowIfCancellationRequested();
-				var name = argument.NameEquals?.Name.ToString() ?? argument.DescendantNodes().OfType<IdentifierNameSyntax>().FirstOrDefault()?.ToString();
+				var name =
+					argument.NameEquals?.Name.ToString()
+					?? argument
+						.DescendantNodes()
+						.OfType<IdentifierNameSyntax>()
+						.FirstOrDefault()
+						?.ToString();
 				var value = argument.Expression.ToString();
 				if (name == null || value == null)
 					continue;
@@ -151,79 +166,138 @@ static partial class SharedHelpers
 		return true;
 	}
 
-	static bool HasErrors(AttributeData attributeData,
+	static bool HasErrors(
+		AttributeData attributeData,
 		SemanticModel semanticModel,
 		GenerationLogger? logger,
-		CancellationToken cancellationToken)
+		CancellationToken cancellationToken
+	)
 	{
-		if (attributeData.ApplicationSyntaxReference?.GetSyntax(cancellationToken) is not AttributeSyntax attributeSyntax)
+		if (
+			attributeData.ApplicationSyntaxReference?.GetSyntax(cancellationToken)
+			is not AttributeSyntax attributeSyntax
+		)
 			return false;
 
-		var diagnostics = semanticModel.GetDiagnostics(attributeSyntax.Span, cancellationToken);
-		if (diagnostics.Length > 0 && logger != null)
+		try
 		{
-			var d = diagnostics.Select(m => m.GetMessage(CultureInfo.InvariantCulture));
-			logger.Debug("Attribute has diagnostics: \n" + string.Join("\n - ", d));
-		}
+			var diagnostics = semanticModel.GetDiagnostics(attributeSyntax.Span, cancellationToken);
+			if (diagnostics.Length > 0 && logger != null)
+			{
+				var d = diagnostics.Select(m => m.GetMessage(CultureInfo.InvariantCulture));
+				logger.Debug("Attribute has diagnostics: \n" + string.Join("\n - ", d));
+			}
 
-		return diagnostics.Any(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
+			return diagnostics.Any(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
+		}
+		catch (ArgumentException)
+		{
+			// For partial interfaces or other cases where the span might be invalid,
+			// fall back to getting diagnostics without a span
+			logger?.Debug(
+				"Span invalid for GetDiagnostics, falling back to full syntax tree diagnostics"
+			);
+
+			var diagnostics = semanticModel.GetDiagnostics(cancellationToken: cancellationToken);
+			if (diagnostics.Length > 0 && logger != null)
+			{
+				var d = diagnostics.Select(m => m.GetMessage(CultureInfo.InvariantCulture));
+				logger.Debug("Attribute has diagnostics (fallback): \n" + string.Join("\n - ", d));
+			}
+
+			return diagnostics.Any(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
+		}
 	}
 
 	public static TagOrBaggageAttributeRecord? GetTagOrBaggageAttribute(
 		AttributeData attributeData,
 		SemanticModel semanticModel,
 		GenerationLogger? logger,
-		CancellationToken token)
+		CancellationToken token
+	)
 	{
 		AttributeStringValue? nameValue = null;
 		AttributeValue<bool>? skipOnNullOrEmpty = null;
 
-		if (!AttributeParser(attributeData,
-		(name, value) =>
-		{
-			if (name.Equals("Name", StringComparison.OrdinalIgnoreCase))
-				nameValue = new((string)value);
-			else if (name.Equals("SkipOnNullOrEmpty", StringComparison.OrdinalIgnoreCase))
-				skipOnNullOrEmpty = new((bool)value);
-		}, semanticModel, logger, token))
+		if (
+			!AttributeParser(
+				attributeData,
+				(name, value) =>
+				{
+					if (name.Equals("Name", StringComparison.OrdinalIgnoreCase))
+						nameValue = new((string)value);
+					else if (name.Equals("SkipOnNullOrEmpty", StringComparison.OrdinalIgnoreCase))
+						skipOnNullOrEmpty = new((bool)value);
+				},
+				semanticModel,
+				logger,
+				token
+			)
+		)
 		{
 			// Failed to parse correctly, so null it out.
 			return null;
 		}
 
-		return new(
-			Name: nameValue ?? new(),
-			SkipOnNullOrEmpty: skipOnNullOrEmpty ?? new(false)
-		);
+		return new(Name: nameValue ?? new(), SkipOnNullOrEmpty: skipOnNullOrEmpty ?? new(false));
 	}
 
-	public static TelemetryGenerationAttributeRecord GetTelemetryGenerationAttribute(ISymbol type, SemanticModel semanticModel, GenerationLogger? logger, CancellationToken token)
+	public static TelemetryGenerationAttributeRecord GetTelemetryGenerationAttribute(
+		ISymbol type,
+		SemanticModel semanticModel,
+		GenerationLogger? logger,
+		CancellationToken token
+	)
 	{
 		token.ThrowIfCancellationRequested();
 
 		AttributeData? assemblyAttribute = null;
-		if (!Utilities.TryContainsAttribute(type, Constants.Shared.TelemetryGenerationAttribute, token, out var typeAttribute))
-			if (!Utilities.TryContainsAttribute(semanticModel.Compilation.Assembly, Constants.Shared.TelemetryGenerationAttribute, token, out assemblyAttribute))
+		if (
+			!Utilities.TryContainsAttribute(
+				type,
+				Constants.Shared.TelemetryGenerationAttribute,
+				token,
+				out var typeAttribute
+			)
+		)
+			if (
+				!Utilities.TryContainsAttribute(
+					semanticModel.Compilation.Assembly,
+					Constants.Shared.TelemetryGenerationAttribute,
+					token,
+					out assemblyAttribute
+				)
+			)
 				return CreateDefault();
 
-		var assemblyTelemetryGeneration = assemblyAttribute == null
-			? null
-			: GetTelemetryGenerationAttribute(assemblyAttribute, semanticModel, logger, token);
-		var typeGeneration = typeAttribute == null
-			? null
-			: GetTelemetryGenerationAttribute(typeAttribute, semanticModel, logger, token);
+		var assemblyTelemetryGeneration =
+			assemblyAttribute == null
+				? null
+				: GetTelemetryGenerationAttribute(assemblyAttribute, semanticModel, logger, token);
+		var typeGeneration =
+			typeAttribute == null
+				? null
+				: GetTelemetryGenerationAttribute(typeAttribute, semanticModel, logger, token);
 
 		return assemblyAttribute == null && typeGeneration == null
 			? CreateDefault()
 			: new(
-				GenerateDependencyExtension: typeGeneration?.GenerateDependencyExtension ?? assemblyTelemetryGeneration?.GenerateDependencyExtension ?? new(true),
-				ClassName: typeGeneration?.ClassName ?? assemblyTelemetryGeneration?.ClassName ?? new(),
-				DependencyInjectionClassName: typeGeneration?.DependencyInjectionClassName ?? assemblyTelemetryGeneration?.DependencyInjectionClassName ?? new(),
-				DependencyInjectionClassIsPublic: typeGeneration?.DependencyInjectionClassIsPublic ?? assemblyTelemetryGeneration?.DependencyInjectionClassIsPublic ?? new(false)
+				GenerateDependencyExtension: typeGeneration?.GenerateDependencyExtension
+					?? assemblyTelemetryGeneration?.GenerateDependencyExtension
+					?? new(true),
+				ClassName: typeGeneration?.ClassName
+					?? assemblyTelemetryGeneration?.ClassName
+					?? new(),
+				DependencyInjectionClassName: typeGeneration?.DependencyInjectionClassName
+					?? assemblyTelemetryGeneration?.DependencyInjectionClassName
+					?? new(),
+				DependencyInjectionClassIsPublic: typeGeneration?.DependencyInjectionClassIsPublic
+					?? assemblyTelemetryGeneration?.DependencyInjectionClassIsPublic
+					?? new(false)
 			);
 
-		static TelemetryGenerationAttributeRecord CreateDefault()
-			=> new(
+		static TelemetryGenerationAttributeRecord CreateDefault() =>
+			new(
 				GenerateDependencyExtension: new(true),
 				ClassName: new(),
 				DependencyInjectionClassName: new(),
@@ -235,25 +309,51 @@ static partial class SharedHelpers
 		AttributeData attributeData,
 		SemanticModel semanticModel,
 		GenerationLogger? logger,
-		CancellationToken token)
+		CancellationToken token
+	)
 	{
 		AttributeValue<bool>? generateDependencyExtension = null;
 		AttributeStringValue? className = null;
 		AttributeStringValue? dependencyInjectionClassName = null;
 		AttributeValue<bool>? dependencyInjectionClassIsPublic = null;
 
-		return AttributeParser(attributeData,
-				(name, value) =>
-				{
-					if (name.Equals(nameof(TelemetryGenerationAttributeRecord.GenerateDependencyExtension), StringComparison.OrdinalIgnoreCase))
-						generateDependencyExtension = new((bool)value);
-					else if (name.Equals(nameof(TelemetryGenerationAttributeRecord.ClassName), StringComparison.OrdinalIgnoreCase))
-						className = new((string)value);
-					else if (name.Equals(nameof(TelemetryGenerationAttributeRecord.DependencyInjectionClassName), StringComparison.OrdinalIgnoreCase))
-						dependencyInjectionClassName = new((string)value);
-					else if (name.Equals(nameof(TelemetryGenerationAttributeRecord.DependencyInjectionClassIsPublic), StringComparison.OrdinalIgnoreCase))
-						dependencyInjectionClassIsPublic = new((bool)value);
-				}, semanticModel, logger, token)
+		return AttributeParser(
+			attributeData,
+			(name, value) =>
+			{
+				if (
+					name.Equals(
+						nameof(TelemetryGenerationAttributeRecord.GenerateDependencyExtension),
+						StringComparison.OrdinalIgnoreCase
+					)
+				)
+					generateDependencyExtension = new((bool)value);
+				else if (
+					name.Equals(
+						nameof(TelemetryGenerationAttributeRecord.ClassName),
+						StringComparison.OrdinalIgnoreCase
+					)
+				)
+					className = new((string)value);
+				else if (
+					name.Equals(
+						nameof(TelemetryGenerationAttributeRecord.DependencyInjectionClassName),
+						StringComparison.OrdinalIgnoreCase
+					)
+				)
+					dependencyInjectionClassName = new((string)value);
+				else if (
+					name.Equals(
+						nameof(TelemetryGenerationAttributeRecord.DependencyInjectionClassIsPublic),
+						StringComparison.OrdinalIgnoreCase
+					)
+				)
+					dependencyInjectionClassIsPublic = new((bool)value);
+			},
+			semanticModel,
+			logger,
+			token
+		)
 			? new(
 				GenerateDependencyExtension: generateDependencyExtension ?? new(true),
 				ClassName: className ?? new(),

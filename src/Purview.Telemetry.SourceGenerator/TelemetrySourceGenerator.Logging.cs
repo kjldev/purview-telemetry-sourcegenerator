@@ -8,17 +8,26 @@ namespace Purview.Telemetry.SourceGenerator;
 
 partial class TelemetrySourceGenerator
 {
-	static void RegisterLoggerGeneration(IncrementalGeneratorInitializationContext context, GenerationLogger? logger)
+	static void RegisterLoggerGeneration(
+		IncrementalGeneratorInitializationContext context,
+		GenerationLogger? logger
+	)
 	{
 		// Transform
-		Func<GeneratorAttributeSyntaxContext, CancellationToken, LoggerTarget?> loggerTargetTransform =
+		Func<
+			GeneratorAttributeSyntaxContext,
+			CancellationToken,
+			LoggerTarget?
+		> loggerTargetTransform =
 			logger == null
-				? static (context, cancellationToken) => PipelineHelpers.BuildLoggerTransform(context, null, cancellationToken)
-				: (context, cancellationToken) => PipelineHelpers.BuildLoggerTransform(context, logger, cancellationToken);
+				? static (context, cancellationToken) =>
+					PipelineHelpers.BuildLoggerTransform(context, null, cancellationToken)
+				: (context, cancellationToken) =>
+					PipelineHelpers.BuildLoggerTransform(context, logger, cancellationToken);
 
 		// Register
-		var loggerTargetsPredicate = context.SyntaxProvider
-			.ForAttributeWithMetadataName(
+		var loggerTargetsPredicate = context
+			.SyntaxProvider.ForAttributeWithMetadataName(
 				Constants.Logging.LoggerAttribute,
 				static (node, token) => PipelineHelpers.HasLoggerTargetAttribute(node, token),
 				loggerTargetTransform
@@ -27,14 +36,16 @@ partial class TelemetrySourceGenerator
 			.WithTrackingName($"{nameof(TelemetrySourceGenerator)}_Logging");
 
 		// Build generation (static vs. non-static is for the logger).
-		Action<SourceProductionContext, (Compilation Compilation, ImmutableArray<LoggerTarget?> Targets)> generationLoggerAction =
+		Action<
+			SourceProductionContext,
+			(Compilation Compilation, ImmutableArray<LoggerTarget?> Targets)
+		> generationLoggerAction =
 			logger == null
 				? static (spc, source) => GenerateLoggerTargets(source.Targets, spc, null)
 				: (spc, source) => GenerateLoggerTargets(source.Targets, spc, logger);
 
 		// Register with the source generator.
-		var loggerTargets
-			= context.CompilationProvider.Combine(loggerTargetsPredicate.Collect());
+		var loggerTargets = context.CompilationProvider.Combine(loggerTargetsPredicate.Collect());
 
 		context.RegisterImplementationSourceOutput(
 			source: loggerTargets,
@@ -42,7 +53,11 @@ partial class TelemetrySourceGenerator
 		);
 	}
 
-	static void GenerateLoggerTargets(ImmutableArray<LoggerTarget?> targets, SourceProductionContext spc, GenerationLogger? logger)
+	static void GenerateLoggerTargets(
+		ImmutableArray<LoggerTarget?> targets,
+		SourceProductionContext spc,
+		GenerationLogger? logger
+	)
 	{
 		if (targets.Length == 0)
 			return;
@@ -57,9 +72,14 @@ partial class TelemetrySourceGenerator
 		{
 			foreach (var target in targets)
 			{
-				if (target!.Failures?.Length > 0 && target.Failures.Value.Any(m => m.Item1.Severity == DiagnosticSeverity.Error))
+				if (
+					target!.Failures?.Length > 0
+					&& target.Failures.Value.Any(m => m.Item1.Severity == DiagnosticSeverity.Error)
+				)
 				{
-					logger?.Debug($"Skipping logger generation target due to error diagnostic: {target.FullyQualifiedName}");
+					logger?.Debug(
+						$"Skipping logger generation target due to error diagnostic: {target.FullyQualifiedName}"
+					);
 
 					continue;
 				}
@@ -74,9 +94,15 @@ partial class TelemetrySourceGenerator
 		}
 		catch (Exception ex)
 		{
-			logger?.Error($"A fatal error occurred while executing the source generation stage: {ex}");
+			logger?.Error(
+				$"A fatal error occurred while executing the source generation stage: {ex}"
+			);
 
-			TelemetryDiagnostics.Report(spc.ReportDiagnostic, TelemetryDiagnostics.General.FatalExecutionDuringExecution, ex);
+			TelemetryDiagnostics.Report(
+				spc.ReportDiagnostic,
+				TelemetryDiagnostics.General.FatalExecutionDuringExecution,
+				ex
+			);
 		}
 	}
 }

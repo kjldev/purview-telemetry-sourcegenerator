@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorActivityTests
 	public async Task Generate_GivenBasicContextGen_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -33,7 +34,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicContextGenWithReturningActivity_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -61,7 +63,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicContextGenWithReturningNullableActivity_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -91,7 +94,8 @@ public interface ITestActivities {
 	public async Task Generate_GivenBasicContextGenWithNullableParams_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -122,7 +126,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicContextGenWithActivity_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -153,7 +158,8 @@ public interface ITestActivities
 	public async Task Generate_GivenBasicContextGenWithActivityAndNoReturn_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 

@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorLoggingGen2Tests
 	public async Task Generate_GivenMethodWithNonSpecificException_UsesExceptionParameter()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -18,7 +19,10 @@ public interface ITestLogger {{
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -28,7 +32,8 @@ public interface ITestLogger {{
 	public async Task Generate_GivenMethodWithCustomException_UsesExceptionParameter()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -42,7 +47,10 @@ public class BadLuckException : Exception {{ }}
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -52,7 +60,8 @@ public class BadLuckException : Exception {{ }}
 	public async Task Generate_GivenMethodWithMultipleExceptionParameters_GeneratesEntry()
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -66,7 +75,10 @@ public class BadLuckException : Exception {{ }}
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);

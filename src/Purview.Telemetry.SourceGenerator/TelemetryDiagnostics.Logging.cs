@@ -16,13 +16,14 @@ partial class TelemetryDiagnostics
 			Severity: DiagnosticSeverity.Error
 		);
 
-		public static readonly TelemetryDiagnosticDescriptor MaximumLogEntryParametersExceeded = new(
-			Id: "TSG2001",
-			Title: "More than 6 parameters",
-			Description: $"The maximum number of parameters (excluding optional Exception) is {Constants.Logging.MaxNonExceptionParameters}",
-			Category: Constants.Diagnostics.Logging.Usage,
-			Severity: DiagnosticSeverity.Error
-		);
+		public static readonly TelemetryDiagnosticDescriptor MaximumLogEntryParametersExceeded =
+			new(
+				Id: "TSG2001",
+				Title: "More than 6 parameters",
+				Description: $"The maximum number of parameters (excluding optional Exception) is {Constants.Logging.MaxNonExceptionParameters}",
+				Category: Constants.Diagnostics.Logging.Usage,
+				Severity: DiagnosticSeverity.Error
+			);
 
 		public static readonly TelemetryDiagnosticDescriptor InferringErrorLogLevel = new(
 			Id: "TSG2002",
@@ -56,13 +57,14 @@ partial class TelemetryDiagnostics
 			Severity: DiagnosticSeverity.Error
 		);
 
-		public static readonly TelemetryDiagnosticDescriptor ExpandEnumerableAndLogPropertiesNotSupported = new(
-			Id: "TSG2006",
-			Title: "Using LogPropertiesAttribute and ExpandEnumerableAttribute on the same parameter is not supported",
-			Description: "Expanding an array/ IEnumerable, and the expanding the complex type of the items in the array are not supported.",
-			Category: Constants.Diagnostics.Logging.Usage,
-			Severity: DiagnosticSeverity.Error
-		);
+		public static readonly TelemetryDiagnosticDescriptor ExpandEnumerableAndLogPropertiesNotSupported =
+			new(
+				Id: "TSG2006",
+				Title: "Using LogPropertiesAttribute and ExpandEnumerableAttribute on the same parameter is not supported",
+				Description: "Expanding an array/ IEnumerable, and the expanding the complex type of the items in the array are not supported.",
+				Category: Constants.Diagnostics.Logging.Usage,
+				Severity: DiagnosticSeverity.Error
+			);
 
 		public static readonly TelemetryDiagnosticDescriptor ScopedMethodShouldNotHaveLevel = new(
 			Id: "TSG2007",

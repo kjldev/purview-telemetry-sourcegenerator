@@ -7,7 +7,7 @@
     <File Path="exclusion.dic" />
     <File Path="global.json" />
   </Folder>
-  <Folder Name="/Solution Items/.build-system/" Id="dd7e3dc2-fe79-c54d-4790-1409758131e2">
+  <Folder Name="/Solution Items/.build-system/">
     <File Path=".build-system/BuildVariables.props" />
     <File Path=".build-system/Directory.Build.props" />
     <File Path=".build-system/Directory.Build.targets" />

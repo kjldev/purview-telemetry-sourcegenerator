@@ -4,5 +4,5 @@ public enum IncludeLoggerTypes
 {
 	None,
 	LoggerOnly,
-	Telemetry
+	Telemetry,
 }

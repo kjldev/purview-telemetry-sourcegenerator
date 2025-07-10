@@ -13,13 +13,22 @@ static partial class Utilities
 		typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces
 	);
 
-	static readonly Lazy<ImmutableDictionary<Templates.TypeInfo, string>> TypeInfoToSystemTypeMapper = new(GenerateSystemTypeMap);
-	static readonly Lazy<ImmutableDictionary<string, string>> FullTypeNameToSystemTypeMapper = new(() => TypeInfoToSystemTypeMapper.Value.ToImmutableDictionary(x => x.Key.FullName, x => x.Value));
+	static readonly Lazy<
+		ImmutableDictionary<Templates.TypeInfo, string>
+	> TypeInfoToSystemTypeMapper = new(GenerateSystemTypeMap);
+	static readonly Lazy<ImmutableDictionary<string, string>> FullTypeNameToSystemTypeMapper = new(
+		() =>
+			TypeInfoToSystemTypeMapper.Value.ToImmutableDictionary(
+				x => x.Key.FullName,
+				x => x.Value
+			)
+	);
 
 	static ImmutableDictionary<Templates.TypeInfo, string> GenerateSystemTypeMap()
 		// Putting this here ensures it's not accessed
 		// before the static fields have been initialised.
-		=> new Dictionary<Templates.TypeInfo, string>
+		=>
+		new Dictionary<Templates.TypeInfo, string>
 		{
 			{ Constants.System.String, Constants.System.StringKeyword },
 			{ Constants.System.Boolean, Constants.System.BoolKeyword },
@@ -29,16 +38,20 @@ static partial class Utilities
 			{ Constants.System.Int64, Constants.System.LongKeyword },
 			{ Constants.System.Single, Constants.System.FloatKeyword },
 			{ Constants.System.Double, Constants.System.DoubleKeyword },
-			{ Constants.System.Decimal, Constants.System.DecimalKeyword }
+			{ Constants.System.Decimal, Constants.System.DecimalKeyword },
 		}.ToImmutableDictionary();
 
-	static public string Convert(this Templates.TypeInfo type)
-		=> TypeInfoToSystemTypeMapper.Value.GetValueOrDefault(type, type.FullName);
+	public static string Convert(this Templates.TypeInfo type) =>
+		TypeInfoToSystemTypeMapper.Value.GetValueOrDefault(type, type.FullName);
 
-	static public string Convert(this string type)
-		=> FullTypeNameToSystemTypeMapper.Value.GetValueOrDefault(type, type);
+	public static string Convert(this string type) =>
+		FullTypeNameToSystemTypeMapper.Value.GetValueOrDefault(type, type);
 
-	public static TargetGeneration IsValidGenerationTarget(IMethodSymbol method, GenerationType generationType, GenerationType requestedType)
+	public static TargetGeneration IsValidGenerationTarget(
+		IMethodSymbol method,
+		GenerationType generationType,
+		GenerationType requestedType
+	)
 	{
 		var attributes = method.GetAttributes();
 		var activityCount = attributes.Count(m =>
@@ -78,16 +91,26 @@ static partial class Utilities
 		if (count > 1)
 			multiGenerationTargetsNotSupported = true;
 
-		var isValid = !multiGenerationTargetsNotSupported && !inferenceNotSupportedWithMultiTargeting;
+		var isValid =
+			!multiGenerationTargetsNotSupported && !inferenceNotSupportedWithMultiTargeting;
 		if (isValid)
 		{
-			if (generationType.HasFlag(GenerationType.Activities) && requestedType == GenerationType.Activities)
+			if (
+				generationType.HasFlag(GenerationType.Activities)
+				&& requestedType == GenerationType.Activities
+			)
 				isValid = loggingCount == 0 && metricsCount == 0;
 
-			if (generationType.HasFlag(GenerationType.Logging) && requestedType == GenerationType.Logging)
+			if (
+				generationType.HasFlag(GenerationType.Logging)
+				&& requestedType == GenerationType.Logging
+			)
 				isValid = activityCount == 0 && metricsCount == 0;
 
-			if (generationType.HasFlag(GenerationType.Metrics) && requestedType == GenerationType.Metrics)
+			if (
+				generationType.HasFlag(GenerationType.Metrics)
+				&& requestedType == GenerationType.Metrics
+			)
 				isValid = activityCount == 0 && loggingCount == 0;
 		}
 
@@ -100,38 +123,38 @@ static partial class Utilities
 
 	public static string WithNullable(this string value) => value + '?';
 
-	public static string WithComma(this string value, bool andSpace = true)
-		=> value + ',' + (andSpace ? ' ' : null);
+	public static string WithComma(this string value, bool andSpace = true) =>
+		value + ',' + (andSpace ? ' ' : null);
 
 	public static string OrNullKeyword(this string? value) => value ?? Constants.System.NullKeyword;
 
 	public static string WithGlobal(this string value) => "global::" + value;
 
-	public static StringBuilder AggressiveInlining(this StringBuilder builder, int indent)
-		=> builder.Append(indent, Constants.System.AggressiveInlining);
+	public static StringBuilder AggressiveInlining(this StringBuilder builder, int indent) =>
+		builder.Append(indent, Constants.System.AggressiveInlining);
 
-	public static StringBuilder CodeGen(this StringBuilder builder, int indent)
-		=> builder.Append(indent, Constants.System.GeneratedCode.Value);
+	public static StringBuilder CodeGen(this StringBuilder builder, int indent) =>
+		builder.Append(indent, Constants.System.GeneratedCode.Value);
 
-	public static StringBuilder IfDefines(this StringBuilder builder, string condition, params string[] values)
-		=> builder.IfDefines(condition, 0, values);
+	public static StringBuilder IfDefines(
+		this StringBuilder builder,
+		string condition,
+		params string[] values
+	) => builder.IfDefines(condition, 0, values);
 
-	public static StringBuilder IfDefines(this StringBuilder builder, string condition, int indent, params string[] values)
+	public static StringBuilder IfDefines(
+		this StringBuilder builder,
+		string condition,
+		int indent,
+		params string[] values
+	)
 	{
-		builder
-			.AppendLine()
-			.Append("#if ")
-			.AppendLine(condition)
-			.WithIndent(indent)
-		;
+		builder.AppendLine().Append("#if ").AppendLine(condition).WithIndent(indent);
 
 		foreach (var value in values)
 			builder.Append(value);
 
-		builder
-			.AppendLine()
-			.AppendLine("#endif")
-		;
+		builder.AppendLine().AppendLine("#endif");
 
 		return builder;
 	}
@@ -144,11 +167,14 @@ static partial class Utilities
 		return builder;
 	}
 
-	public static StringBuilder Append(this StringBuilder builder, int tabs, char value, bool withNewLine = true)
+	public static StringBuilder Append(
+		this StringBuilder builder,
+		int tabs,
+		char value,
+		bool withNewLine = true
+	)
 	{
-		builder
-			.WithIndent(tabs)
-			.Append(value);
+		builder.WithIndent(tabs).Append(value);
 
 		if (withNewLine)
 			builder.AppendLine();
@@ -156,11 +182,14 @@ static partial class Utilities
 		return builder;
 	}
 
-	public static StringBuilder Append(this StringBuilder builder, int tabs, string value, bool withNewLine = true)
+	public static StringBuilder Append(
+		this StringBuilder builder,
+		int tabs,
+		string value,
+		bool withNewLine = true
+	)
 	{
-		builder
-			.WithIndent(tabs)
-			.Append(value);
+		builder.WithIndent(tabs).Append(value);
 
 		if (withNewLine)
 			builder.AppendLine();
@@ -168,11 +197,14 @@ static partial class Utilities
 		return builder;
 	}
 
-	public static StringBuilder Append(this StringBuilder builder, int tabs, Templates.TypeInfo typeInfo, bool withNewLine = true)
+	public static StringBuilder Append(
+		this StringBuilder builder,
+		int tabs,
+		Templates.TypeInfo typeInfo,
+		bool withNewLine = true
+	)
 	{
-		builder
-			.WithIndent(tabs)
-			.Append(typeInfo.Convert());
+		builder.WithIndent(tabs).Append(typeInfo.Convert());
 
 		if (withNewLine)
 			builder.AppendLine();
@@ -195,10 +227,8 @@ static partial class Utilities
 	//	return builder;
 	//}
 
-	public static StringBuilder AppendLine(this StringBuilder builder, char @char)
-		=> builder
-			.Append(@char)
-			.AppendLine();
+	public static StringBuilder AppendLine(this StringBuilder builder, char @char) =>
+		builder.Append(@char).AppendLine();
 
 	//static public StringBuilder AppendWrap(this StringBuilder builder, string value, char c = '"')
 	//	=> builder
@@ -206,8 +236,7 @@ static partial class Utilities
 	//			.Append(value)
 	//			.Append(c);
 
-	public static string Wrap(this string value, char c = '"')
-		=> c + value + c;
+	public static string Wrap(this string value, char c = '"') => c + value + c;
 
 	//public static string Strip(this string value, char c = '"')
 	//{
@@ -282,18 +311,18 @@ static partial class Utilities
 			parentClass = parentClass.Parent as ClassDeclarationSyntax;
 		}
 
-		return parentClasses.Count == 0
-			? null
-			: string.Join(".", parentClasses);
+		return parentClasses.Count == 0 ? null : string.Join(".", parentClasses);
 	}
 
 	public static string? GetNamespace(TypeDeclarationSyntax typeSymbol)
 	{
 		// Determine the namespace the type is declared in, if any
 		var potentialNamespaceParent = typeSymbol.Parent;
-		while (potentialNamespaceParent != null &&
-			   potentialNamespaceParent is not NamespaceDeclarationSyntax
-			   && potentialNamespaceParent is not FileScopedNamespaceDeclarationSyntax)
+		while (
+			potentialNamespaceParent != null
+			&& potentialNamespaceParent is not NamespaceDeclarationSyntax
+			&& potentialNamespaceParent is not FileScopedNamespaceDeclarationSyntax
+		)
 		{
 			potentialNamespaceParent = potentialNamespaceParent.Parent;
 		}
@@ -316,10 +345,15 @@ static partial class Utilities
 		return null;
 	}
 
-	public static string GetFullyQualifiedOrSystemName(ITypeSymbol namedType, bool trimNullableAnnotation = true)
+	public static string GetFullyQualifiedOrSystemName(
+		ITypeSymbol namedType,
+		bool trimNullableAnnotation = true
+	)
 	{
 		var result = namedType.ToDisplayString(SymbolDisplayFormat) ?? namedType.ToString();
-		if (namedType as INamedTypeSymbol is { IsGenericType: true, IsValueType: false } genericType)
+		if (
+			namedType as INamedTypeSymbol is { IsGenericType: true, IsValueType: false } genericType
+		)
 		{
 			List<string> typeArguments = [];
 			foreach (var typeArgument in genericType.TypeArguments)
@@ -337,7 +371,10 @@ static partial class Utilities
 	//static public string GetFullyQualifiedName(TypeDeclarationSyntax type)
 	//	=> GetFullNamespace(type, true) + type.Identifier.Text;
 
-	public static string? GetFullNamespace(TypeDeclarationSyntax type, bool includeTrailingSeparator)
+	public static string? GetFullNamespace(
+		TypeDeclarationSyntax type,
+		bool includeTrailingSeparator
+	)
 	{
 		var typeNamespace = GetNamespace(type);
 		var parentClasses = GetParentClassesAsNamespace(type);
@@ -362,13 +399,12 @@ static partial class Utilities
 		return fullNamespace;
 	}
 
-	public static object? GetTypedConstantValue(TypedConstant arg)
-		=> arg.Kind == TypedConstantKind.Array
-			? arg.Values
-			: arg.Value;
+	public static object? GetTypedConstantValue(TypedConstant arg) =>
+		arg.Kind == TypedConstantKind.Array ? arg.Values : arg.Value;
 
-	public static IncrementalValuesProvider<TSource> WhereNotNull<TSource>(this IncrementalValuesProvider<TSource> source)
-		=> source.Where(static m => m is not null);
+	public static IncrementalValuesProvider<TSource> WhereNotNull<TSource>(
+		this IncrementalValuesProvider<TSource> source
+	) => source.Where(static m => m is not null);
 
 	//public static bool IsEnumerableOrArray(string parameterType, string fullTypeName)
 	//	=> IsArray(parameterType, fullTypeName)
@@ -387,11 +423,12 @@ static partial class Utilities
 		return false;
 	}
 
-	public static bool IsArray(ITypeSymbol typeSymbol)
-		=> typeSymbol.SpecialType != SpecialType.System_String && typeSymbol.TypeKind is TypeKind.Array;
+	public static bool IsArray(ITypeSymbol typeSymbol) =>
+		typeSymbol.SpecialType != SpecialType.System_String
+		&& typeSymbol.TypeKind is TypeKind.Array;
 
-	public static bool IsArray(string parameterType, string fullTypeName)
-		=> parameterType == (fullTypeName + "[]");
+	public static bool IsArray(string parameterType, string fullTypeName) =>
+		parameterType == (fullTypeName + "[]");
 
 	public static bool IsIEnumerable(ITypeSymbol typeSymbol, Compilation compilation)
 	{
@@ -406,7 +443,9 @@ static partial class Utilities
 
 		// Check if the type implements `IEnumerable`
 		return ienumerableSymbol != null
-			&& typeSymbol.AllInterfaces.Any(i => SymbolEqualityComparer.Default.Equals(i, ienumerableSymbol));
+			&& typeSymbol.AllInterfaces.Any(i =>
+				SymbolEqualityComparer.Default.Equals(i, ienumerableSymbol)
+			);
 	}
 
 	public static bool IsGenericIEnumerable(ITypeSymbol typeSymbol, Compilation compilation)
@@ -417,11 +456,15 @@ static partial class Utilities
 			return true;
 
 		// Get the `IEnumerable` symbol from the compilation
-		var ienumerableSymbol = compilation.GetTypeByMetadataName(Constants.System.GenericIEnumerable + "`1");
+		var ienumerableSymbol = compilation.GetTypeByMetadataName(
+			Constants.System.GenericIEnumerable + "`1"
+		);
 
 		// Check if the type implements `IEnumerable`
 		return ienumerableSymbol != null
-			&& typeSymbol.AllInterfaces.Any(i => SymbolEqualityComparer.Default.Equals(i, ienumerableSymbol));
+			&& typeSymbol.AllInterfaces.Any(i =>
+				SymbolEqualityComparer.Default.Equals(i, ienumerableSymbol)
+			);
 	}
 
 	static bool IsIEnumerable(ITypeSymbol typeSymbol)
@@ -431,32 +474,33 @@ static partial class Utilities
 			return false;
 #pragma warning restore IDE0046 // Convert to conditional expression
 
-		return typeSymbol.SpecialType is SpecialType.System_Collections_IEnumerable
-			or SpecialType.System_Collections_Generic_ICollection_T
-			or SpecialType.System_Collections_Generic_IList_T
-			or SpecialType.System_Collections_Generic_IReadOnlyCollection_T
-			or SpecialType.System_Collections_Generic_IReadOnlyList_T
-			or SpecialType.System_Collections_Generic_IEnumerable_T;
+		return typeSymbol.SpecialType
+			is SpecialType.System_Collections_IEnumerable
+				or SpecialType.System_Collections_Generic_ICollection_T
+				or SpecialType.System_Collections_Generic_IList_T
+				or SpecialType.System_Collections_Generic_IReadOnlyCollection_T
+				or SpecialType.System_Collections_Generic_IReadOnlyList_T
+				or SpecialType.System_Collections_Generic_IEnumerable_T;
 	}
 
-	public static bool IsEnumerable(string parameterType, string fullTypeName)
-		=> parameterType == (Constants.System.GenericIEnumerable.FullName + "<" + fullTypeName + ">")
-		|| parameterType.StartsWith(Constants.System.GenericIEnumerable.FullName + "<" + fullTypeName, StringComparison.Ordinal);
+	public static bool IsEnumerable(string parameterType, string fullTypeName) =>
+		parameterType == (Constants.System.GenericIEnumerable.FullName + "<" + fullTypeName + ">")
+		|| parameterType.StartsWith(
+			Constants.System.GenericIEnumerable.FullName + "<" + fullTypeName,
+			StringComparison.Ordinal
+		);
 
-	public static bool IsBoolean(ITypeSymbol type)
-		=> Constants.System.Boolean.Equals(type);
+	public static bool IsBoolean(ITypeSymbol type) => Constants.System.Boolean.Equals(type);
 
-	public static bool IsBoolean(string type)
-		=> type == Constants.System.BoolKeyword
-			|| Constants.System.Boolean.Equals(type);
+	public static bool IsBoolean(string type) =>
+		type == Constants.System.BoolKeyword || Constants.System.Boolean.Equals(type);
 
-	public static bool IsString(ITypeSymbol type)
-		=> type.ToDisplayString() == Constants.System.StringKeyword
-			|| Constants.System.String.Equals(type);
+	public static bool IsString(ITypeSymbol type) =>
+		type.ToDisplayString() == Constants.System.StringKeyword
+		|| Constants.System.String.Equals(type);
 
-	public static bool IsString(string type)
-		=> type == Constants.System.StringKeyword
-			|| Constants.System.String.Equals(type);
+	public static bool IsString(string type) =>
+		type == Constants.System.StringKeyword || Constants.System.String.Equals(type);
 
 	public static bool IsExceptionType(ITypeSymbol? typeSymbol)
 	{
@@ -471,18 +515,16 @@ static partial class Utilities
 		return false;
 	}
 
-	public static string Flatten(this SyntaxNode syntax)
-		=> syntax.WithoutTrivia()
-			.ToString()
-			.Flatten();
+	public static string Flatten(this SyntaxNode syntax) =>
+		syntax.WithoutTrivia().ToString().Flatten();
 
 	//public static string Flatten(this SyntaxToken syntax)
 	//	=> syntax.WithoutTrivia()
 	//		.ToString()
 	//		.Flatten();
 
-	public static string Flatten(this string value)
-		=> Regex.Replace(value, @"\s+", " ", RegexOptions.None, TimeSpan.FromMilliseconds(2000));
+	public static string Flatten(this string value) =>
+		Regex.Replace(value, @"\s+", " ", RegexOptions.None, TimeSpan.FromMilliseconds(2000));
 
 	//public static bool ContainsAttribute(ISymbol symbol, Templates.TypeInfo typeInfo, CancellationToken token)
 	//	=> TryContainsAttribute(symbol, typeInfo, token, out _);
@@ -506,16 +548,30 @@ static partial class Utilities
 	//	return false;
 	//}
 
-	public static bool ContainsAttribute(ISymbol symbol, string typeName, CancellationToken token)
-		=> TryContainsAttribute(symbol, typeName, token, out _);
+	public static bool ContainsAttribute(
+		ISymbol symbol,
+		string typeName,
+		CancellationToken token
+	) => TryContainsAttribute(symbol, typeName, token, out _);
 
-	public static bool ContainsAttribute(ISymbol symbol, Templates.TemplateInfo templateInfo, CancellationToken token)
-		=> TryContainsAttribute(symbol, templateInfo, token, out _);
+	public static bool ContainsAttribute(
+		ISymbol symbol,
+		Templates.TemplateInfo templateInfo,
+		CancellationToken token
+	) => TryContainsAttribute(symbol, templateInfo, token, out _);
 
-	public static bool ContainsAttribute(ISymbol symbol, Templates.TemplateInfo[] templateInfo, CancellationToken token)
-		=> TryContainsAttribute(symbol, templateInfo, token, out _, out _);
+	public static bool ContainsAttribute(
+		ISymbol symbol,
+		Templates.TemplateInfo[] templateInfo,
+		CancellationToken token
+	) => TryContainsAttribute(symbol, templateInfo, token, out _, out _);
 
-	public static bool TryContainsAttribute(ISymbol symbol, string typeName, CancellationToken token, out AttributeData? attributeData)
+	public static bool TryContainsAttribute(
+		ISymbol symbol,
+		string typeName,
+		CancellationToken token,
+		out AttributeData? attributeData
+	)
 	{
 		attributeData = null;
 
@@ -524,7 +580,10 @@ static partial class Utilities
 		{
 			token.ThrowIfCancellationRequested();
 
-			if (attribute.AttributeClass != null && typeName == attribute.AttributeClass?.ToString())
+			if (
+				attribute.AttributeClass != null
+				&& typeName == attribute.AttributeClass?.ToString()
+			)
 			{
 				attributeData = attribute;
 				return true;
@@ -534,7 +593,12 @@ static partial class Utilities
 		return false;
 	}
 
-	public static bool TryContainsAttribute(ISymbol symbol, Templates.TemplateInfo templateInfo, CancellationToken token, out AttributeData? attributeData)
+	public static bool TryContainsAttribute(
+		ISymbol symbol,
+		Templates.TemplateInfo templateInfo,
+		CancellationToken token,
+		out AttributeData? attributeData
+	)
 	{
 		attributeData = null;
 
@@ -553,7 +617,13 @@ static partial class Utilities
 		return false;
 	}
 
-	public static bool TryContainsAttribute(ISymbol symbol, Templates.TemplateInfo[] templateInfo, CancellationToken token, out AttributeData? attributeData, out Templates.TemplateInfo? matchingTemplate)
+	public static bool TryContainsAttribute(
+		ISymbol symbol,
+		Templates.TemplateInfo[] templateInfo,
+		CancellationToken token,
+		out AttributeData? attributeData,
+		out Templates.TemplateInfo? matchingTemplate
+	)
 	{
 		attributeData = null;
 		matchingTemplate = null;

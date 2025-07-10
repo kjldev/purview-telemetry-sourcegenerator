@@ -32,17 +32,14 @@ record TypeInfo(string Name, string FullName, string Namespace) : IEquatable<str
 		return Equals(typeName) || Equals(other.Name);
 	}
 
-	public string MakeGeneric(params string[] types)
-		=> FullName + "<" + string.Join(", ", types) + ">";
+	public string MakeGeneric(params string[] types) =>
+		FullName + "<" + string.Join(", ", types) + ">";
 
-	public string WithGlobal()
-		=> FullName.WithGlobal();
+	public string WithGlobal() => FullName.WithGlobal();
 
-	public override string ToString()
-		=> FullName;
+	public override string ToString() => FullName;
 
-	public static implicit operator string(TypeInfo typeInfo)
-		=> typeInfo.FullName;
+	public static implicit operator string(TypeInfo typeInfo) => typeInfo.FullName;
 
 	public static TypeInfo Create(string fullName)
 	{
@@ -51,8 +48,12 @@ record TypeInfo(string Name, string FullName, string Namespace) : IEquatable<str
 
 		var @parts = fullName.Split('.');
 
-		return new(parts.LastOrDefault() ?? fullName, fullName, string.Join(".", parts.Take(parts.Length - 2)));
+		return new(
+			parts.LastOrDefault() ?? fullName,
+			fullName,
+			string.Join(".", parts.Take(parts.Length - 2))
+		);
 	}
-	public static TypeInfo Create<T>()
-		=> Create(typeof(T).FullName);
+
+	public static TypeInfo Create<T>() => Create(typeof(T).FullName);
 }

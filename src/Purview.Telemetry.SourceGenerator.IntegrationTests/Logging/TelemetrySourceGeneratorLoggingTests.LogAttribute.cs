@@ -7,7 +7,8 @@ partial class TelemetrySourceGeneratorLoggingTests
 	public async Task Generate_GivenLogTargetWithEntryName_GenerateLogger(string logTargetName)
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -23,21 +24,25 @@ public interface ITestLogger {{
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(logTargetName));
+		await TestHelpers.Verify(generationResult, parameters: logTargetName);
 	}
 
 	[Theory]
 	[MemberData(nameof(GetPrefixAndEntryNames))]
-	public async Task Generate_GivenLogTargetWithPrefixAndEntryName_GenerateLogger(string type, string logTargetName)
+	public async Task Generate_GivenLogTargetWithPrefixAndEntryName_GenerateLogger(
+		string type,
+		string logTargetName
+	)
 	{
 		// Arrange
 		var prefixType = type switch
 		{
 			"Custom" => type + ", CustomPrefix = \"custom-prefix\"",
-			_ => type
+			_ => type,
 		};
 
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -53,7 +58,7 @@ public interface ITestLogger {{
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(prefixType, logTargetName));
+		await TestHelpers.Verify(generationResult, parameters: [prefixType, logTargetName]);
 	}
 
 	public static TheoryData<string, string> GetPrefixAndEntryNames()
@@ -85,10 +90,11 @@ public interface ITestLogger {{
 		return data;
 	}
 
-	static readonly string[] TestEntryNames = [
+	static readonly string[] TestEntryNames =
+	[
 		"LogNameSetViaLogTargetAttribute",
 		"CustomLogNameSetViaLogTargetAttribute",
 		"123",
-		"custom-log-entry-name"
+		"custom-log-entry-name",
 	];
 }

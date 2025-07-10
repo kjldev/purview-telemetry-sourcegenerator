@@ -2,6 +2,5 @@
 public sealed class VerifyChecksTests
 {
 	[Fact]
-	public Task Run() =>
-		VerifyChecks.Run();
+	public Task Run() => VerifyChecks.Run();
 }

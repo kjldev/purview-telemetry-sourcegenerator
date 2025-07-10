@@ -3,10 +3,87 @@
 partial class TelemetrySourceGeneratorTests
 {
 	[Fact]
+	public async Task Generate_GivenPartialInterface_GeneratesTelemetry()
+	{
+		// Arrange
+		const string partialInterfaceDef =
+			@"
+using Purview.Telemetry.Activities;
+using Purview.Telemetry.Logging;
+using Purview.Telemetry.Metrics;
+
+[ActivitySource(""activity-source"")]
+[Logger]
+[Meter]
+partial interface ITestTelemetry
+{
+}
+";
+
+		const string partialInterfaceActivities =
+			@"
+using Purview.Telemetry.Activities;
+
+partial interface ITestTelemetry
+{
+	[Activity]
+	System.Diagnostics.Activity? Activity([Baggage]string stringParam, [Tag]int intParam, bool boolParam);
+
+	[Event]
+	void Event(System.Diagnostics.Activity? activity, [Baggage]string stringParam, [Tag]int intParam, bool boolParam);
+
+	[Context]
+	void Context(System.Diagnostics.Activity? activity, [Baggage]string stringParam, [Tag]int intParam, bool boolParam);
+}
+";
+
+		const string partialInterfaceLogging =
+			@"
+using Purview.Telemetry.Logging;
+
+partial interface ITestTelemetry
+{
+	[Log]
+	void Log([Tag]int intParam, bool boolParam);
+
+	[Log]
+	IDisposable? LogScope([Tag]int intParam, bool boolParam);
+}
+";
+
+		const string partialInterfaceMetric =
+			@"
+using Purview.Telemetry.Metrics;
+
+
+partial interface ITestTelemetry
+{
+	[Counter]
+	bool Counter(int counterValue, [Tag]int intParam, bool boolParam);
+}
+";
+
+		// Act
+		var generationResult = await GenerateAsync(
+			csharpDocuments:
+			[
+				Text(partialInterfaceDef),
+				Text(partialInterfaceActivities),
+				Text(partialInterfaceLogging),
+				Text(partialInterfaceMetric),
+			]
+		);
+
+		// Assert
+		await TestHelpers.Verify(generationResult);
+	}
+
+	[Fact]
 	public async Task Generate_GivenNoNamespace_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 using Purview.Telemetry.Logging;
 using Purview.Telemetry.Metrics;
@@ -47,7 +124,8 @@ public interface ITestTelemetry
 	public async Task Generate_GivenBasicTelemetryGen_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 using Purview.Telemetry.Logging;
 using Purview.Telemetry.Metrics;
@@ -90,7 +168,8 @@ public interface ITestTelemetry
 	public async Task Generate_GivenBasicEventWithException_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -117,7 +196,8 @@ public interface ITestTelemetry
 	public async Task Generate_GivenBasicEventWithExceptionAndEscape_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -144,7 +224,8 @@ public interface ITestTelemetry
 	public async Task Generate_GivenBasicEventWithExceptionAndDisabledOTelExceptionRulesAndEscape_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -171,7 +252,8 @@ public interface ITestTelemetry
 	public async Task Generate_GivenBasicEventWithExplicitExceptionAndNamedExceptionAndRulesAreFalse_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -198,7 +280,8 @@ public interface ITestTelemetry
 	public async Task Generate_GivenBasicEventWithExplicitExceptionAndEventIsNamedExceptionAndRulesAreTrue_GeneratesTelemetry()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -225,7 +308,8 @@ public interface ITestTelemetry
 	public async Task Generate_GivenDuplicateTelemetryGen_GeneratesDiagnostics()
 	{
 		// Arrange
-		const string basicTelemetry = @"
+		const string basicTelemetry =
+			@"
 using Purview.Telemetry.Activities;
 using Purview.Telemetry.Logging;
 using Purview.Telemetry.Metrics;
@@ -268,6 +352,11 @@ public interface ITestTelemetry
 		var generationResult = await GenerateAsync(basicTelemetry);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, s => s.ScrubInlineGuids(), validateNonEmptyDiagnostics: true, validationCompilation: false);
+		await TestHelpers.Verify(
+			generationResult,
+			s => s.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			validationCompilation: false
+		);
 	}
 }

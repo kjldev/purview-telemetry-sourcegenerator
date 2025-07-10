@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorMetricsTests
 	public async Task Generate_GivenBasicObservableGauge_GeneratesMetrics()
 	{
 		// Arrange
-		const string basicMetric = @"
+		const string basicMetric =
+			@"
 using Purview.Telemetry.Metrics;
 using System.Diagnostics.Metrics;
 using System.Collections.Generic;

@@ -115,7 +115,7 @@ partial class PipelineHelpers
 			ActivityTargetAttributeRecord: activitySourceAttribute,
 			ActivityMethods: activityMethods,
 			InterfaceLocation: interfaceDeclaration.GetLocation(),
-			DuplicateMethods: BuildDuplicateMethods(interfaceSymbol),
+			DuplicateMethods: BuildDuplicateMethods(interfaceSymbol, semanticModel, token),
 			Failures: methodDiagnostics?.ToImmutableArray()
 		);
 	}
@@ -150,7 +150,9 @@ partial class PipelineHelpers
 		List<(TelemetryDiagnosticDescriptor, ImmutableArray<Location>)>? methodDiagnosticsList =
 			null;
 		List<ActivityBasedGenerationTarget> methodTargets = [];
-		foreach (var method in interfaceSymbol.GetMembers().OfType<IMethodSymbol>())
+		foreach (
+			var method in GetAllInterfaceMethods(interfaceSymbol, semanticModel.Compilation, token)
+		)
 		{
 			token.ThrowIfCancellationRequested();
 

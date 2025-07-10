@@ -4,16 +4,19 @@ partial class TelemetrySourceGeneratorLoggingTests
 {
 	[Theory]
 	[MemberData(nameof(SpecificLogAttributeTypes))]
-	public async Task Generate_GivenInterfaceWithSpecificLogAttribute_GenerateLoggerWithThatLevel(string attribute)
+	public async Task Generate_GivenInterfaceWithSpecificLogAttribute_GenerateLoggerWithThatLevel(
+		string attribute
+	)
 	{
 		// Arrange
-		string basicLogger = @$"
+		string basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
 
 [Logger]
-public interface ITestLogger 
+public interface ITestLogger
 {{
 	[{attribute}]
 	void Log(string stringParam, int intParam, bool boolParam);
@@ -24,21 +27,24 @@ public interface ITestLogger
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(attribute));
+		await TestHelpers.Verify(generationResult, parameters: attribute);
 	}
 
 	[Theory]
 	[MemberData(nameof(SpecificLogAttributeTypes))]
-	public async Task Generate_GivenInterfaceWithSpecificTypesAndSpecificParameters_GenerateLoggerWithThatLevelAndParameter(string attribute)
+	public async Task Generate_GivenInterfaceWithSpecificTypesAndSpecificParameters_GenerateLoggerWithThatLevelAndParameter(
+		string attribute
+	)
 	{
 		// Arrange
-		string basicLogger = @$"
+		string basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
 
 [Logger]
-public interface ITestLogger 
+public interface ITestLogger
 {{
 	[{attribute}]
 	void Log(string stringParam, int intParam, bool boolParam);
@@ -64,7 +70,7 @@ public interface ITestLogger
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(attribute));
+		await TestHelpers.Verify(generationResult, parameters: attribute);
 	}
 
 	public static TheoryData<string> SpecificLogAttributeTypes

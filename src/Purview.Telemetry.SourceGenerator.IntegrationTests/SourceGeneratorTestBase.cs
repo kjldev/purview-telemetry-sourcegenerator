@@ -6,10 +6,14 @@ using Purview.Telemetry.SourceGenerator.Helpers;
 
 namespace Purview.Telemetry.SourceGenerator;
 
-public abstract class IncrementalSourceGeneratorTestBase<TGenerator> : SourceGeneratorTestBase<ISourceGenerator>
+public abstract class IncrementalSourceGeneratorTestBase<TGenerator>
+	: SourceGeneratorTestBase<ISourceGenerator>
 	where TGenerator : class, IIncrementalGenerator
 {
-	protected IncrementalSourceGeneratorTestBase(ITestOutputHelper? testOutputHelper = null, bool throwOnLoggedOnError = true)
+	protected IncrementalSourceGeneratorTestBase(
+		ITestOutputHelper? testOutputHelper = null,
+		bool throwOnLoggedOnError = true
+	)
 		: base(testOutputHelper, throwOnLoggedOnError)
 	{
 		ThrowOnLoggedOnError = throwOnLoggedOnError;
@@ -27,10 +31,12 @@ public abstract class IncrementalSourceGeneratorTestBase<TGenerator> : SourceGen
 	}
 }
 
-public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? testOutputHelper = null, bool throwOnLoggedOnError = true)
+public abstract class SourceGeneratorTestBase<TGenerator>(
+	ITestOutputHelper? testOutputHelper = null,
+	bool throwOnLoggedOnError = true
+)
 	where TGenerator : ISourceGenerator
 {
-
 	protected virtual bool ThrowOnLoggedOnError { get; set; } = throwOnLoggedOnError;
 
 	protected virtual TGenerator Generator
@@ -52,41 +58,65 @@ public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? tes
 
 		if (generator is ILogSupport logging && testOutputHelper is not null)
 		{
-			logging.SetLogOutput((message, outputType) =>
-			{
-				var prefix = outputType switch
+			logging.SetLogOutput(
+				(message, outputType) =>
 				{
-					OutputType.Debug => "DBG",
-					OutputType.Diagnostic => "DIA",
-					OutputType.Warning => "WRN",
-					OutputType.Error => "ERR",
-					_ => "???",
-				};
+					var prefix = outputType switch
+					{
+						OutputType.Debug => "DBG",
+						OutputType.Diagnostic => "DIA",
+						OutputType.Warning => "WRN",
+						OutputType.Error => "ERR",
+						_ => "???",
+					};
 
-				testOutputHelper.WriteLine($"{prefix}: {message}");
+					testOutputHelper.WriteLine($"{prefix}: {message}");
 
-				if (ThrowOnLoggedOnError)
-					outputType.ShouldNotBe(OutputType.Error, message);
-			});
+					if (ThrowOnLoggedOnError)
+						outputType.ShouldNotBe(OutputType.Error, message);
+				}
+			);
 		}
 	}
 
-	protected static AdditionalText Text(string content, bool autoIncludeUsings = true)
-	=> new InMemoryAdditionalText($"{Guid.NewGuid()}", (autoIncludeUsings ? TestHelpers.DefaultUsingSet : "") + content);
+	protected static AdditionalText Text(string content, bool autoIncludeUsings = true) =>
+		new InMemoryAdditionalText(
+			$"{Guid.NewGuid()}",
+			(autoIncludeUsings ? TestHelpers.DefaultUsingSet : "") + content
+		);
 
-	protected static AdditionalText Text(string path, string content, bool autoIncludeUsings = true)
-		=> new InMemoryAdditionalText(path, (autoIncludeUsings ? TestHelpers.DefaultUsingSet : "") + content);
+	protected static AdditionalText Text(
+		string path,
+		string content,
+		bool autoIncludeUsings = true
+	) =>
+		new InMemoryAdditionalText(
+			path,
+			(autoIncludeUsings ? TestHelpers.DefaultUsingSet : "") + content
+		);
 
-	protected static AdditionalText[] Texts(params (string path, string content)[] pairs)
-		=> [.. pairs.Select(pair => new InMemoryAdditionalText(pair.path, pair.content))];
+	protected static AdditionalText[] Texts(params (string path, string content)[] pairs) =>
+		[.. pairs.Select(pair => new InMemoryAdditionalText(pair.path, pair.content))];
 
-	protected static AdditionalText[] Texts(params (string path, string content, (string key, string value)[]? options)[] pairs)
-		=> [.. pairs.Select(pair => new InMemoryAdditionalText(pair.path, pair.content, pair.options))];
+	protected static AdditionalText[] Texts(
+		params (string path, string content, (string key, string value)[]? options)[] pairs
+	) =>
+		[
+			.. pairs.Select(pair => new InMemoryAdditionalText(
+				pair.path,
+				pair.content,
+				pair.options
+			)),
+		];
 
-	protected static ImmutableDictionary<string, string> Options(params (string key, string value)[] pairs)
-		=> pairs.ToImmutableDictionary(pair => pair.key, pair => pair.value);
+	protected static ImmutableDictionary<string, string> Options(
+		params (string key, string value)[] pairs
+	) => pairs.ToImmutableDictionary(pair => pair.key, pair => pair.value);
 
-	protected async Task<Compilation> GetCompilationAsync(GenerationResult generationResult, CancellationToken cancellationToken = default)
+	protected async Task<Compilation> GetCompilationAsync(
+		GenerationResult generationResult,
+		CancellationToken cancellationToken = default
+	)
 	{
 		ArgumentNullException.ThrowIfNull(generationResult);
 
@@ -129,9 +159,18 @@ public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? tes
 		bool disableDependencyInjection = true,
 		bool autoIncludeUsings = true,
 		IncludeLoggerTypes includeLoggerTypes = IncludeLoggerTypes.LoggerOnly,
-		bool debugLog = true)
+		bool debugLog = true
+	)
 	{
-		return await GenerateAsync(Text(csharpDocument, autoIncludeUsings: autoIncludeUsings), additionalTexts, globalOptions, projectModifier, disableDependencyInjection, includeLoggerTypes, debugLog);
+		return await GenerateAsync(
+			Text(csharpDocument, autoIncludeUsings: autoIncludeUsings),
+			additionalTexts,
+			globalOptions,
+			projectModifier,
+			disableDependencyInjection,
+			includeLoggerTypes,
+			debugLog
+		);
 	}
 
 	protected async Task<GenerationResult> GenerateAsync(
@@ -141,25 +180,39 @@ public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? tes
 		Func<Project, Project>? projectModifier = null,
 		bool disableDependencyInjection = true,
 		IncludeLoggerTypes includeLoggerTypes = IncludeLoggerTypes.LoggerOnly,
-		bool debugLog = true)
+		bool debugLog = true
+	)
 	{
-		return await GenerateAsync([csharpDocument], additionalTexts, globalOptions, projectModifier, disableDependencyInjection, includeLoggerTypes, debugLog);
+		return await GenerateAsync(
+			[csharpDocument],
+			additionalTexts,
+			globalOptions,
+			projectModifier,
+			disableDependencyInjection,
+			includeLoggerTypes,
+			debugLog
+		);
 	}
 
 	protected async Task<GenerationResult> GenerateAsync(
-			AdditionalText[] csharpDocuments,
-			AdditionalText[]? additionalTexts = null,
-			ImmutableDictionary<string, string>? globalOptions = null,
-			Func<Project, Project>? projectModifier = null,
-			bool disableDependencyInjection = true,
-			IncludeLoggerTypes includeLoggerTypes = IncludeLoggerTypes.LoggerOnly,
-			bool debugLog = true)
+		AdditionalText[] csharpDocuments,
+		AdditionalText[]? additionalTexts = null,
+		ImmutableDictionary<string, string>? globalOptions = null,
+		Func<Project, Project>? projectModifier = null,
+		bool disableDependencyInjection = true,
+		IncludeLoggerTypes includeLoggerTypes = IncludeLoggerTypes.LoggerOnly,
+		bool debugLog = true
+	)
 	{
 		List<string> preprocessorSymbols = [];
 		if (includeLoggerTypes == IncludeLoggerTypes.None)
 			preprocessorSymbols.Add("EXCLUDE_PURVIEW_TELEMETRY_LOGGING");
 
-		CSharpParseOptions parseOptions = new(kind: SourceCodeKind.Regular, documentationMode: DocumentationMode.Parse, preprocessorSymbols: preprocessorSymbols);
+		CSharpParseOptions parseOptions = new(
+			kind: SourceCodeKind.Regular,
+			documentationMode: DocumentationMode.Parse,
+			preprocessorSymbols: preprocessorSymbols
+		);
 
 		globalOptions ??= ImmutableDictionary<string, string>.Empty;
 		if (debugLog)
@@ -167,16 +220,19 @@ public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? tes
 
 		globalOptions = globalOptions.SetItem("CompilerVersion", "v4.7");
 
-		var optionsProvider = TestAnalyzerConfigOptionsProvider
-			.Empty
-			.WithGlobalOptions(new TestAnalyzerConfigOptions(globalOptions));
+		var optionsProvider = TestAnalyzerConfigOptionsProvider.Empty.WithGlobalOptions(
+			new TestAnalyzerConfigOptions(globalOptions)
+		);
 
 		if (disableDependencyInjection)
 		{
 			csharpDocuments =
 			[
 				.. csharpDocuments,
-				Text("[assembly: Purview.Telemetry.TelemetryGeneration(GenerateDependencyExtension = false)]", autoIncludeUsings: false)
+				Text(
+					"[assembly: Purview.Telemetry.TelemetryGeneration(GenerateDependencyExtension = false)]",
+					autoIncludeUsings: false
+				),
 			];
 		}
 
@@ -192,10 +248,23 @@ public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? tes
 			optionsProvider = optionsProvider.WithAdditionalTreeOptions(map.ToImmutable());
 		}
 
-		GeneratorDriver driver = CSharpGeneratorDriver.Create([Generator], additionalTexts: additionalTexts, parseOptions: parseOptions, optionsProvider: optionsProvider);
-		(var _, var compilation) = await ObtainProjectAndCompilationAsync(projectModifier, csharpDocuments, includeLoggerTypes);
+		GeneratorDriver driver = CSharpGeneratorDriver.Create(
+			[Generator],
+			additionalTexts: additionalTexts,
+			parseOptions: parseOptions,
+			optionsProvider: optionsProvider
+		);
+		(var _, var compilation) = await ObtainProjectAndCompilationAsync(
+			projectModifier,
+			csharpDocuments,
+			includeLoggerTypes
+		);
 
-		var result = driver.RunGeneratorsAndUpdateCompilation(compilation, out var outputCompilation, out var diagnostics);
+		var result = driver.RunGeneratorsAndUpdateCompilation(
+			compilation,
+			out var outputCompilation,
+			out var diagnostics
+		);
 		if (testOutputHelper is object)
 		{
 			foreach (var d in diagnostics)
@@ -204,10 +273,7 @@ public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? tes
 
 		var runResult = result.GetRunResult();
 
-		runResult.Results
-			.Where(m => m.Exception != null)
-			.Select(m => m.Exception)
-			.ShouldBeEmpty();
+		runResult.Results.Where(m => m.Exception != null).Select(m => m.Exception).ShouldBeEmpty();
 
 		return new(runResult, diagnostics, outputCompilation);
 	}
@@ -217,22 +283,35 @@ public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? tes
 		var generatorType = generator.GetType();
 
 		if (!generatorType.IsDefined(typeof(GeneratorAttribute)))
-			throw new InvalidOperationException($"Type is not marked [Generator]: {generatorType}.");
+			throw new InvalidOperationException(
+				$"Type is not marked [Generator]: {generatorType}."
+			);
 	}
 
 	protected virtual bool ReferenceCore => true;
 
-	protected async Task<(Project Project, Compilation Compilation)> ObtainProjectAndCompilationAsync(
+	protected async Task<(
+		Project Project,
+		Compilation Compilation
+	)> ObtainProjectAndCompilationAsync(
 		Func<Project, Project>? projectModifier = null,
 		AdditionalText[]? csharpDocuments = null,
-		IncludeLoggerTypes includeLoggerTypes = IncludeLoggerTypes.LoggerOnly)
+		IncludeLoggerTypes includeLoggerTypes = IncludeLoggerTypes.LoggerOnly
+	)
 	{
 		using AdhocWorkspace workspace = new();
-		var project = workspace.AddProject(typeof(SourceGeneratorTestBase<>).Namespace, LanguageNames.CSharp);
+		var project = workspace.AddProject(
+			typeof(SourceGeneratorTestBase<>).Namespace,
+			LanguageNames.CSharp
+		);
 
 		project = project
-			.WithCompilationOptions(project.CompilationOptions!.WithOutputKind(OutputKind.DynamicallyLinkedLibrary))
-			.AddMetadataReference(MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location));
+			.WithCompilationOptions(
+				project.CompilationOptions!.WithOutputKind(OutputKind.DynamicallyLinkedLibrary)
+			)
+			.AddMetadataReference(
+				MetadataReference.CreateFromFile(typeof(object).GetTypeInfo().Assembly.Location)
+			);
 
 		if (csharpDocuments != null && csharpDocuments.Length > 0)
 		{
@@ -245,21 +324,59 @@ public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? tes
 		if (ReferenceCore)
 		{
 			project = project
-				.AddMetadataReference(MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51").Location))
-				.AddMetadataReference(MetadataReference.CreateFromFile(Assembly.Load("System.Runtime").Location))
-				.AddMetadataReference(MetadataReference.CreateFromFile(typeof(System.ComponentModel.EditorBrowsableAttribute).Assembly.Location))
-				.AddMetadataReference(MetadataReference.CreateFromFile(typeof(IServiceProvider).Assembly.Location))
-
-				.AddMetadataReference(MetadataReference.CreateFromFile(typeof(System.Diagnostics.Activity).Assembly.Location))
-				.AddMetadataReference(MetadataReference.CreateFromFile(typeof(System.Diagnostics.Metrics.Meter).Assembly.Location))
-				.AddMetadataReference(MetadataReference.CreateFromFile(typeof(Microsoft.Extensions.DependencyInjection.IServiceCollection).Assembly.Location))
-			;
+				.AddMetadataReference(
+					MetadataReference.CreateFromFile(
+						Assembly
+							.Load(
+								"netstandard, Version=2.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51"
+							)
+							.Location
+					)
+				)
+				.AddMetadataReference(
+					MetadataReference.CreateFromFile(Assembly.Load("System.Runtime").Location)
+				)
+				.AddMetadataReference(
+					MetadataReference.CreateFromFile(
+						typeof(System.ComponentModel.EditorBrowsableAttribute).Assembly.Location
+					)
+				)
+				.AddMetadataReference(
+					MetadataReference.CreateFromFile(typeof(IServiceProvider).Assembly.Location)
+				)
+				.AddMetadataReference(
+					MetadataReference.CreateFromFile(
+						typeof(System.Diagnostics.Activity).Assembly.Location
+					)
+				)
+				.AddMetadataReference(
+					MetadataReference.CreateFromFile(
+						typeof(System.Diagnostics.Metrics.Meter).Assembly.Location
+					)
+				)
+				.AddMetadataReference(
+					MetadataReference.CreateFromFile(
+						typeof(Microsoft.Extensions.DependencyInjection.IServiceCollection)
+							.Assembly
+							.Location
+					)
+				);
 
 			if (includeLoggerTypes >= IncludeLoggerTypes.LoggerOnly)
 			{
-				project = project.AddMetadataReference(MetadataReference.CreateFromFile(typeof(Microsoft.Extensions.Logging.LogLevel).Assembly.Location));
+				project = project.AddMetadataReference(
+					MetadataReference.CreateFromFile(
+						typeof(Microsoft.Extensions.Logging.LogLevel).Assembly.Location
+					)
+				);
 				if (includeLoggerTypes == IncludeLoggerTypes.Telemetry)
-					project = project.AddMetadataReference(MetadataReference.CreateFromFile(typeof(Microsoft.Extensions.Logging.LogPropertiesAttribute).Assembly.Location));
+					project = project.AddMetadataReference(
+						MetadataReference.CreateFromFile(
+							typeof(Microsoft.Extensions.Logging.LogPropertiesAttribute)
+								.Assembly
+								.Location
+						)
+					);
 			}
 		}
 
@@ -272,4 +389,8 @@ public abstract class SourceGeneratorTestBase<TGenerator>(ITestOutputHelper? tes
 	protected virtual Project SetupProject(Project project) => project;
 }
 
-public record GenerationResult(GeneratorDriverRunResult Result, ImmutableArray<Diagnostic> Diagnostics, Compilation Compilation);
+public record GenerationResult(
+	GeneratorDriverRunResult Result,
+	ImmutableArray<Diagnostic> Diagnostics,
+	Compilation Compilation
+);

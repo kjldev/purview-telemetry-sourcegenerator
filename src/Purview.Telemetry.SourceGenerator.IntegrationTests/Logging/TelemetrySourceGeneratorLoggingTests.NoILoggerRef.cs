@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorLoggingTests
 	public async Task Generate_GivenNoReferenceToILoggerAndNoLoggerRequested_DoesNotGenerateDiagnostic()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -22,7 +23,10 @@ public interface ITestActivities {
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicActivity, includeLoggerTypes: IncludeLoggerTypes.None);
+		var generationResult = await GenerateAsync(
+			basicActivity,
+			includeLoggerTypes: IncludeLoggerTypes.None
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -32,7 +36,8 @@ public interface ITestActivities {
 	public async Task Generate_GivenNoReferenceToILoggerAndNoLoggerRequested_CompilesWithoutILoggerRef()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 
 namespace Testing;
@@ -48,9 +53,16 @@ public interface ITestActivities {
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicActivity, includeLoggerTypes: IncludeLoggerTypes.None);
+		var generationResult = await GenerateAsync(
+			basicActivity,
+			includeLoggerTypes: IncludeLoggerTypes.None
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, validateNonEmptyDiagnostics: false, whenValidatingDiagnosticsIgnoreNonErrors: true);
+		await TestHelpers.Verify(
+			generationResult,
+			validateNonEmptyDiagnostics: false,
+			whenValidatingDiagnosticsIgnoreNonErrors: true
+		);
 	}
 }

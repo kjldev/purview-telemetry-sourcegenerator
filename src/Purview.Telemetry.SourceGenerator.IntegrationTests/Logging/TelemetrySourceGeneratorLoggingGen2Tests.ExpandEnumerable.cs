@@ -4,10 +4,13 @@ partial class TelemetrySourceGeneratorLoggingGen2Tests
 {
 	[Theory]
 	[MemberData(nameof(ExpandableArrays))]
-	public async Task Generate_GivenMethodWithExpandableArrayOrEnumerable_GeneratesCorrectElements(string parameter)
+	public async Task Generate_GivenMethodWithExpandableArrayOrEnumerable_GeneratesCorrectElements(
+		string parameter
+	)
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -20,18 +23,24 @@ public interface ITestLogger
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.UseParameters(parameter));
+		await TestHelpers.Verify(generationResult, parameters: parameter);
 	}
 
 	[Theory]
 	[MemberData(nameof(ExpandableMaxCount))]
-	public async Task Generate_GivenMethodWithExpandableAndHighMaxCount_GeneratesDiagnostic(int maxCount)
+	public async Task Generate_GivenMethodWithExpandableAndHighMaxCount_GeneratesDiagnostic(
+		int maxCount
+	)
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -46,13 +55,18 @@ public interface ITestLogger
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicLogger, includeLoggerTypes: IncludeLoggerTypes.Telemetry);
+		var generationResult = await GenerateAsync(
+			basicLogger,
+			includeLoggerTypes: IncludeLoggerTypes.Telemetry
+		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c
-			.UseParameters(maxCount)
-			.ScrubInlineGuids()
-		, validateNonEmptyDiagnostics: true);
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true,
+			parameters: maxCount
+		);
 	}
 
 	public static TheoryData<string> ExpandableArrays
@@ -63,10 +77,14 @@ public interface ITestLogger
 
 			data.Add("[ExpandEnumerable]string[] paramValue");
 			data.Add("[ExpandEnumerable]System.String[] paramValue");
-			data.Add("[ExpandEnumerable]System.Collections.Generic.IEnumerable<System.String> paramValue");
+			data.Add(
+				"[ExpandEnumerable]System.Collections.Generic.IEnumerable<System.String> paramValue"
+			);
 			data.Add("[ExpandEnumerable]System.Collections.Generic.IEnumerable<string> paramValue");
 			data.Add("[ExpandEnumerable]System.Collections.Generic.ICollection<string> paramValue");
-			data.Add("[ExpandEnumerable]System.Collections.Generic.IDictionary<string, int> paramValue");
+			data.Add(
+				"[ExpandEnumerable]System.Collections.Generic.IDictionary<string, int> paramValue"
+			);
 
 			return data;
 		}

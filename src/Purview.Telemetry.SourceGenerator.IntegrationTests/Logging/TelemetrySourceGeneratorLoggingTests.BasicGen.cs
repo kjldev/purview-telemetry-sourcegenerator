@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorLoggingTests
 	public async Task Generate_GivenInterfaceWithSingleBasicExplicitLogEntry_GenerateLogger()
 	{
 		// Arrange
-		const string basicLogger = @"
+		const string basicLogger =
+			@"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -29,7 +30,8 @@ public interface ITestLogger {
 	public async Task Generate_GivenInterfaceWithSingleBasicImplicitLogEntry_GenerateLogger()
 	{
 		// Arrange
-		const string basicLogger = @"
+		const string basicLogger =
+			@"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -51,10 +53,13 @@ public interface ITestLogger {
 	[InlineData("Level = Microsoft.Extensions.Logging.LogLevel.Trace")]
 	[InlineData("level: Microsoft.Extensions.Logging.LogLevel.Trace")]
 	[InlineData("Microsoft.Extensions.Logging.LogLevel.Trace")]
-	public async Task Generate_GivenInterfaceWithExplicitLogLevelAndAnExceptionParameter_GenerateLogger(string level)
+	public async Task Generate_GivenInterfaceWithExplicitLogLevelAndAnExceptionParameter_GenerateLogger(
+		string level
+	)
 	{
 		// Arrange
-		var basicLogger = @$"
+		var basicLogger =
+			@$"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -70,14 +75,15 @@ public interface ITestLogger {{
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids().UseParameters(level));
+		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids(), parameters: level);
 	}
 
 	[Fact]
 	public async Task Generate_GivenInterfaceWithoutExplicitLogLevelAndAnExceptionParameter_GenerateLogger()
 	{
 		// Arrange
-		const string basicLogger = @"
+		const string basicLogger =
+			@"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -92,14 +98,19 @@ public interface ITestLogger {
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids(), validateNonEmptyDiagnostics: true);
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids(),
+			validateNonEmptyDiagnostics: true
+		);
 	}
 
 	[Fact]
 	public async Task Generate_GivenInterfaceMoreThanSixParameters_RaisesDiagnostic()
 	{
 		// Arrange
-		const string basicLogger = @"
+		const string basicLogger =
+			@"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -114,7 +125,9 @@ public interface ITestLogger {
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids(),
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids(),
 			validateNonEmptyDiagnostics: true,
 			validationCompilation: false
 		);
@@ -124,7 +137,8 @@ public interface ITestLogger {
 	public async Task Generate_GivenInterfaceMoreThanOneExceptionParameter_RaisesDiagnostic()
 	{
 		// Arrange
-		const string basicLogger = @"
+		const string basicLogger =
+			@"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -139,7 +153,9 @@ public interface ITestLogger {
 		var generationResult = await GenerateAsync(basicLogger);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, c => c.ScrubInlineGuids(),
+		await TestHelpers.Verify(
+			generationResult,
+			c => c.ScrubInlineGuids(),
 			validateNonEmptyDiagnostics: true,
 			validationCompilation: false
 		);
@@ -149,7 +165,8 @@ public interface ITestLogger {
 	public async Task Generate_GivenMethodReturnsIDisposable_GeneratesScopedLogEntry()
 	{
 		// Arrange
-		const string basicLogger = @"
+		const string basicLogger =
+			@"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -171,7 +188,8 @@ public interface ITestLogger {
 	public async Task Generate_GivenMethodWithParamsAndExceptionReturnsIDisposable_GeneratesScopedLogEntry()
 	{
 		// Arrange
-		const string basicLogger = @"
+		const string basicLogger =
+			@"
 using Purview.Telemetry.Logging;
 
 namespace Testing;
@@ -193,7 +211,8 @@ public interface ITestLogger {
 	public async Task Generate_GivenMethodWithParamsReturnsIDisposable_GeneratesScopedLogEntry()
 	{
 		// Arrange
-		const string basicLogger = @"
+		const string basicLogger =
+			@"
 using Purview.Telemetry.Logging;
 
 namespace Testing;

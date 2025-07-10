@@ -7,7 +7,13 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 
 partial class LoggerGenTargetClassEmitter
 {
-	static int EmitMethods(LoggerTarget target, StringBuilder builder, int indent, SourceProductionContext context, GenerationLogger? logger)
+	static int EmitMethods(
+		LoggerTarget target,
+		StringBuilder builder,
+		int indent,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		indent++;
 
@@ -24,7 +30,13 @@ partial class LoggerGenTargetClassEmitter
 		return --indent;
 	}
 
-	static void EmitMethod(StringBuilder builder, int indent, LogMethodTarget methodTarget, SourceProductionContext context, GenerationLogger? logger)
+	static void EmitMethod(
+		StringBuilder builder,
+		int indent,
+		LogMethodTarget methodTarget,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -34,27 +46,18 @@ partial class LoggerGenTargetClassEmitter
 			.AppendLine()
 			.CodeGen(indent)
 			.AggressiveInlining(indent)
-			.Append(indent, "public ", withNewLine: false)
-		;
+			.Append(indent, "public ", withNewLine: false);
 
 		if (methodTarget.IsScoped)
 			builder.Append(Constants.System.IDisposable.WithGlobal().WithNullable());
 		else
 			builder.Append(Constants.System.VoidKeyword);
 
-		builder
-			.Append(' ')
-			.Append(methodTarget.MethodName)
-			.Append('(')
-		;
+		builder.Append(' ').Append(methodTarget.MethodName).Append('(');
 
 		EmitParametersAsMethodArgumentList(methodTarget, builder, context);
 
-		builder
-			.Append(')')
-			.AppendLine()
-			.Append(indent, '{')
-		;
+		builder.Append(')').AppendLine().Append(indent, '{');
 
 		indent++;
 
@@ -86,16 +89,29 @@ partial class LoggerGenTargetClassEmitter
 				.Append(indent, '{')
 				.Append(indent + 1, "return;")
 				.Append(indent, '}')
-				.AppendLine()
-			;
+				.AppendLine();
 		}
 
 		// Output the state here...
-		EmitStateContent(builder, indent, methodTarget, stateVarName, existingParamNames, context, logger);
+		EmitStateContent(
+			builder,
+			indent,
+			methodTarget,
+			stateVarName,
+			existingParamNames,
+			context,
+			logger
+		);
 
 		if (methodTarget.IsScoped)
 		{
-			var (interpolatedMessage, variables) = GenerateInterpolatedFunction(methodTarget.MessageTemplate, stateVarName, methodTarget.ExceptionParameter?.Name, [.. methodTarget.Parameters], existingParamNames);
+			var (interpolatedMessage, variables) = GenerateInterpolatedFunction(
+				methodTarget.MessageTemplate,
+				stateVarName,
+				methodTarget.ExceptionParameter?.Name,
+				[.. methodTarget.Parameters],
+				existingParamNames
+			);
 
 			if (variables.Length > 0)
 			{
@@ -110,19 +126,32 @@ partial class LoggerGenTargetClassEmitter
 				.Append(indent, "var ", withNewLine: false)
 				.AppendLine("formattedMessage = ")
 				.AppendLine("#if NET")
-				.Append(indent + 1, "string.Create(global::System.Globalization.CultureInfo.InvariantCulture, $", withNewLine: false)
+				.Append(
+					indent + 1,
+					"string.Create(global::System.Globalization.CultureInfo.InvariantCulture, $",
+					withNewLine: false
+				)
 				.Append(interpolatedMessage.Wrap())
 				.AppendLine(");")
 				.AppendLine("#else")
-				.Append(indent + 1, "global::System.FormattableString.Invariant($", withNewLine: false)
+				.Append(
+					indent + 1,
+					"global::System.FormattableString.Invariant($",
+					withNewLine: false
+				)
 				.Append(interpolatedMessage.Wrap())
 				.AppendLine(");")
 				.AppendLine("#endif")
 				.Append(indent, ';')
-				.AppendLine()
-			;
+				.AppendLine();
 
-			OutputState(builder.WithIndent(indent), stateVarName, Utilities.UppercaseFirstChar(formattedMessageVarName).Wrap(), formattedMessageVarName, index: null);
+			OutputState(
+				builder.WithIndent(indent),
+				stateVarName,
+				Utilities.UppercaseFirstChar(formattedMessageVarName).Wrap(),
+				formattedMessageVarName,
+				index: null
+			);
 
 			builder
 				.AppendLine()
@@ -130,20 +159,27 @@ partial class LoggerGenTargetClassEmitter
 				.Append(Constants.Logging.LoggerFieldName)
 				.Append(".BeginScope(")
 				.Append(stateVarName)
-				.AppendLine(");")
-			;
+				.AppendLine(");");
 		}
 		else
 		{
 			var expressionStateVarName = FindUniqueName("s", existingParamNames);
-			var expressionExceptionVarName = methodTarget.ExceptionParameter?.UsedInTemplate == true
-				? FindUniqueName("e", existingParamNames)
-				: null;
-			var (interpolatedMessage, variables) = GenerateInterpolatedFunction(methodTarget.MessageTemplate, expressionStateVarName, expressionExceptionVarName, [.. methodTarget.Parameters], existingParamNames);
-
+			var expressionExceptionVarName =
+				methodTarget.ExceptionParameter?.UsedInTemplate == true
+					? FindUniqueName("e", existingParamNames)
+					: null;
+			var (interpolatedMessage, variables) = GenerateInterpolatedFunction(
+				methodTarget.MessageTemplate,
+				expressionStateVarName,
+				expressionExceptionVarName,
+				[.. methodTarget.Parameters],
+				existingParamNames
+			);
 
 			// Call the .Log method.
-			var eventId = methodTarget.EventId ?? SharedHelpers.GetNonRandomizedHashCode(methodTarget.MethodName);
+			var eventId =
+				methodTarget.EventId
+				?? SharedHelpers.GetNonRandomizedHashCode(methodTarget.MethodName);
 			builder
 				.Append(indent, Constants.Logging.LoggerFieldName, withNewLine: false)
 				.AppendLine(".Log(")
@@ -158,7 +194,10 @@ partial class LoggerGenTargetClassEmitter
 				// State
 				.Append(indent + 1, stateVarName.WithComma(andSpace: false))
 				// Exception
-				.Append(indent + 1, methodTarget.ExceptionParameter.OrNullKeyword().WithComma(andSpace: false))
+				.Append(
+					indent + 1,
+					methodTarget.ExceptionParameter.OrNullKeyword().WithComma(andSpace: false)
+				)
 				// Message Template
 				.CodeGen(indent + 1)
 				.Append(indent + 1, "static string (", withNewLine: false)
@@ -166,8 +205,7 @@ partial class LoggerGenTargetClassEmitter
 				.Append(", ")
 				.Append(expressionExceptionVarName ?? "_")
 				.AppendLine(") =>")
-				.Append(indent + 1, "{")
-			;
+				.Append(indent + 1, "{");
 
 			if (variables.Length > 0)
 			{
@@ -179,38 +217,43 @@ partial class LoggerGenTargetClassEmitter
 
 			builder
 				.AppendLine("#if NET")
-				.Append(indent + 2, "return string.Create(global::System.Globalization.CultureInfo.InvariantCulture, $", withNewLine: false)
+				.Append(
+					indent + 2,
+					"return string.Create(global::System.Globalization.CultureInfo.InvariantCulture, $",
+					withNewLine: false
+				)
 				.Append(interpolatedMessage.Wrap())
 				.AppendLine(");")
 				.AppendLine("#else")
-				.Append(indent + 2, "return global::System.FormattableString.Invariant($", withNewLine: false)
+				.Append(
+					indent + 2,
+					"return global::System.FormattableString.Invariant($",
+					withNewLine: false
+				)
 				.Append(interpolatedMessage.Wrap())
 				.AppendLine(");")
 				.AppendLine("#endif")
 				.Append(indent + 1, '}')
-				.Append(indent, ");")
-			;
+				.Append(indent, ");");
 
 			builder
 				.AppendLine()
 				.Append(indent, stateVarName, withNewLine: false)
-				.AppendLine(".Clear();")
-			;
+				.AppendLine(".Clear();");
 		}
 
-		builder
-			.Append(--indent, '}')
-			.AppendLine()
-		;
+		builder.Append(--indent, '}').AppendLine();
 	}
 
-	static void EmitStateContent(StringBuilder builder,
+	static void EmitStateContent(
+		StringBuilder builder,
 		int indent,
 		LogMethodTarget methodTarget,
 		string stateVarName,
 		List<string> existingParamNames,
 		SourceProductionContext context,
-		GenerationLogger? logger)
+		GenerationLogger? logger
+	)
 	{
 		logger?.Debug("Emitting state content");
 
@@ -232,11 +275,16 @@ partial class LoggerGenTargetClassEmitter
 			.Append(".ReserveTagSpace(")
 			.Append(reservationCount)
 			.AppendLine(");")
-			.AppendLine()
-		;
+			.AppendLine();
 
 		// Original format is always at 0.
-		OutputState(builder.WithIndent(indent), stateVarName, "{OriginalFormat}".Wrap(), methodTarget.MessageTemplate.Wrap(), 0);
+		OutputState(
+			builder.WithIndent(indent),
+			stateVarName,
+			"{OriginalFormat}".Wrap(),
+			methodTarget.MessageTemplate.Wrap(),
+			0
+		);
 
 		var idx = 0;
 		List<string>? postSetProperties = null;
@@ -251,7 +299,12 @@ partial class LoggerGenTargetClassEmitter
 
 			var isEnumerable = parameter.IsArray || parameter.IsIEnumerable;
 			// Need to match the name against the value.
-			OutputState(builder.WithIndent(indent), stateVarName, parameter.Name.Wrap(), parameter.Name, ++idx,
+			OutputState(
+				builder.WithIndent(indent),
+				stateVarName,
+				parameter.Name.Wrap(),
+				parameter.Name,
+				++idx,
 				isEnumerable: isEnumerable
 			);
 
@@ -260,11 +313,27 @@ partial class LoggerGenTargetClassEmitter
 				if (parameter.ExpandEnumerableAttribute != null)
 				{
 					postSetProperties ??= [];
-					postSetProperties.Add(OutputExpandedEnumerable(indent, stateVarName, parameter, context, existingParamNames, logger));
+					postSetProperties.Add(
+						OutputExpandedEnumerable(
+							indent,
+							stateVarName,
+							parameter,
+							context,
+							existingParamNames,
+							logger
+						)
+					);
 				}
 			}
 			else if (parameter.LogProperties != null)
-				OutputLogPropertyDetails(indent, stateVarName, context, ref postSetProperties, parameter, existingParamNames);
+				OutputLogPropertyDetails(
+					indent,
+					stateVarName,
+					context,
+					ref postSetProperties,
+					parameter,
+					existingParamNames
+				);
 		}
 
 		if (postSetProperties != null)
@@ -280,12 +349,14 @@ partial class LoggerGenTargetClassEmitter
 
 		builder.AppendLine();
 
-		static void OutputLogPropertyDetails(int indent,
+		static void OutputLogPropertyDetails(
+			int indent,
 			string stateVarName,
 			SourceProductionContext context,
 			ref List<string>? postPropertyDefinitions,
 			LogParameterTarget parameter,
-			List<string> existingParamNames)
+			List<string> existingParamNames
+		)
 		{
 			StringBuilder logPropertiesBuilder = new();
 			foreach (var logProperty in parameter.LogProperties!.Value)
@@ -294,10 +365,17 @@ partial class LoggerGenTargetClassEmitter
 
 				var logPropertyValue = $"{parameter.Name}?.{logProperty.PropertyName}";
 				var logPropertyName = logProperty.PropertyName;
-				if (!parameter.LogPropertiesAttribute!.OmitReferenceName.Value.GetValueOrDefault(false))
+				if (
+					!parameter.LogPropertiesAttribute!.OmitReferenceName.Value.GetValueOrDefault(
+						false
+					)
+				)
 					logPropertyName = $"{parameter.Name}.{logPropertyName}";
 
-				var shouldSkipNull = parameter.LogPropertiesAttribute.SkipNullProperties.Value.GetValueOrDefault(false) && logProperty.IsNullable;
+				var shouldSkipNull =
+					parameter.LogPropertiesAttribute.SkipNullProperties.Value.GetValueOrDefault(
+						false
+					) && logProperty.IsNullable;
 				if (shouldSkipNull)
 				{
 					var tmpVarName = FindUniqueName("tmp", existingParamNames);
@@ -311,23 +389,25 @@ partial class LoggerGenTargetClassEmitter
 						.Append(indent + 1, "if (", withNewLine: false)
 						.Append(tmpVarName)
 						.AppendLine(" != null)")
-						.Append(indent + 1, '{')
-					;
+						.Append(indent + 1, '{');
 
 					logPropertyValue = tmpVarName;
 
 					indent += 2;
 				}
 
-				OutputState(logPropertiesBuilder.WithIndent(indent), stateVarName, logPropertyName.Wrap(), logPropertyValue, null);
+				OutputState(
+					logPropertiesBuilder.WithIndent(indent),
+					stateVarName,
+					logPropertyName.Wrap(),
+					logPropertyValue,
+					null
+				);
 
 				if (shouldSkipNull)
 				{
 					indent -= 2;
-					logPropertiesBuilder
-						.Append(indent + 1, '}')
-						.Append(indent, '}')
-					;
+					logPropertiesBuilder.Append(indent + 1, '}').Append(indent, '}');
 				}
 
 				postPropertyDefinitions ??= [];
@@ -338,19 +418,20 @@ partial class LoggerGenTargetClassEmitter
 		}
 	}
 
-	static void OutputState(StringBuilder builder, string stateVarName, string propertyName, string value, int? index, bool isEnumerable = false)
+	static void OutputState(
+		StringBuilder builder,
+		string stateVarName,
+		string propertyName,
+		string value,
+		int? index,
+		bool isEnumerable = false
+	)
 	{
-		builder
-			.Append(stateVarName)
-			.Append('.')
-		;
+		builder.Append(stateVarName).Append('.');
 
 		if (index.HasValue)
 		{
-			builder
-				.Append("TagArray[")
-				.Append(index.Value)
-				.Append("] = new(");
+			builder.Append("TagArray[").Append(index.Value).Append("] = new(");
 		}
 		else
 			builder.Append("AddTag(");
@@ -365,17 +446,22 @@ partial class LoggerGenTargetClassEmitter
 				.Append(Constants.Logging.MicrosoftExtensions.LoggerMessageHelper.WithGlobal())
 				.Append(".Stringify(")
 				.Append(value)
-				.Append(')')
-			;
+				.Append(')');
 		}
 		else
 			builder.Append(value);
 
 		builder.AppendLine(");");
-
 	}
 
-	static string OutputExpandedEnumerable(int indent, string stateVarName, LogParameterTarget parameter, SourceProductionContext context, List<string> existingParamNames, GenerationLogger? logger)
+	static string OutputExpandedEnumerable(
+		int indent,
+		string stateVarName,
+		LogParameterTarget parameter,
+		SourceProductionContext context,
+		List<string> existingParamNames,
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -389,10 +475,10 @@ partial class LoggerGenTargetClassEmitter
 			.Append(indent, '{')
 			.Append(++indent, "var ", withNewLine: false)
 			.Append(iteratorVarName)
-			.AppendLine(" = 0;")
-		;
+			.AppendLine(" = 0;");
 
-		var maxCount = parameter.ExpandEnumerableAttribute!.MaximumValueCount.Value
+		var maxCount =
+			parameter.ExpandEnumerableAttribute!.MaximumValueCount.Value
 			?? Constants.Logging.UnboundedIEnumerableMaxCountBeforeDiagnostic;
 
 		if (maxCount < 1)
@@ -400,8 +486,14 @@ partial class LoggerGenTargetClassEmitter
 
 		if (maxCount > Constants.Logging.UnboundedIEnumerableMaxCountBeforeDiagnostic)
 		{
-			logger?.Diagnostic($"Identified {parameter.Name} that has a large unbounded ienumerable max.");
-			TelemetryDiagnostics.Report(context.ReportDiagnostic, TelemetryDiagnostics.Logging.UnboundedIEnumerableMaxCount, parameter.Locations);
+			logger?.Diagnostic(
+				$"Identified {parameter.Name} that has a large unbounded ienumerable max."
+			);
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
+				TelemetryDiagnostics.Logging.UnboundedIEnumerableMaxCount,
+				parameter.Locations
+			);
 		}
 
 		builder
@@ -419,33 +511,38 @@ partial class LoggerGenTargetClassEmitter
 			.Append(indent, '{')
 			.Append(indent + 1, "break;")
 			.Append(indent, "}")
-			.AppendLine()
-		;
+			.AppendLine();
 
-		OutputState(builder.WithIndent(indent),
+		OutputState(
+			builder.WithIndent(indent),
 			stateVarName,
 			$"$\"{parameter.Name}[{{{iteratorVarName}}}]\"",
 			iteratorItemVarName,
-			null);
+			null
+		);
 
 		builder
 			.Append(indent, iteratorVarName, withNewLine: false)
 			.AppendLine("++;")
 			.Append(--indent, '}')
-			.Append(--indent, '}')
-		;
+			.Append(--indent, '}');
 
 		return builder.ToString();
 	}
 
-	static void EmitParametersAsMethodArgumentList(LogMethodTarget methodTarget, StringBuilder builder, SourceProductionContext context)
+	static void EmitParametersAsMethodArgumentList(
+		LogMethodTarget methodTarget,
+		StringBuilder builder,
+		SourceProductionContext context
+	)
 	{
 		for (var i = 0; i < methodTarget.TotalParameterCount; i++)
 		{
 			context.CancellationToken.ThrowIfCancellationRequested();
 
-			if (methodTarget.Parameters[i].IsComplexType
-				|| methodTarget.Parameters[i].IsIEnumerable)
+			if (
+				methodTarget.Parameters[i].IsComplexType || methodTarget.Parameters[i].IsIEnumerable
+			)
 				builder.Append("global::");
 
 			builder.Append(methodTarget.Parameters[i].FullyQualifiedType);
@@ -453,9 +550,7 @@ partial class LoggerGenTargetClassEmitter
 			if (methodTarget.Parameters[i].IsNullable)
 				builder.Append('?');
 
-			builder
-				.Append(' ')
-				.Append(methodTarget.Parameters[i].Name);
+			builder.Append(' ').Append(methodTarget.Parameters[i].Name);
 
 			if (i < methodTarget.TotalParameterCount - 1)
 				builder.Append(", ");
@@ -482,7 +577,8 @@ partial class LoggerGenTargetClassEmitter
 		string expressionStateVarName,
 		string? expressionExceptionVarName,
 		LogParameterTarget[] parameters,
-		List<string> existingParamNames)
+		List<string> existingParamNames
+	)
 	{
 		if (parameters.Length == 0)
 			return (messageTemplate, Array.Empty<string>());
@@ -498,9 +594,7 @@ partial class LoggerGenTargetClassEmitter
 				holeIndexMap[hole] = currentIndex++;
 		}
 
-		var escapedTemplate = messageTemplate
-			.Replace("{{", "\u0001")
-			.Replace("}}", "\u0002");
+		var escapedTemplate = messageTemplate.Replace("{{", "\u0001").Replace("}}", "\u0002");
 
 		var exceptionParameter = parameters?.FirstOrDefault(p => p.IsFirstException);
 		var exceptionUsedInTemplate = exceptionParameter?.UsedInTemplate == true;
@@ -509,7 +603,8 @@ partial class LoggerGenTargetClassEmitter
 			var index = hole.IsPositional ? hole.Ordinal!.Value : holeIndexMap[hole];
 			string varName;
 
-			var isUsingExpressionException = exceptionParameter != null && exceptionParameter.ReferencedHoles.Contains(hole);
+			var isUsingExpressionException =
+				exceptionParameter != null && exceptionParameter.ReferencedHoles.Contains(hole);
 			if (isUsingExpressionException)
 				varName = expressionExceptionVarName!;
 			else
@@ -518,14 +613,16 @@ partial class LoggerGenTargetClassEmitter
 				existingParamNames.Add(varName);
 
 				// Define variable for every placeholder and ensure null safety
-				var varAssignment = $"var {varName} = {expressionStateVarName}.TagArray[{index + 1}].Value ?? \"(null)\";";
+				var varAssignment =
+					$"var {varName} = {expressionStateVarName}.TagArray[{index + 1}].Value ?? \"(null)\";";
 				variableDefinitions.Add(varAssignment);
 			}
 
 			// If this hole belongs to the Exception parameter, use it directly
-			string replacement = $"{{{varName}" +
-				  $"{(hole.Alignment.HasValue ? $",{hole.Alignment}" : "")}" +
-				  $"{(hole.Format != null ? $":{hole.Format}" : "")}}}";
+			string replacement =
+				$"{{{varName}"
+				+ $"{(hole.Alignment.HasValue ? $",{hole.Alignment}" : "")}"
+				+ $"{(hole.Format != null ? $":{hole.Format}" : "")}}}";
 
 			// Replace all occurrences of this hole’s placeholders
 			string placeholder = hole.IsPositional ? $"{{{hole.Ordinal}}}" : $"{{{hole.Name}}}";

@@ -12,14 +12,12 @@ static class DependencyInjectionClassEmitter
 		GenerationType requestingType,
 		TelemetryGenerationAttributeRecord attribute,
 		GenerationType generationType,
-
 		string implementationClassName,
 		string sourceInterfaceName,
-
 		string? fullyQualifiedNamespace,
-
 		SourceProductionContext context,
-		GenerationLogger? logger)
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -31,7 +29,9 @@ static class DependencyInjectionClassEmitter
 
 		if (!SharedHelpers.ShouldEmit(requestingType, generationType))
 		{
-			logger?.Debug($"Skipping dependency injection emit for {requestingType} ({generationType}).");
+			logger?.Debug(
+				$"Skipping dependency injection emit for {requestingType} ({generationType})."
+			);
 			return;
 		}
 
@@ -41,37 +41,39 @@ static class DependencyInjectionClassEmitter
 		if (string.IsNullOrWhiteSpace(classNameToGenerate))
 			classNameToGenerate = implementationClassName + "DIExtension";
 
-		var classAccessModifier = (attribute.DependencyInjectionClassIsPublic.Value ?? false)
-			? "public static"
-			: "static";
+		var classAccessModifier =
+			(attribute.DependencyInjectionClassIsPublic.Value ?? false)
+				? "public static"
+				: "static";
 
-		logger?.Debug($"Generating service dependency class {classNameToGenerate} for: {fullyQualifiedNamespace}{sourceInterfaceName}");
+		logger?.Debug(
+			$"Generating service dependency class {classNameToGenerate} for: {fullyQualifiedNamespace}{sourceInterfaceName}"
+		);
 
 		context.CancellationToken.ThrowIfCancellationRequested();
 
 		builder
 			.Append("namespace ")
 			.AppendLine(Constants.DependencyInjection.DependencyInjectionNamespace)
-			.AppendLine('{')
-		;
+			.AppendLine('{');
 
 		builder
 			.CodeGen(1)
-			.Append(1, "[global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never)]")
+			.Append(
+				1,
+				"[global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never)]"
+			)
 			.Append(1, $"{classAccessModifier} class ", withNewLine: false)
 			.Append(classNameToGenerate)
 			.AppendLine()
-			.Append(1, '{')
-		;
+			.Append(1, '{');
 
 		EmitMethod(
 			builder,
 			2,
-
 			implementationClassName,
 			sourceInterfaceName,
 			fullyQualifiedNamespace,
-
 			logger,
 			context.CancellationToken
 		);
@@ -83,10 +85,21 @@ static class DependencyInjectionClassEmitter
 		var sourceText = EmbeddedResources.Instance.AddHeader(builder.ToString());
 		var hintName = $"{fullyQualifiedNamespace}{classNameToGenerate}.DependencyInjection.g.cs";
 
-		context.AddSource(hintName, Microsoft.CodeAnalysis.Text.SourceText.From(sourceText, Encoding.UTF8));
+		context.AddSource(
+			hintName,
+			Microsoft.CodeAnalysis.Text.SourceText.From(sourceText, Encoding.UTF8)
+		);
 	}
 
-	static void EmitMethod(StringBuilder builder, int indent, string className, string interfaceName, string? fullyQualifiedNamespace, GenerationLogger? logger, CancellationToken token)
+	static void EmitMethod(
+		StringBuilder builder,
+		int indent,
+		string className,
+		string interfaceName,
+		string? fullyQualifiedNamespace,
+		GenerationLogger? logger,
+		CancellationToken token
+	)
 	{
 		token.ThrowIfCancellationRequested();
 
@@ -117,7 +130,6 @@ static class DependencyInjectionClassEmitter
 			.Append(fullyQualifiedNamespace!.WithGlobal())
 			.Append(className)
 			.AppendLine(">();")
-			.Append(indent, '}')
-		;
+			.Append(indent, '}');
 	}
 }

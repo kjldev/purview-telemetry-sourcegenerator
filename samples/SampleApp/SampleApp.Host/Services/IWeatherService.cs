@@ -2,5 +2,8 @@
 
 public interface IWeatherService
 {
-	Task<IEnumerable<WeatherForecast>> GetWeatherForecastsAsync(int requestCount, CancellationToken cancellationToken = default);
+	Task<IEnumerable<WeatherForecast>> GetWeatherForecastsAsync(
+		int requestCount,
+		CancellationToken cancellationToken = default
+	);
 }

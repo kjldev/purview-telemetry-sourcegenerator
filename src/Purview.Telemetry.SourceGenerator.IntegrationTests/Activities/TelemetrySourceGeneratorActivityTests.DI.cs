@@ -6,7 +6,8 @@ partial class TelemetrySourceGeneratorActivityTests
 	public async Task Generate_GivenAssemblyEnableDI_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -25,7 +26,10 @@ public interface ITestActivities {
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicActivity, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicActivity,
+			disableDependencyInjection: false
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -35,7 +39,8 @@ public interface ITestActivities {
 	public async Task Generate_GivenInterfaceEnableDI_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -53,7 +58,10 @@ public interface ITestActivities {
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicActivity, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicActivity,
+			disableDependencyInjection: false
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -63,7 +71,8 @@ public interface ITestActivities {
 	public async Task Generate_GivenDIDisabledAtAssemblyAndInterfaceEnableDI_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -83,7 +92,10 @@ public interface ITestActivities {
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicActivity, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicActivity,
+			disableDependencyInjection: false
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -93,7 +105,8 @@ public interface ITestActivities {
 	public async Task Generate_GivenDIEnabledAtAssemblyAndInterfaceDisableDI_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -113,7 +126,10 @@ public interface ITestActivities {
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicActivity, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicActivity,
+			disableDependencyInjection: false
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);
@@ -123,7 +139,8 @@ public interface ITestActivities {
 	public async Task Generate_GivenAssemblyEnableDIAndClassIsPublic_GeneratesActivity()
 	{
 		// Arrange
-		const string basicActivity = @"
+		const string basicActivity =
+			@"
 using Purview.Telemetry.Activities;
 using System.Diagnostics;
 
@@ -142,7 +159,10 @@ public interface ITestActivities {
 ";
 
 		// Act
-		var generationResult = await GenerateAsync(basicActivity, disableDependencyInjection: false);
+		var generationResult = await GenerateAsync(
+			basicActivity,
+			disableDependencyInjection: false
+		);
 
 		// Assert
 		await TestHelpers.Verify(generationResult);

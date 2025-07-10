@@ -7,7 +7,13 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 
 partial class ActivitySourceTargetClassEmitter
 {
-	static int EmitFields(ActivitySourceTarget target, StringBuilder builder, int indent, SourceProductionContext context, GenerationLogger? logger)
+	static int EmitFields(
+		ActivitySourceTarget target,
+		StringBuilder builder,
+		int indent,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		context.CancellationToken.ThrowIfCancellationRequested();
 
@@ -18,7 +24,11 @@ partial class ActivitySourceTargetClassEmitter
 		{
 			logger?.Diagnostic($"No activity source specified.");
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic, TelemetryDiagnostics.Activities.NoActivitySourceSpecified, location: null);
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
+				TelemetryDiagnostics.Activities.NoActivitySourceSpecified,
+				location: null
+			);
 
 			activitySourceName = Constants.Activities.DefaultActivitySourceName;
 		}
@@ -31,8 +41,7 @@ partial class ActivitySourceTargetClassEmitter
 			.Append(" = new(")
 			.Append(activitySourceName!.Wrap())
 			.AppendLine(");")
-			.AppendLine()
-		;
+			.AppendLine();
 
 		return --indent;
 	}

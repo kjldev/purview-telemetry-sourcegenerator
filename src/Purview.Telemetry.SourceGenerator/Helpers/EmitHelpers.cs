@@ -7,21 +7,21 @@ namespace Purview.Telemetry.SourceGenerator.Helpers;
 
 static class EmitHelpers
 {
-	public static int EmitNamespaceStart(string? classNamespace, string[] parentClasses, StringBuilder builder, CancellationToken token)
+	public static int EmitNamespaceStart(
+		string? classNamespace,
+		string[] parentClasses,
+		StringBuilder builder,
+		CancellationToken token
+	)
 	{
 		token.ThrowIfCancellationRequested();
 
 		var indent = 0;
 		if (classNamespace != null)
 		{
-			builder
-				.Append("namespace ")
-				.AppendLine(classNamespace)
-			;
+			builder.Append("namespace ").AppendLine(classNamespace);
 
-			builder
-				.Append('{')
-				.AppendLine();
+			builder.Append('{').AppendLine();
 
 			indent++;
 		}
@@ -43,7 +43,13 @@ static class EmitHelpers
 		return indent++;
 	}
 
-	public static void EmitNamespaceEnd(string? classNamespace, string[] parentClasses, int indent, StringBuilder builder, CancellationToken token)
+	public static void EmitNamespaceEnd(
+		string? classNamespace,
+		string[] parentClasses,
+		int indent,
+		StringBuilder builder,
+		CancellationToken token
+	)
 	{
 		token.ThrowIfCancellationRequested();
 
@@ -64,7 +70,8 @@ static class EmitHelpers
 		string fullyQualifiedInterface,
 		StringBuilder builder,
 		int indent,
-		CancellationToken token)
+		CancellationToken token
+	)
 	{
 		token.ThrowIfCancellationRequested();
 
@@ -77,19 +84,24 @@ static class EmitHelpers
 			.Append(" : ")
 			.Append(fullyQualifiedInterface.WithGlobal())
 			.AppendLine()
-			.Append(indent, '{')
-		;
+			.Append(indent, '{');
 
 		return indent;
 	}
 
-	public static void EmitClassEnd(StringBuilder builder, int indent)
-		=> builder.Append(indent, '}');
+	public static void EmitClassEnd(StringBuilder builder, int indent) =>
+		builder.Append(indent, '}');
 
-	public static bool GenerateDuplicateMethodDiagnostics(GenerationType requestedType, GenerationType generationType, ImmutableDictionary<string, Location[]> duplicateMethods, SourceProductionContext context, GenerationLogger? logger)
+	public static bool GenerateDuplicateMethodDiagnostics(
+		GenerationType requestedType,
+		GenerationType generationType,
+		ImmutableDictionary<string, Location[]> duplicateMethods,
+		SourceProductionContext context,
+		GenerationLogger? logger
+	)
 	{
 		if (duplicateMethods.IsEmpty)
-			// No duplicate methods found. 
+			// No duplicate methods found.
 			return false;
 
 		if (!SharedHelpers.ShouldEmit(requestedType, generationType))
@@ -106,7 +118,12 @@ static class EmitHelpers
 			var locations = duplicateMethods[methodName];
 			logger?.Diagnostic($"Method '{methodName}' is defined in multiple locations:");
 
-			TelemetryDiagnostics.Report(context.ReportDiagnostic, TelemetryDiagnostics.General.DuplicateMethodNamesAreNotSupported, locations, methodName);
+			TelemetryDiagnostics.Report(
+				context.ReportDiagnostic,
+				TelemetryDiagnostics.General.DuplicateMethodNamesAreNotSupported,
+				locations,
+				methodName
+			);
 		}
 
 		return true;
