@@ -191,7 +191,7 @@ using Purview.Telemetry;
 
 		config?.Invoke(verifierTask);
 
-		verifierTask = verifierTask.AutoVerify();
+		//verifierTask = verifierTask.AutoVerify();
 
 		await verifierTask;
 
