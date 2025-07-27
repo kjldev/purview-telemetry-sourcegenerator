@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Purview.Telemetry.SourceGenerator.Records;
+using Purview.Telemetry.SourceGenerator.Templates;
 
 namespace Purview.Telemetry.SourceGenerator.Helpers;
 
@@ -259,33 +260,28 @@ partial class SharedHelpers
 		}
 
 		InstrumentTypes instrumentType;
-		var isAutoCounter = Constants.Metrics.AutoCounterAttribute.Equals(
-			attributeData.AttributeClass
-		);
-		if (
-			isAutoCounter || Constants.Metrics.CounterAttribute.Equals(attributeData.AttributeClass)
-		)
+		var attributeType = PurviewTypeFactory.Create(attributeData.AttributeClass);
+		var isAutoCounter = Constants.Metrics.AutoCounterAttribute == attributeType;
+		if (isAutoCounter || Constants.Metrics.CounterAttribute == attributeType)
 		{
 			instrumentType = InstrumentTypes.Counter;
 
 			if (isAutoCounter)
 				autoIncrement = new(true);
 		}
-		else if (Constants.Metrics.HistogramAttribute.Equals(attributeData.AttributeClass))
+		else if (Constants.Metrics.HistogramAttribute == attributeType)
 			instrumentType = InstrumentTypes.Histogram;
-		else if (Constants.Metrics.UpDownCounterAttribute.Equals(attributeData.AttributeClass))
+		else if (Constants.Metrics.UpDownCounterAttribute == attributeType)
 			instrumentType = InstrumentTypes.UpDownCounter;
-		else if (Constants.Metrics.ObservableCounterAttribute.Equals(attributeData.AttributeClass))
+		else if (Constants.Metrics.ObservableCounterAttribute == attributeType)
 			instrumentType = InstrumentTypes.ObservableCounter;
-		else if (
-			Constants.Metrics.ObservableUpDownCounterAttribute.Equals(attributeData.AttributeClass)
-		)
+		else if (Constants.Metrics.ObservableUpDownCounterAttribute == attributeType)
 			instrumentType = InstrumentTypes.ObservableUpDownCounter;
-		else if (Constants.Metrics.ObservableGaugeAttribute.Equals(attributeData.AttributeClass))
+		else if (Constants.Metrics.ObservableGaugeAttribute == attributeType)
 			instrumentType = InstrumentTypes.ObservableGauge;
 		else
 		{
-			logger?.Error($"Unknown instrument type {attributeData.AttributeClass}.");
+			logger?.Error($"Unknown instrument type {attributeType}.");
 			return null;
 		}
 
@@ -300,20 +296,6 @@ partial class SharedHelpers
 	}
 
 	public static bool IsValidMeasurementValueType(ITypeSymbol type) =>
-		Array.FindIndex(
-			Constants.Metrics.ValidMeasurementKeywordTypes,
-			m => m == type.ToDisplayString()
-		) > -1
-		|| Array.FindIndex(Constants.Metrics.ValidMeasurementTypes, m => m.Equals(type)) > -1;
-
-	public static bool IsInstrument(IMethodSymbol method, CancellationToken token)
-	{
-		foreach (var instrumentAttribute in Constants.Metrics.ValidInstrumentAttributes)
-		{
-			if (Utilities.TryContainsAttribute(method, instrumentAttribute, token, out _))
-				return true;
-		}
-
-		return false;
-	}
+		Array.FindIndex(Constants.Metrics.ValidMeasurementSpecialTypes, m => m == type.SpecialType)
+		> -1;
 }

@@ -91,7 +91,7 @@ public interface ITestMetrics<{genericTypeDef}>  {{
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			parameters: genericTypeCount
 		);
 	}
@@ -128,7 +128,7 @@ public interface ITestMetrics<{genericTypeDef}>  {{
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			parameters: genericTypeCount
 		);
 	}

@@ -50,14 +50,7 @@ partial class MeterTargetClassEmitter
 			.Append(indent, "partial void ", withNewLine: false)
 			.Append(PartialMeterTagsMethod)
 			.Append('(')
-			.Append(
-				Constants
-					.System.Dictionary.MakeGeneric(
-						Constants.System.StringKeyword,
-						Constants.System.ObjectKeyword + "?"
-					)
-					.WithGlobal()
-			)
+			.Append(DictionaryStringObjectType)
 			.AppendLine(" meterTags);")
 			.AppendLine();
 
@@ -74,14 +67,7 @@ partial class MeterTargetClassEmitter
 				.Append(indent, "partial void ", withNewLine: false)
 				.Append(instrument.TagPopulateMethodName)
 				.Append('(')
-				.Append(
-					Constants
-						.System.Dictionary.MakeGeneric(
-							Constants.System.StringKeyword,
-							Constants.System.ObjectKeyword + "?"
-						)
-						.WithGlobal()
-				)
+				.Append(DictionaryStringObjectType)
 				.AppendLine(" instrumentTags);")
 				.AppendLine();
 		}
@@ -128,22 +114,17 @@ partial class MeterTargetClassEmitter
 			{
 				var type = methodTarget.InstrumentMeasurementType;
 				if (methodTarget.MeasurementParameter!.IsMeasurement)
-					type = Constants
-						.Metrics.SystemDiagnostics.Measurement.MakeGeneric(type)
-						.WithGlobal();
+					type = Constants.Metrics.SystemDiagnostics.Measurement.MakeGeneric(type);
 
 				if (methodTarget.MeasurementParameter!.IsIEnumerable)
-					type = Constants.System.GenericIEnumerable.MakeGeneric(type).WithGlobal();
+					type = Constants.System.GenericIEnumerable.MakeGeneric(type);
 
-				type = Constants.System.Func.MakeGeneric(type).WithGlobal();
+				type = Constants.System.Func.MakeGeneric(type);
 
 				builder.Append(type);
 			}
 			else
 				builder.Append(parameter.ParameterType);
-
-			if (parameter.IsNullable)
-				builder.Append('?');
 
 			builder.Append(' ').Append(parameter.ParameterName);
 
@@ -188,7 +169,7 @@ partial class MeterTargetClassEmitter
 		{
 			builder
 				.Append(indent + 1, "throw new ", withNewLine: false)
-				.Append(Constants.System.Exception.WithGlobal())
+				.Append(Constants.System.Exception)
 				.Append("(\"")
 				.Append(method.MetricName)
 				.AppendLine(" has already been initialized.\");");
@@ -316,7 +297,7 @@ partial class MeterTargetClassEmitter
 
 		var tagVariableName = Utilities.LowercaseFirstChar(methodTarget.MethodName + "TagList");
 		builder
-			.Append(indent, Constants.System.TagList.WithGlobal(), withNewLine: false)
+			.Append(indent, Constants.System.TagList, withNewLine: false)
 			.Append(' ')
 			.Append(tagVariableName)
 			.Append(" = new")

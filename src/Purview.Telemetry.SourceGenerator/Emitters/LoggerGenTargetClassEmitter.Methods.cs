@@ -49,7 +49,7 @@ partial class LoggerGenTargetClassEmitter
 			.Append(indent, "public ", withNewLine: false);
 
 		if (methodTarget.IsScoped)
-			builder.Append(Constants.System.IDisposable.WithGlobal().WithNullable());
+			builder.Append(Constants.System.IDisposable.WithNullable());
 		else
 			builder.Append(Constants.System.VoidKeyword);
 
@@ -83,7 +83,7 @@ partial class LoggerGenTargetClassEmitter
 				.Append(indent, "if (!", withNewLine: false)
 				.Append(Constants.Logging.LoggerFieldName)
 				.Append(".IsEnabled(")
-				.Append(methodTarget.MSLevel.WithGlobal())
+				.Append(methodTarget.MSLevel)
 				.Append("))")
 				.AppendLine()
 				.Append(indent, '{')
@@ -184,7 +184,7 @@ partial class LoggerGenTargetClassEmitter
 				.Append(indent, Constants.Logging.LoggerFieldName, withNewLine: false)
 				.AppendLine(".Log(")
 				// Log level
-				.Append(indent + 1, methodTarget.MSLevel.WithGlobal().WithComma(andSpace: false))
+				.Append(indent + 1, methodTarget.MSLevel.WithComma(andSpace: false))
 				// Event Id
 				.Append(indent + 1, "new (", withNewLine: false)
 				.Append(eventId)
@@ -268,7 +268,7 @@ partial class LoggerGenTargetClassEmitter
 			.Append(indent, "var ", withNewLine: false)
 			.Append(stateVarName)
 			.Append(" = ")
-			.Append(Constants.Logging.MicrosoftExtensions.LoggerMessageHelper.WithGlobal())
+			.Append(Constants.Logging.MicrosoftExtensions.LoggerMessageHelper)
 			.Append('.')
 			.AppendLine("ThreadLocalState;")
 			.Append(indent, stateVarName, withNewLine: false)
@@ -443,7 +443,7 @@ partial class LoggerGenTargetClassEmitter
 			builder
 				.Append(value)
 				.Append(" == null ? null : ")
-				.Append(Constants.Logging.MicrosoftExtensions.LoggerMessageHelper.WithGlobal())
+				.Append(Constants.Logging.MicrosoftExtensions.LoggerMessageHelper)
 				.Append(".Stringify(")
 				.Append(value)
 				.Append(')');
@@ -540,17 +540,10 @@ partial class LoggerGenTargetClassEmitter
 		{
 			context.CancellationToken.ThrowIfCancellationRequested();
 
-			if (
-				methodTarget.Parameters[i].IsComplexType || methodTarget.Parameters[i].IsIEnumerable
-			)
-				builder.Append("global::");
-
-			builder.Append(methodTarget.Parameters[i].FullyQualifiedType);
-
-			if (methodTarget.Parameters[i].IsNullable)
-				builder.Append('?');
-
-			builder.Append(' ').Append(methodTarget.Parameters[i].Name);
+			builder
+				.Append(methodTarget.Parameters[i].ParameterType)
+				.Append(' ')
+				.Append(methodTarget.Parameters[i].Name);
 
 			if (i < methodTarget.TotalParameterCount - 1)
 				builder.Append(", ");

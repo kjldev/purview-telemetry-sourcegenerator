@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Purview.Telemetry.SourceGenerator.Records;
+using Purview.Telemetry.SourceGenerator.Templates;
 
 namespace Purview.Telemetry.SourceGenerator.Helpers;
 
@@ -101,8 +102,7 @@ partial class PipelineHelpers
 			ParentClasses: Utilities.GetParentClasses(interfaceDeclaration),
 			FullNamespace: fullNamespace,
 			FullyQualifiedName: fullNamespace + className,
-			InterfaceName: interfaceSymbol.Name,
-			FullyQualifiedInterfaceName: fullNamespace + interfaceSymbol.Name,
+			InterfaceType: PurviewTypeFactory.Create(interfaceSymbol),
 			MeterName: meterName,
 			MeterGeneration: meterGenerationAttribute,
 			InstrumentationMethods: instrumentMethods,
@@ -188,9 +188,6 @@ partial class PipelineHelpers
 				.ToImmutableArray();
 			var measurementParameter = measurementParameters.FirstOrDefault();
 
-			var returnType = method.ReturnsVoid
-				? Constants.System.VoidKeyword
-				: Utilities.GetFullyQualifiedOrSystemName(method.ReturnType);
 			var fieldName = $"_{Utilities.LowercaseFirstChar(method.Name)}Instrument";
 			var instrumentName = instrumentAttribute?.Name?.Value;
 			if (string.IsNullOrWhiteSpace(instrumentName))
@@ -204,7 +201,7 @@ partial class PipelineHelpers
 #pragma warning restore CA1308 // Normalize strings to uppercase
 			}
 
-			var returnsBool = Utilities.IsBoolean(method.ReturnType);
+			var returnsBool = method.ReturnType.SpecialType == SpecialType.System_Boolean;
 			var targetGenerationState = Utilities.IsValidGenerationTarget(
 				method,
 				generationType,
@@ -327,7 +324,7 @@ partial class PipelineHelpers
 			}
 
 			var instrumentMeasurementType =
-				measurementParameter?.InstrumentType ?? Constants.System.IntKeyword;
+				measurementParameter?.InstrumentType ?? Constants.System.BuiltInTypes.Int32;
 			if (measurementParameter != null && !measurementParameter.IsValidInstrumentType)
 			{
 				methodDiagnosticsList ??= [];
@@ -342,7 +339,7 @@ partial class PipelineHelpers
 			methodTargets.Add(
 				new(
 					MethodName: method.Name,
-					ReturnType: returnType,
+					ReturnType: PurviewTypeFactory.Create(method.ReturnType),
 					ReturnsBool: returnsBool,
 					IsNullableReturn: method.ReturnType.NullableAnnotation
 						== NullableAnnotation.Annotated,
@@ -417,15 +414,14 @@ partial class PipelineHelpers
 			var isMeasurementType = false;
 			var isValidInstrumentType = false;
 
-			string? instrumentType = null;
-
+			PurviewTypeInfo? instrumentType = null;
 			if (destination != InstrumentParameterDestination.Tag)
 			{
 				if (parameter.Type is INamedTypeSymbol parameterType)
 				{
 					isFuncType =
 						parameterType.ConstructedFrom.ToString()
-						== Constants.System.Func.MakeGeneric("TResult");
+						== Constants.System.Func.MakeGeneric(false, "TResult");
 					if (isFuncType)
 					{
 						// For observable instruments.
@@ -459,10 +455,9 @@ partial class PipelineHelpers
 												);
 											if (isValidInstrumentType)
 											{
-												instrumentType =
-													Utilities.GetFullyQualifiedOrSystemName(
-														measurementType.TypeArguments[0]
-													);
+												instrumentType = PurviewTypeFactory.Create(
+													measurementType.TypeArguments[0]
+												);
 												destination =
 													InstrumentParameterDestination.Measurement;
 
@@ -486,7 +481,7 @@ partial class PipelineHelpers
 								);
 								if (isValidInstrumentType)
 								{
-									instrumentType = Utilities.GetFullyQualifiedOrSystemName(
+									instrumentType = PurviewTypeFactory.Create(
 										typeArg.TypeArguments[0]
 									);
 									destination = InstrumentParameterDestination.Measurement;
@@ -500,7 +495,7 @@ partial class PipelineHelpers
 							{
 								isValidInstrumentType = true;
 
-								instrumentType = Utilities.GetFullyQualifiedOrSystemName(typeArg);
+								instrumentType = PurviewTypeFactory.Create(typeArg);
 								destination = InstrumentParameterDestination.Measurement;
 
 								logger?.Debug(
@@ -515,7 +510,7 @@ partial class PipelineHelpers
 							);
 							if (isValidInstrumentType)
 							{
-								instrumentType = Utilities.GetFullyQualifiedOrSystemName(
+								instrumentType = PurviewTypeFactory.Create(
 									parameterType.TypeArguments[0]
 								);
 								destination = InstrumentParameterDestination.Measurement;
@@ -534,7 +529,7 @@ partial class PipelineHelpers
 						);
 						if (isValidInstrumentType && !isAutoCounter)
 						{
-							instrumentType = Utilities.GetFullyQualifiedOrSystemName(parameterType);
+							instrumentType = PurviewTypeFactory.Create(parameterType);
 							destination = InstrumentParameterDestination.Measurement;
 
 							logger?.Debug($"Found valid instrument type: {instrumentType}");
@@ -559,13 +554,12 @@ partial class PipelineHelpers
 			parameterTargets.Add(
 				new(
 					ParameterName: parameterName,
-					ParameterType: Utilities.GetFullyQualifiedOrSystemName(parameter.Type),
+					ParameterType: PurviewTypeFactory.Create(parameter.Type),
 					IsFunc: isFuncType,
 					IsIEnumerable: isIEnumerableType,
 					IsMeasurement: isMeasurementType,
 					IsValidInstrumentType: isValidInstrumentType,
 					InstrumentType: instrumentType,
-					IsNullable: parameter.NullableAnnotation == NullableAnnotation.Annotated,
 					GeneratedName: generatedName,
 					ParamDestination: destination,
 					SkipOnNullOrEmpty: GetSkipOnNullOrEmptyValue(tagAttribute),

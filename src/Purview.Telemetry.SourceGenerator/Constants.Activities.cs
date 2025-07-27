@@ -57,20 +57,18 @@ partial class Constants
 			"Purview.Telemetry.Activities.StatusDescriptionAttribute"
 		);
 
-		public static readonly ImmutableDictionary<int, TypeInfo> ActivityTypeMap = new Dictionary<
-			int,
-			TypeInfo
-		>
-		{
-			{ 0, SystemDiagnostics.ActivityKind_Internal },
-			{ 1, SystemDiagnostics.ActivityKind_Server },
-			{ 2, SystemDiagnostics.ActivityKind_Client },
-			{ 3, SystemDiagnostics.ActivityKind_Producer },
-			{ 4, SystemDiagnostics.ActivityKind_Consumer },
-		}.ToImmutableDictionary();
+		public static readonly ImmutableDictionary<int, string> ActivityKindTypeMap =
+			new Dictionary<int, string>
+			{
+				{ 0, SystemDiagnostics.ActivityKind_Internal },
+				{ 1, SystemDiagnostics.ActivityKind_Server },
+				{ 2, SystemDiagnostics.ActivityKind_Client },
+				{ 3, SystemDiagnostics.ActivityKind_Producer },
+				{ 4, SystemDiagnostics.ActivityKind_Consumer },
+			}.ToImmutableDictionary();
 
-		public static readonly ImmutableDictionary<int, TypeInfo> ActivityStatusCodeMap =
-			new Dictionary<int, TypeInfo>
+		public static readonly ImmutableDictionary<int, string> ActivityStatusCodeMap =
+			new Dictionary<int, string>
 			{
 				{ 0, SystemDiagnostics.ActivityStatusCode_Unset },
 				{ 1, SystemDiagnostics.ActivityStatusCode_Ok },
@@ -91,66 +89,62 @@ partial class Constants
 
 		public static class SystemDiagnostics
 		{
-			public static readonly TypeInfo Activity = TypeInfo.Create(
+			public static readonly PurviewTypeInfo Activity = PurviewTypeFactory.Create(
 				SystemDiagnosticsNamespace + ".Activity"
 			);
-			public static readonly TypeInfo ActivitySource = TypeInfo.Create(
+
+			public static readonly PurviewTypeInfo ActivitySource = PurviewTypeFactory.Create(
 				SystemDiagnosticsNamespace + ".ActivitySource"
 			);
-			public static readonly TypeInfo ActivityEvent = TypeInfo.Create(
+
+			public static readonly PurviewTypeInfo ActivityEvent = PurviewTypeFactory.Create(
 				SystemDiagnosticsNamespace + ".ActivityEvent"
 			);
-			public static readonly TypeInfo ActivityContext = TypeInfo.Create(
+
+			public static readonly PurviewTypeInfo ActivityContext = PurviewTypeFactory.Create(
 				SystemDiagnosticsNamespace + ".ActivityContext"
 			);
-			public static readonly TypeInfo ActivityKind = TypeInfo.Create(
+
+			public static readonly PurviewTypeInfo ActivityKind = PurviewTypeFactory.Create(
 				SystemDiagnosticsNamespace + ".ActivityKind"
 			);
-			public static readonly TypeInfo ActivityStatusCode = TypeInfo.Create(
+
+			public static readonly PurviewTypeInfo ActivityStatusCode = PurviewTypeFactory.Create(
 				SystemDiagnosticsNamespace + ".ActivityStatusCode"
 			);
-			public static readonly TypeInfo ActivityTagsCollection = TypeInfo.Create(
-				SystemDiagnosticsNamespace + ".ActivityTagsCollection"
-			);
-			public static readonly TypeInfo ActivityTagIEnumerable = TypeInfo.Create(
-				"System.Collections.Generic.IEnumerable<System.Collections.Generic.KeyValuePair<string, object?>>"
-			);
 
-			public static readonly TypeInfo ActivityLink = TypeInfo.Create(
+			public static readonly PurviewTypeInfo ActivityTagsCollection =
+				PurviewTypeFactory.Create(SystemDiagnosticsNamespace + ".ActivityTagsCollection");
+
+			public static readonly PurviewTypeInfo ActivityTagIEnumerable =
+				System.IEnumerable.MakeGeneric(
+					PurviewTypeFactory.Create(
+						"System.Collections.Generic.KeyValuePair<string, object?>"
+					)
+				);
+
+			public static readonly PurviewTypeInfo ActivityLink = PurviewTypeFactory.Create(
 				SystemDiagnosticsNamespace + ".ActivityLink"
 			);
-			public static readonly TypeInfo ActivityLinkIEnumerable = TypeInfo.Create(
-				"System.Collections.Generic.IEnumerable<System.Diagnostics.ActivityLink>"
-			);
-			public static readonly TypeInfo ActivityLinkArray = TypeInfo.Create(
+
+			public static readonly PurviewTypeInfo ActivityLinkIEnumerable =
+				PurviewTypeFactory.Create(
+					$"System.Collections.Generic.IEnumerable<{ActivityLink}>"
+				);
+
+			public static readonly PurviewTypeInfo ActivityLinkArray = PurviewTypeFactory.Create(
 				SystemDiagnosticsNamespace + ".ActivityLink[]"
 			);
 
-			public static readonly TypeInfo ActivityKind_Internal = TypeInfo.Create(
-				ActivityKind + ".Internal"
-			);
-			public static readonly TypeInfo ActivityKind_Server = TypeInfo.Create(
-				ActivityKind + ".Server"
-			);
-			public static readonly TypeInfo ActivityKind_Client = TypeInfo.Create(
-				ActivityKind + ".Client"
-			);
-			public static readonly TypeInfo ActivityKind_Producer = TypeInfo.Create(
-				ActivityKind + ".Producer"
-			);
-			public static readonly TypeInfo ActivityKind_Consumer = TypeInfo.Create(
-				ActivityKind + ".Consumer"
-			);
+			public static readonly string ActivityKind_Internal = ActivityKind + ".Internal";
+			public static readonly string ActivityKind_Server = ActivityKind + ".Server";
+			public static readonly string ActivityKind_Client = ActivityKind + ".Client";
+			public static readonly string ActivityKind_Producer = ActivityKind + ".Producer";
+			public static readonly string ActivityKind_Consumer = ActivityKind + ".Consumer";
 
-			public static readonly TypeInfo ActivityStatusCode_Unset = TypeInfo.Create(
-				ActivityStatusCode + ".Unset"
-			);
-			public static readonly TypeInfo ActivityStatusCode_Ok = TypeInfo.Create(
-				ActivityStatusCode + ".Ok"
-			);
-			public static readonly TypeInfo ActivityStatusCode_Error = TypeInfo.Create(
-				ActivityStatusCode + ".Error"
-			);
+			public static readonly string ActivityStatusCode_Unset = ActivityStatusCode + ".Unset";
+			public static readonly string ActivityStatusCode_Ok = ActivityStatusCode + ".Ok";
+			public static readonly string ActivityStatusCode_Error = ActivityStatusCode + ".Error";
 		}
 	}
 }

@@ -59,7 +59,7 @@ partial class LoggerTargetClassEmitter
 
 		if (methodTarget.IsScoped)
 		{
-			builder.Append(Constants.System.IDisposable.WithGlobal()).Append('?');
+			builder.Append(Constants.System.IDisposable).Append('?');
 		}
 		else
 			builder.Append(Constants.System.VoidKeyword);
@@ -84,7 +84,7 @@ partial class LoggerTargetClassEmitter
 				.Append(indent + 1, "if (!", withNewLine: false)
 				.Append(Constants.Logging.LoggerFieldName)
 				.Append(".IsEnabled(")
-				.Append(methodTarget.MSLevel.WithGlobal())
+				.Append(methodTarget.MSLevel)
 				.Append("))")
 				.AppendLine()
 				.Append(indent + 1, '{')
@@ -125,12 +125,10 @@ partial class LoggerTargetClassEmitter
 		{
 			context.CancellationToken.ThrowIfCancellationRequested();
 
-			builder.Append(methodTarget.Parameters[i].FullyQualifiedType);
-
-			if (methodTarget.Parameters[i].IsNullable)
-				builder.Append('?');
-
-			builder.Append(' ').Append(methodTarget.Parameters[i].Name);
+			builder
+				.Append(methodTarget.Parameters[i].ParameterType)
+				.Append(' ')
+				.Append(methodTarget.Parameters[i].Name);
 
 			if (i < methodTarget.TotalParameterCount - 1)
 				builder.Append(", ");

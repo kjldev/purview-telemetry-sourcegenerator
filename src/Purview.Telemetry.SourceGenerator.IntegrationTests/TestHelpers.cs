@@ -2,8 +2,6 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Purview.Telemetry.SourceGenerator;
 
@@ -45,9 +43,6 @@ using Purview.Telemetry;
 		return reader.ReadToEnd();
 	}
 
-	public static bool IsModifierPresent(MemberDeclarationSyntax member, SyntaxKind modifier) =>
-		member.Modifiers.Any(m => m.IsKind(modifier));
-
 	public static List<string> GetCasePermutations(string input)
 	{
 		List<string> result = [];
@@ -82,8 +77,6 @@ using Purview.Telemetry;
 
 		return result;
 	}
-
-	public static string GetFriendlyTypeName<T>() => GetFriendlyTypeName(typeof(T));
 
 	public static string GetFriendlyTypeName(Type type, bool useSystemType = true)
 	{
@@ -155,7 +148,7 @@ using Purview.Telemetry;
 	public static async Task Verify(
 		GenerationResult generationResult,
 		Action<SettingsTask>? config = null,
-		bool validateNonEmptyDiagnostics = false,
+		bool expectsDiagnostics = false,
 		bool whenValidatingDiagnosticsIgnoreNonErrors = false,
 		bool validationCompilation = true,
 		bool autoVerifyTemplates = true,
@@ -199,7 +192,7 @@ using Purview.Telemetry;
 		if (whenValidatingDiagnosticsIgnoreNonErrors)
 			diag = diag.Where(m => m.Severity == DiagnosticSeverity.Error);
 
-		if (validateNonEmptyDiagnostics)
+		if (expectsDiagnostics)
 			diag.ShouldNotBeEmpty();
 		else
 			diag.ShouldBeEmpty();

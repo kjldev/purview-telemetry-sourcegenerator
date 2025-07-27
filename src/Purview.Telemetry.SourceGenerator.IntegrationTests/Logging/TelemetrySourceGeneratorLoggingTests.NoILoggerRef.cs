@@ -61,7 +61,7 @@ public interface ITestActivities {
 		// Assert
 		await TestHelpers.Verify(
 			generationResult,
-			validateNonEmptyDiagnostics: false,
+			expectsDiagnostics: false,
 			whenValidatingDiagnosticsIgnoreNonErrors: true
 		);
 	}

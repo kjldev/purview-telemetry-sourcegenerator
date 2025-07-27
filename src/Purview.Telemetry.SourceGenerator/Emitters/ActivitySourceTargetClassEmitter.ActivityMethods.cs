@@ -73,11 +73,7 @@ partial class ActivitySourceTargetClassEmitter
 		var activityVariableName = "activity" + methodTarget.MethodName;
 
 		builder
-			.Append(
-				indent,
-				Constants.Activities.SystemDiagnostics.Activity.WithGlobal(),
-				withNewLine: false
-			)
+			.Append(indent, Constants.Activities.SystemDiagnostics.Activity, withNewLine: false)
 			.Append("? ")
 			.Append(activityVariableName)
 			.Append(" = ")
@@ -86,12 +82,10 @@ partial class ActivitySourceTargetClassEmitter
 
 		var createOnly = methodTarget.ActivityAttribute?.CreateOnly.Value == true;
 		var createActivityMethod = createOnly ? "Create" : "Start";
-		var parentContextParameterName =
-			Constants.Activities.SystemDiagnostics.ActivityContext.Equals(
-				parentContextOrId?.ParameterType
-			)
-				? "parentContext"
-				: "parentId";
+		var useParentContext = Constants.Activities.SystemDiagnostics.ActivityContext.Equals(
+			parentContextOrId?.ParameterType
+		);
+		var parentContextParameterName = useParentContext ? "parentContext" : "parentId";
 
 		if (createOnly && startTimeParam != null)
 		{
@@ -109,21 +103,40 @@ partial class ActivitySourceTargetClassEmitter
 
 		var kind =
 			methodTarget.ActivityAttribute?.Kind.IsSet == true
-				? methodTarget.ActivityAttribute.Kind.Value!.Value
+				? methodTarget.ActivityAttribute.Value.Kind.Value!.Value
 				: Constants.Activities.DefaultActivityKind;
+
+		var parentContextOrIdParameterValue = parentContextOrId?.ParameterName ?? "default";
+		if (useParentContext && parentContextOrId!.ParameterType.IsNullable)
+		{
+			// parentContextOrId is not going to be null at this point as
+			// we already checked the type.
+			// If it's nullable we need to use the null-coalescing operator...
+			// and we need to ensure its explicit or the call is ambiguous
+			// between ActivityContext and ParentId.
+			parentContextOrIdParameterValue += " ?? default";
+		}
+
+		builder.Append(createActivityMethod).Append("Activity(");
+
+		if (createOnly || !useParentContext)
+		{
+			// Only create the name always comes first.
+			// If it's start, and we're using an ActivityContext then the
+			// name comes last.
+			AddActivityNameParameter(builder, methodTarget, false);
+			builder.Append(", ");
+		}
+		;
+
 		builder
-			.Append(createActivityMethod)
-			// name:
-			.Append("Activity(name: ")
-			.Append(methodTarget.ActivityOrEventName.Wrap())
-			// kind:
-			.Append(", kind: ")
-			.Append(Constants.Activities.ActivityTypeMap[kind].WithGlobal())
+			// kind: (un-named)
+			.Append(Constants.Activities.ActivityKindTypeMap[kind])
 			// parentContext/ parentId:
 			.Append(", ")
 			.Append(parentContextParameterName)
 			.Append(": ")
-			.Append(parentContextOrId?.ParameterName ?? "default")
+			.Append(parentContextOrIdParameterValue)
 			// tags:
 			.Append(", tags: ")
 			.Append(tagsParam?.ParameterName ?? "default")
@@ -137,6 +150,14 @@ partial class ActivitySourceTargetClassEmitter
 				// startTime:
 				.Append(", startTime: ")
 				.Append(startTimeParam?.ParameterName ?? "default");
+
+			if (useParentContext)
+			{
+				// If it's a Start and we're using an ActivityContext,
+				// the name comes last.
+				builder.Append(", ");
+				AddActivityNameParameter(builder, methodTarget, true);
+			}
 		}
 
 		builder.AppendLine(");");
@@ -174,6 +195,18 @@ partial class ActivitySourceTargetClassEmitter
 				.Append(activityVariableName)
 				.AppendLine(';');
 		}
+
+		static void AddActivityNameParameter(
+			StringBuilder builder,
+			ActivityBasedGenerationTarget methodTarget,
+			bool useName
+		)
+		{
+			if (useName)
+				builder.Append("name: ");
+
+			builder.Append(methodTarget.ActivityOrEventName.Wrap());
+		}
 	}
 
 	static void EmitHasListenersTest(
@@ -182,9 +215,7 @@ partial class ActivitySourceTargetClassEmitter
 		ActivityBasedGenerationTarget methodTarget
 	)
 	{
-		var returnsVoid =
-			methodTarget.ReturnType == null
-			|| methodTarget.ReturnType == Constants.System.VoidKeyword;
+		var returnsVoid = methodTarget.ReturnType.SpecialType == SpecialType.System_Void;
 		builder
 			.Append(indent, "if (!", withNewLine: false)
 			.Append(Constants.Activities.ActivitySourceFieldName)
@@ -194,7 +225,11 @@ partial class ActivitySourceTargetClassEmitter
 			.Append(
 				indent + 1,
 				"return"
-					+ (returnsVoid ? null : " null" + (methodTarget.IsNullableReturn ? null : "!"))
+					+ (
+						returnsVoid
+							? null
+							: " null" + (methodTarget.ReturnType.IsNullable ? null : "!")
+					)
 					+ ";"
 			)
 			.Append(indent, '}')

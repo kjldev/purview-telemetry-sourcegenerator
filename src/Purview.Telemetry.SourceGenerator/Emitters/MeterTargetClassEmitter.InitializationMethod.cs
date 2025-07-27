@@ -27,7 +27,7 @@ partial class MeterTargetClassEmitter
 			.Append(indent, "void ", withNewLine: false)
 			.Append(Constants.Metrics.MeterInitializationMethod)
 			.Append('(')
-			.Append(Constants.Metrics.SystemDiagnostics.IMeterFactory.WithGlobal())
+			.Append(Constants.Metrics.SystemDiagnostics.IMeterFactory)
 			.Append(' ')
 			.Append(Constants.Metrics.MeterFactoryParameterName)
 			.AppendLine(')')
@@ -41,13 +41,13 @@ partial class MeterTargetClassEmitter
 			.AppendLine(" != null)")
 			.Append(indent, '{')
 			.Append(indent + 1, "throw new ", withNewLine: false)
-			.Append(Constants.System.Exception.WithGlobal())
+			.Append(Constants.System.Exception)
 			.AppendLine("(\"The meters have already been initialized.\");")
 			.Append(indent, '}')
 			.AppendLine();
 
 		builder
-			.Append(indent, DictionaryStringObject, withNewLine: false)
+			.Append(indent, DictionaryStringObjectType, withNewLine: false)
 			.Append(' ')
 			.Append(meterTagsVariableName)
 			.AppendLine(" = new();")
@@ -65,7 +65,7 @@ partial class MeterTargetClassEmitter
 			.Append(" = ")
 			.Append(Constants.Metrics.MeterFactoryParameterName)
 			.Append(".Create(new ")
-			.Append(Constants.Metrics.SystemDiagnostics.MeterOptions.WithGlobal())
+			.Append(Constants.Metrics.SystemDiagnostics.MeterOptions)
 			.Append('(')
 			.Append(target.MeterName!.Wrap())
 			.AppendLine(')')
@@ -103,16 +103,10 @@ partial class MeterTargetClassEmitter
 			var description =
 				method.InstrumentAttribute?.Description?.Value?.Wrap()
 				?? Constants.System.NullKeyword;
-			var tagVariableType = Constants
-				.System.Dictionary.MakeGeneric(
-					Constants.System.StringKeyword,
-					Constants.System.ObjectKeyword + "?"
-				)
-				.WithGlobal();
 			var tagVariableName = Utilities.LowercaseFirstChar(method.MethodName) + "Tags";
 
 			builder
-				.Append(indent, tagVariableType, withNewLine: false)
+				.Append(indent, DictionaryStringObjectType, withNewLine: false)
 				.Append(' ')
 				.Append(tagVariableName)
 				.Append(" = new")

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Purview.Telemetry.SourceGenerator.Templates;
 
 namespace Purview.Telemetry.SourceGenerator.Records;
 
@@ -11,8 +12,7 @@ record LoggerTarget(
 	string[] ParentClasses,
 	string? FullNamespace,
 	string FullyQualifiedName,
-	string InterfaceName,
-	string FullyQualifiedInterfaceName,
+	PurviewTypeInfo InterfaceType,
 	LoggerAttributeRecord LoggerAttribute,
 	int DefaultLevel,
 	ImmutableArray<LogMethodTarget> LogMethods,
@@ -33,8 +33,7 @@ record LoggerTarget(
 			null!,
 			null,
 			null!,
-			null!,
-			null!,
+			Constants.Empty,
 			null!,
 			0,
 			[],
@@ -73,8 +72,7 @@ record LogMethodTarget(
 record LogParameterTarget(
 	string Name,
 	string UpperCasedName,
-	string FullyQualifiedType,
-	bool IsNullable,
+	PurviewTypeInfo ParameterType,
 	bool IsException,
 	bool IsFirstException,
 	bool IsIEnumerable,

@@ -27,7 +27,7 @@ partial class TelemetryDiagnostics
 		public static readonly TelemetryDiagnosticDescriptor InvalidReturnType = new(
 			Id: "TSG3002",
 			Title: "Invalid return type",
-			Description: $"An activity or event must return either void or an {Constants.Activities.SystemDiagnostics.Activity}.",
+			Description: $"An activity or event must return either void or an {Constants.Activities.SystemDiagnostics.Activity.ToString(includeGlobal: false)}.",
 			Category: Constants.Diagnostics.Activity.Usage,
 			Severity: DiagnosticSeverity.Error
 		);
@@ -109,7 +109,7 @@ partial class TelemetryDiagnostics
 		public static readonly TelemetryDiagnosticDescriptor NoActivityMethodsDefined = new(
 			Id: "TSG3012",
 			Title: "There are no Activity methods defined, assumed use of Activity.Current",
-			Description: "As Event and/ or Context methods are defined, it's best practise to create a specific Activity otherwise the Activity will belong to another operation.",
+			Description: "As Event and/ or Context methods are defined, it's best practice to create a specific Activity otherwise the Activity will belong to another operation.",
 			Category: Constants.Diagnostics.Activity.Usage,
 			Severity: DiagnosticSeverity.Info
 		);

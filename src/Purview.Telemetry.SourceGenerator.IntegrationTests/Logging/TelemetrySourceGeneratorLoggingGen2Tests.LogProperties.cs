@@ -69,7 +69,7 @@ public class WeatherForecast
 		);
 
 		// Assert
-		await TestHelpers.Verify(generationResult, validateNonEmptyDiagnostics: true);
+		await TestHelpers.Verify(generationResult, expectsDiagnostics: true);
 	}
 
 	[Fact]

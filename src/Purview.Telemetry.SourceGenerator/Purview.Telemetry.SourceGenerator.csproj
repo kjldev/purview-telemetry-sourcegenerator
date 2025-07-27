@@ -9,14 +9,14 @@
 		<PackageId>Purview.Telemetry.SourceGenerator</PackageId>
 		<Title>Purview Telemetry Source Generator</Title>
 		<Description>.NET Source Generator for interface-based telemetry generting activities, activity events, logs, and metrics.</Description>
-		<PackageIcon>purview-logo.png</PackageIcon>
+		<PackageIcon>kjldev-logo.png</PackageIcon>
 		<Authors>Kieron Lanning</Authors>
 		<Company>KJL Solutions Ltd.</Company>
 		<Copyright>KJL Solutions Ltd., $(COPYRIGHT_YEAR) | All rights reserved.</Copyright>
 		<RepositoryUrl>https://github.com/kjldev/purview-telemetry-sourcegenerator/</RepositoryUrl>
 		<PackageLicenseFile>LICENSE.md</PackageLicenseFile>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
-		<PackageProjectUrl>https://github.com/kjldev/purview-telemetry-sourcegenerator/wiki</PackageProjectUrl>
+		<PackageProjectUrl>https://kjl.dev/projects/purviewtelemetrysourcegenerator/</PackageProjectUrl>
 		<PackageTags>logs;log;logger;logging;source-generator;high-performance-logging;otel;open-telemetry;telemetry;traces;tracing;metric;metrics;meter;meters;instrumentation;instruments;events;distributed-traces;distributed-tracing;melt;dotnet;aspnet;</PackageTags>
 		<DevelopmentDependency>true</DevelopmentDependency>
 		<SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
@@ -29,7 +29,12 @@
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" />
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="purview-logo.png" Pack="true" PackagePath="" />
+		<None Include="kjldev-logo.png" Pack="true" PackagePath="" />
+		<EmbeddedResource Remove="bin\**" />
+		<None Remove="bin\**" />
+		<None Remove="*.cache" />
+	</ItemGroup>
+	<ItemGroup>
 		<EmbeddedResource Remove="bin\**" />
 		<None Remove="bin\**" />
 		<None Remove="*.cache" />

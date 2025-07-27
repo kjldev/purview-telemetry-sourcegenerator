@@ -64,7 +64,7 @@ public interface ITestLogger
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			parameters: maxCount
 		);
 	}

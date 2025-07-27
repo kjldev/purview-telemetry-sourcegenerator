@@ -56,7 +56,7 @@ public interface ITestActivities {
 		await TestHelpers.Verify(
 			generationResult,
 			config: s => s.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true
+			expectsDiagnostics: true
 		);
 	}
 
@@ -118,7 +118,7 @@ public interface ITestActivities {
 		await TestHelpers.Verify(
 			generationResult,
 			s => s.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true
+			expectsDiagnostics: true
 		);
 	}
 

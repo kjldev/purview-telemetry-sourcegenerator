@@ -21,9 +21,9 @@ partial class LoggerTargetClassEmitter
 
 		builder
 			.Append(indent, "readonly ", withNewLine: false)
-			.Append(Constants.Logging.MicrosoftExtensions.ILogger.WithGlobal())
+			.Append(Constants.Logging.MicrosoftExtensions.ILogger)
 			.Append('<')
-			.Append(target.FullyQualifiedInterfaceName.WithGlobal())
+			.Append(target.InterfaceType)
 			.Append('>')
 			.Append(' ')
 			.Append(Constants.Logging.LoggerFieldName)
@@ -40,7 +40,7 @@ partial class LoggerTargetClassEmitter
 				if (methodTarget.TargetGenerationState.RaiseMultiGenerationTargetsNotSupported)
 				{
 					logger?.Debug(
-						$"Identified {target.InterfaceName}.{methodTarget.MethodName} as problematic as it has another target types."
+						$"Identified {target.InterfaceType.TypeName}.{methodTarget.MethodName} as problematic as it has another target types."
 					);
 					TelemetryDiagnostics.Report(
 						context.ReportDiagnostic,
@@ -53,7 +53,7 @@ partial class LoggerTargetClassEmitter
 				)
 				{
 					logger?.Debug(
-						$"Identified {target.InterfaceName}.{methodTarget.MethodName} as problematic as it is inferred."
+						$"Identified {target.InterfaceType.TypeName}.{methodTarget.MethodName} as problematic as it is inferred."
 					);
 					TelemetryDiagnostics.Report(
 						context.ReportDiagnostic,
@@ -114,37 +114,23 @@ partial class LoggerTargetClassEmitter
 	{
 		builder
 			.Append(indent, "static readonly ", withNewLine: false)
-			.Append(
-				methodTarget.IsScoped
-					? Constants.System.Func.WithGlobal()
-					: Constants.System.Action.WithGlobal()
-			)
+			.Append(methodTarget.IsScoped ? Constants.System.Func : Constants.System.Action)
 			.Append('<')
-			.Append(Constants.Logging.MicrosoftExtensions.ILogger.WithGlobal())
+			.Append(Constants.Logging.MicrosoftExtensions.ILogger)
 			.Append(", ");
 
 		foreach (var parameter in methodTarget.ParametersSansException)
-		{
-			builder.Append(parameter.FullyQualifiedType);
-			if (parameter.IsNullable)
-				builder.Append('?');
-
-			builder.Append(", ");
-		}
+			builder.Append(parameter.ParameterType).Append(", ");
 
 		if (methodTarget.IsScoped)
-		{
-			builder.Append(Constants.System.IDisposable.WithGlobal()).Append("?> ");
-		}
+			builder.Append(Constants.System.IDisposable).Append("?> ");
 		else
-		{
-			builder.Append(Constants.System.Exception.WithGlobal()).Append("?> ");
-		}
+			builder.Append(Constants.System.Exception).Append("?> ");
 
 		builder
 			.Append(methodTarget.LoggerActionFieldName)
 			.Append(" = ")
-			.Append(Constants.Logging.MicrosoftExtensions.LoggerMessage.WithGlobal())
+			.Append(Constants.Logging.MicrosoftExtensions.LoggerMessage)
 			.Append(".Define");
 
 		if (methodTarget.IsScoped)
@@ -157,11 +143,7 @@ partial class LoggerTargetClassEmitter
 			var i = 0;
 			foreach (var parameter in methodTarget.ParametersSansException)
 			{
-				builder.Append(parameter.FullyQualifiedType);
-
-				if (parameter.IsNullable)
-					builder.Append('?');
-
+				builder.Append(parameter.ParameterType);
 				if (i < methodTarget.ParameterCountSansException - 1)
 					builder.Append(", ");
 
@@ -175,14 +157,14 @@ partial class LoggerTargetClassEmitter
 
 		if (!methodTarget.IsScoped)
 		{
-			builder.Append(methodTarget.MSLevel.WithGlobal()).Append(", ");
+			builder.Append(methodTarget.MSLevel).Append(", ");
 
 			var eventId =
 				methodTarget.EventId
 				?? SharedHelpers.GetNonRandomizedHashCode(methodTarget.MethodName);
 			builder
 				.Append("new ")
-				.Append(Constants.Logging.MicrosoftExtensions.EventId.WithGlobal())
+				.Append(Constants.Logging.MicrosoftExtensions.EventId)
 				.Append('(')
 				.Append(eventId)
 				.Append(", \"")
