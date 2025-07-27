@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.4-prerelease.0](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.2.3...v3.2.4-prerelease.0) (2025-07-27)
+
+
+### Bug Fixes
+
+* accidently left auto-verifg on ([3163d49](https://github.com/purview-dev/purview-telemetry-sourcegenerator/commit/3163d49d13eccad5115616c8c435b1e9d72d8347))
+* fixed the Vertify parameters update ([b474466](https://github.com/purview-dev/purview-telemetry-sourcegenerator/commit/b47446636f4fffce4e77657fce0a31eba4968310))
+* fixing nullable ActivityContext parameter usage, [#74](https://github.com/purview-dev/purview-telemetry-sourcegenerator/issues/74) ([1df12f9](https://github.com/purview-dev/purview-telemetry-sourcegenerator/commit/1df12f94664b3feb5b3d90e955c96bc0f137171e))
+
 ## [3.2.3](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.2.1...v3.2.3) (2025-07-08)
 
 ## [3.2.2](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.2.1...v3.2.2) (2025-07-08)

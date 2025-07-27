@@ -18,7 +18,7 @@ Use the latest version available on [NuGet](https://www.nuget.org/packages/Purvi
 Reference in your `Directory.Build.props` or `.csproj` file:
 
 ```xml
-<PackageReference Include="Purview.Telemetry.SourceGenerator" Version="3.2.3">
+<PackageReference Include="Purview.Telemetry.SourceGenerator" Version="3.2.4-prerelease.0">
   <PrivateAssets>all</PrivateAssets>
   <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 </PackageReference>
