@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.4](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.2.4-prerelease.1...v3.2.4) (2025-07-27)
+
 ## [3.2.4-prerelease.1](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.2.4-prerelease.0...v3.2.4-prerelease.1) (2025-07-27)
 
 ## [3.2.4-prerelease.0](https://github.com/purview-dev/purview-telemetry-sourcegenerator/compare/v3.2.3...v3.2.4-prerelease.0) (2025-07-27)
