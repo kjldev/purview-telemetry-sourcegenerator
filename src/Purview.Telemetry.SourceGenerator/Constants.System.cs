@@ -46,6 +46,12 @@ partial class Constants
 		public const string AggressiveInlining =
 			"[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]";
 
+		public const string ExcludeFromCodeCoverageConstant =
+			"[global::System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]";
+
+		public const string EditorBrowsableConstant =
+			"[global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Never)]";
+
 		const string GeneratedCodeConstant =
 			"[global::System.CodeDom.Compiler.GeneratedCodeAttribute(\"{0}\", \"{1}\")]";
 

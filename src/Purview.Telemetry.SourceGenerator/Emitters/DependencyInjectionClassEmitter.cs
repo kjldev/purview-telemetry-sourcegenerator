@@ -58,11 +58,9 @@ static class DependencyInjectionClassEmitter
 			.AppendLine('{');
 
 		builder
+			.Append(1, Constants.System.EditorBrowsableConstant)
+			.Append(1, Constants.System.ExcludeFromCodeCoverageConstant)
 			.CodeGen(1)
-			.Append(
-				1,
-				"[global::System.ComponentModel.EditorBrowsable(global::System.ComponentModel.EditorBrowsableState.Never)]"
-			)
 			.Append(1, $"{classAccessModifier} class ", withNewLine: false)
 			.Append(classNameToGenerate)
 			.AppendLine()
