@@ -19,7 +19,7 @@ partial class TelemetryDiagnostics
 		public static readonly TelemetryDiagnosticDescriptor DoesNotReturnVoid = new(
 			Id: "TSG4001",
 			Title: "Must return void or bool",
-			Description: "Instrument methods can only return void or bool.",
+			Description: "Instrument methods can only return void or boolean.",
 			Category: Constants.Diagnostics.Metrics.Usage,
 			Severity: DiagnosticSeverity.Error
 		);
@@ -28,7 +28,7 @@ partial class TelemetryDiagnostics
 			new(
 				Id: "TSG4002",
 				Title: "Auto increment counter and measurement defined",
-				Description: "Auto increment counter and a measurement parameter are defined, either remove the parameter or disable auto increment.",
+				Description: "Auto increment counter and a measurement parameter are defined, either remove the parameter/ attribute or change to a normal counter.",
 				Category: Constants.Diagnostics.Metrics.Usage,
 				Severity: DiagnosticSeverity.Error
 			);

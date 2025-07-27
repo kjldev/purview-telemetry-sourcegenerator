@@ -101,7 +101,7 @@ public interface ITestLogger {
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true
+			expectsDiagnostics: true
 		);
 	}
 
@@ -128,7 +128,7 @@ public interface ITestLogger {
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			validationCompilation: false
 		);
 	}
@@ -156,7 +156,7 @@ public interface ITestLogger {
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			validationCompilation: false
 		);
 	}

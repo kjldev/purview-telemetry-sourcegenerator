@@ -64,7 +64,7 @@ partial class ActivitySourceTargetClassEmitter
 				.Append(", ")
 				.Append(param.ParameterName);
 
-			if (!populateTags && !Utilities.IsString(param.ParameterType))
+			if (!populateTags && param.ParameterType.SpecialType != SpecialType.System_String)
 			{
 				logger?.Diagnostic("Found a baggage parameter type that is not a string.");
 
@@ -74,7 +74,7 @@ partial class ActivitySourceTargetClassEmitter
 					param.Locations
 				);
 
-				if (param.IsNullable)
+				if (param.ParameterType.IsNullable)
 					builder.Append('?');
 
 				builder.Append(".ToString()");
@@ -235,7 +235,7 @@ partial class ActivitySourceTargetClassEmitter
 			escapeParam = escapeParams.FirstOrDefault();
 			if (escapeParam != null)
 			{
-				if (!Utilities.IsBoolean(escapeParam.ParameterType))
+				if (escapeParam.ParameterType.SpecialType != SpecialType.System_Boolean)
 				{
 					TelemetryDiagnostics.Report(
 						context.ReportDiagnostic,
@@ -281,7 +281,7 @@ partial class ActivitySourceTargetClassEmitter
 			statusDescriptionParam = statusDescriptionParams.FirstOrDefault();
 			if (statusDescriptionParam != null)
 			{
-				if (!Utilities.IsString(statusDescriptionParam.ParameterType))
+				if (statusDescriptionParam.ParameterType.SpecialType != SpecialType.System_String)
 				{
 					TelemetryDiagnostics.Report(
 						context.ReportDiagnostic,

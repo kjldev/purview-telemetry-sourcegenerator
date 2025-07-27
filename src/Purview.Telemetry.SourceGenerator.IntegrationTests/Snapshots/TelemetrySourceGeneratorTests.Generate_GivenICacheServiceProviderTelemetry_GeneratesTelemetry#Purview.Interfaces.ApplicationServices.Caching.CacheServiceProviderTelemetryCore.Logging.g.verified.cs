@@ -36,7 +36,7 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void FailedToDeserializePayload(int dataLength, System.Exception ex)
+		public void FailedToDeserializePayload(int dataLength, global::System.Exception ex)
 		{
 			if (!_logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Error))
 			{
@@ -49,7 +49,7 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void FailedToGetFromCache(string key, System.Exception ex)
+		public void FailedToGetFromCache(string key, global::System.Exception ex)
 		{
 			if (!_logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Error))
 			{
@@ -62,7 +62,7 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void FailedToRefresh(string cacheKey, System.Exception ex)
+		public void FailedToRefresh(string cacheKey, global::System.Exception ex)
 		{
 			if (!_logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Error))
 			{
@@ -75,7 +75,7 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void FailedToRemove(string key, System.Exception ex)
+		public void FailedToRemove(string key, global::System.Exception ex)
 		{
 			if (!_logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Error))
 			{
@@ -88,7 +88,7 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void FailedToSerializePayload(string? fullName, System.Exception ex)
+		public void FailedToSerializePayload(string? fullName, global::System.Exception ex)
 		{
 			if (!_logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Error))
 			{
@@ -101,7 +101,7 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void FailedToSetValueInCache(string key, System.Exception ex)
+		public void FailedToSetValueInCache(string key, global::System.Exception ex)
 		{
 			if (!_logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Error))
 			{

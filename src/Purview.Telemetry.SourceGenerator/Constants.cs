@@ -41,6 +41,10 @@ static partial class Constants
 		];
 	}
 
+	public static readonly PurviewTypeInfo Empty = PurviewTypeFactory.Create(
+		"Fake.Fake.Fake.Fake.Empty"
+	);
+
 	public static partial class Shared
 	{
 		public static readonly TemplateInfo TagAttribute = TemplateInfo.Create(
@@ -62,13 +66,13 @@ static partial class Constants
 		public const string DependencyInjectionNamespace =
 			"Microsoft.Extensions.DependencyInjection";
 
-		public static readonly TypeInfo IServiceCollection = TypeInfo.Create(
+		public static readonly PurviewTypeInfo IServiceCollection = PurviewTypeFactory.Create(
 			DependencyInjectionNamespace + ".IServiceCollection"
 		);
-		public static readonly TypeInfo ServiceDescriptor = TypeInfo.Create(
+		public static readonly PurviewTypeInfo ServiceDescriptor = PurviewTypeFactory.Create(
 			DependencyInjectionNamespace + ".ServiceDescriptor"
 		);
-		public static readonly TypeInfo ServiceLifetime = TypeInfo.Create(
+		public static readonly PurviewTypeInfo ServiceLifetime = PurviewTypeFactory.Create(
 			DependencyInjectionNamespace + ".ServiceLifetime"
 		);
 

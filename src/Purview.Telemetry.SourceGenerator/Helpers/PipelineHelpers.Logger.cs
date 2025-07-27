@@ -3,6 +3,7 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Purview.Telemetry.SourceGenerator.Records;
+using Purview.Telemetry.SourceGenerator.Templates;
 
 namespace Purview.Telemetry.SourceGenerator.Helpers;
 
@@ -21,7 +22,7 @@ partial class PipelineHelpers
 		token.ThrowIfCancellationRequested();
 
 		var iLoggerTypeSymbol = context.SemanticModel.Compilation.GetTypeByMetadataName(
-			Constants.Logging.MicrosoftExtensions.ILogger.FullName
+			Constants.Logging.MicrosoftExtensions.ILogger.FullyQualifiedName
 		);
 		if (iLoggerTypeSymbol is null)
 		{
@@ -106,7 +107,7 @@ partial class PipelineHelpers
 			// we'll disable the new telemetry generation.
 			disableMSLoggingTelemetryGeneration =
 				context.SemanticModel.Compilation.GetTypeByMetadataName(
-					Constants.Logging.MicrosoftExtensions.LogPropertiesAttribute.FullName
+					Constants.Logging.MicrosoftExtensions.LogPropertiesAttribute.FullyQualifiedName
 				) == null;
 		}
 
@@ -134,8 +135,7 @@ partial class PipelineHelpers
 			ParentClasses: Utilities.GetParentClasses(interfaceDeclaration),
 			FullNamespace: fullNamespace,
 			FullyQualifiedName: fullNamespace + className,
-			InterfaceName: interfaceSymbol.Name,
-			FullyQualifiedInterfaceName: fullNamespace + interfaceSymbol.Name,
+			InterfaceType: PurviewTypeFactory.Create(interfaceSymbol),
 			LoggerAttribute: loggerAttribute,
 			DefaultLevel: defaultLogLevel,
 			LogMethods: logMethods,
@@ -505,21 +505,18 @@ partial class PipelineHelpers
 				}
 			}
 
+			var logParameterType = PurviewTypeFactory.Create(parameter.Type);
 			var isException = Utilities.IsExceptionType(parameter.Type);
 			parameters.Add(
 				new(
 					Name: parameter.Name,
 					UpperCasedName: Utilities.UppercaseFirstChar(parameter.Name),
-					FullyQualifiedType: Utilities.GetFullyQualifiedOrSystemName(parameter.Type),
-					IsNullable: parameter.NullableAnnotation == NullableAnnotation.Annotated,
+					ParameterType: logParameterType,
 					IsException: isException,
 					IsFirstException: isException && isFirstException,
-					IsIEnumerable: Utilities.IsIEnumerable(
-						parameter.Type,
-						semanticModel.Compilation
-					),
-					IsArray: Utilities.IsArray(parameter.Type),
-					IsComplexType: Utilities.IsComplexType(parameter.Type),
+					IsIEnumerable: parameter.Type.IsIEnumerable(semanticModel.Compilation),
+					IsArray: parameter.Type.IsArray(),
+					IsComplexType: parameter.Type.IsComplexType(),
 					Locations: parameter.Locations,
 					LogPropertiesAttribute: logPropertiesAttribute,
 					LogProperties: logProperties?.ToImmutableArray(),

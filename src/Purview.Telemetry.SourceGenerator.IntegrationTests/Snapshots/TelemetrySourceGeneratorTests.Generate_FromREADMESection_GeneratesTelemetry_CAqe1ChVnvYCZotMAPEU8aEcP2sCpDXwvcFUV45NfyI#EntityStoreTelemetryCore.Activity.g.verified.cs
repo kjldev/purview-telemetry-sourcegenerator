@@ -26,7 +26,8 @@ sealed partial class EntityStoreTelemetryCore : global::IEntityStoreTelemetry
 			return;
 		}
 
-		global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();		tagsCollection.Add("exception.escaped", escape);
+		global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();
+		tagsCollection.Add("exception.escaped", escape);
 		tagsCollection.Add("exception.message", exception.Message);
 		tagsCollection.Add("exception.type", exception.GetType().FullName);
 		tagsCollection.Add("exception.stacktrace", exception.StackTrace);
@@ -38,14 +39,14 @@ sealed partial class EntityStoreTelemetryCore : global::IEntityStoreTelemetry
 
 	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 	[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-	public System.Diagnostics.Activity? GettingEntityFromStore(int entityId, string serviceUrl)
+	public global::System.Diagnostics.Activity? GettingEntityFromStore(int entityId, string serviceUrl)
 	{
 		if (!_activitySource.HasListeners())
 		{
 			return null;
 		}
 
-		global::System.Diagnostics.Activity? activityGettingEntityFromStore = _activitySource.StartActivity(name: "GettingEntityFromStore", kind: global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
+		global::System.Diagnostics.Activity? activityGettingEntityFromStore = _activitySource.StartActivity("GettingEntityFromStore", global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
 
 		if (activityGettingEntityFromStore != null)
 		{
@@ -62,7 +63,7 @@ sealed partial class EntityStoreTelemetryCore : global::IEntityStoreTelemetry
 
 	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 	[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-	public void GetDuration(System.Diagnostics.Activity? activity, int durationInMS)
+	public void GetDuration(global::System.Diagnostics.Activity? activity, int durationInMS)
 	{
 		if (!_activitySource.HasListeners())
 		{
@@ -82,7 +83,7 @@ sealed partial class EntityStoreTelemetryCore : global::IEntityStoreTelemetry
 
 	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 	[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-	public void RetrievedEntity(System.Diagnostics.Activity? activity, float totalValue, int lastUpdatedByUserId)
+	public void RetrievedEntity(global::System.Diagnostics.Activity? activity, float totalValue, int lastUpdatedByUserId)
 	{
 		if (!_activitySource.HasListeners())
 		{

@@ -26,7 +26,8 @@ sealed partial class ServiceTelemetryCore : global::IServiceTelemetry
 			return;
 		}
 
-		global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();		tagsCollection.Add("exception.escaped", escape);
+		global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();
+		tagsCollection.Add("exception.escaped", escape);
 		tagsCollection.Add("exception.message", exception.Message);
 		tagsCollection.Add("exception.type", exception.GetType().FullName);
 		tagsCollection.Add("exception.stacktrace", exception.StackTrace);
@@ -38,14 +39,14 @@ sealed partial class ServiceTelemetryCore : global::IServiceTelemetry
 
 	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 	[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-	public System.Diagnostics.Activity? StartAnActivity(int tagIntParam, string entityId)
+	public global::System.Diagnostics.Activity? StartAnActivity(int tagIntParam, string entityId)
 	{
 		if (!_activitySource.HasListeners())
 		{
 			return null;
 		}
 
-		global::System.Diagnostics.Activity? activityStartAnActivity = _activitySource.StartActivity(name: "StartAnActivity", kind: global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
+		global::System.Diagnostics.Activity? activityStartAnActivity = _activitySource.StartActivity("StartAnActivity", global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
 
 		if (activityStartAnActivity != null)
 		{
@@ -62,7 +63,7 @@ sealed partial class ServiceTelemetryCore : global::IServiceTelemetry
 
 	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 	[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-	public void AnInterestingEvent(System.Diagnostics.Activity? activity, float aTagValue)
+	public void AnInterestingEvent(global::System.Diagnostics.Activity? activity, float aTagValue)
 	{
 		if (!_activitySource.HasListeners())
 		{
@@ -82,7 +83,7 @@ sealed partial class ServiceTelemetryCore : global::IServiceTelemetry
 
 	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 	[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-	public void InterestingInfo(System.Diagnostics.Activity? activity, float anotherTagValue, int intTagValue)
+	public void InterestingInfo(global::System.Diagnostics.Activity? activity, float anotherTagValue, int intTagValue)
 	{
 		if (!_activitySource.HasListeners())
 		{

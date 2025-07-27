@@ -62,19 +62,17 @@ partial class Constants
 			CriticalAttribute,
 		];
 
-		public static readonly ImmutableDictionary<int, TypeInfo> LogLevelTypeMap = new Dictionary<
-			int,
-			TypeInfo
-		>
-		{
-			{ 0, MicrosoftExtensions.LogLevel_Trace },
-			{ 1, MicrosoftExtensions.LogLevel_Debug },
-			{ 2, MicrosoftExtensions.LogLevel_Information },
-			{ 3, MicrosoftExtensions.LogLevel_Warning },
-			{ 4, MicrosoftExtensions.LogLevel_Error },
-			{ 5, MicrosoftExtensions.LogLevel_Critical },
-			{ 6, MicrosoftExtensions.LogLevel_None },
-		}.ToImmutableDictionary();
+		public static readonly ImmutableDictionary<int, PurviewTypeInfo> LogLevelTypeMap =
+			new Dictionary<int, PurviewTypeInfo>
+			{
+				{ 0, MicrosoftExtensions.LogLevel_Trace },
+				{ 1, MicrosoftExtensions.LogLevel_Debug },
+				{ 2, MicrosoftExtensions.LogLevel_Information },
+				{ 3, MicrosoftExtensions.LogLevel_Warning },
+				{ 4, MicrosoftExtensions.LogLevel_Error },
+				{ 5, MicrosoftExtensions.LogLevel_Critical },
+				{ 6, MicrosoftExtensions.LogLevel_None },
+			}.ToImmutableDictionary();
 
 		public static readonly ImmutableDictionary<TemplateInfo, int> SpecificLogAttributesToLevel =
 			new Dictionary<TemplateInfo, int>
@@ -106,50 +104,48 @@ partial class Constants
 		{
 			public const string Namespace = "Microsoft.Extensions.Logging";
 
-			public static readonly TypeInfo ILogger = TypeInfo.Create(
+			public static readonly PurviewTypeInfo ILogger = PurviewTypeFactory.Create(
 				Namespace + '.' + nameof(ILogger)
 			);
-			public static readonly TypeInfo LoggerMessage = TypeInfo.Create(
+			public static readonly PurviewTypeInfo LoggerMessage = PurviewTypeFactory.Create(
 				Namespace + '.' + nameof(LoggerMessage)
 			);
-			public static readonly TypeInfo LogLevel = TypeInfo.Create(
+			public static readonly PurviewTypeInfo LogLevel = PurviewTypeFactory.Create(
 				Namespace + '.' + nameof(LogLevel)
 			);
-			public static readonly TypeInfo EventId = TypeInfo.Create(
+			public static readonly PurviewTypeInfo EventId = PurviewTypeFactory.Create(
 				Namespace + '.' + nameof(EventId)
 			);
 
 			// Log Telemetry Gen.
-			public static readonly TypeInfo LoggerMessageHelper = TypeInfo.Create(
+			public static readonly PurviewTypeInfo LoggerMessageHelper = PurviewTypeFactory.Create(
 				Namespace + '.' + nameof(LoggerMessageHelper)
 			);
-			public static readonly TypeInfo LogPropertiesAttribute = TypeInfo.Create(
-				Namespace + '.' + nameof(LogPropertiesAttribute)
-			);
-			public static readonly TypeInfo LogPropertyIgnoreAttribute = TypeInfo.Create(
-				Namespace + '.' + nameof(LogPropertyIgnoreAttribute)
-			);
+			public static readonly PurviewTypeInfo LogPropertiesAttribute =
+				PurviewTypeFactory.Create(Namespace + '.' + nameof(LogPropertiesAttribute));
+			public static readonly PurviewTypeInfo LogPropertyIgnoreAttribute =
+				PurviewTypeFactory.Create(Namespace + '.' + nameof(LogPropertyIgnoreAttribute));
 
-			public static readonly TypeInfo LogLevel_Trace = TypeInfo.Create(
-				LogLevel.FullName + ".Trace"
+			public static readonly PurviewTypeInfo LogLevel_Trace = PurviewTypeFactory.Create(
+				LogLevel.FullyQualifiedName + ".Trace"
 			);
-			public static readonly TypeInfo LogLevel_Debug = TypeInfo.Create(
-				LogLevel.FullName + ".Debug"
+			public static readonly PurviewTypeInfo LogLevel_Debug = PurviewTypeFactory.Create(
+				LogLevel.FullyQualifiedName + ".Debug"
 			);
-			public static readonly TypeInfo LogLevel_Information = TypeInfo.Create(
-				LogLevel.FullName + ".Information"
+			public static readonly PurviewTypeInfo LogLevel_Information = PurviewTypeFactory.Create(
+				LogLevel.FullyQualifiedName + ".Information"
 			);
-			public static readonly TypeInfo LogLevel_Warning = TypeInfo.Create(
-				LogLevel.FullName + ".Warning"
+			public static readonly PurviewTypeInfo LogLevel_Warning = PurviewTypeFactory.Create(
+				LogLevel.FullyQualifiedName + ".Warning"
 			);
-			public static readonly TypeInfo LogLevel_Error = TypeInfo.Create(
-				LogLevel.FullName + ".Error"
+			public static readonly PurviewTypeInfo LogLevel_Error = PurviewTypeFactory.Create(
+				LogLevel.FullyQualifiedName + ".Error"
 			);
-			public static readonly TypeInfo LogLevel_Critical = TypeInfo.Create(
-				LogLevel.FullName + ".Critical"
+			public static readonly PurviewTypeInfo LogLevel_Critical = PurviewTypeFactory.Create(
+				LogLevel.FullyQualifiedName + ".Critical"
 			);
-			public static readonly TypeInfo LogLevel_None = TypeInfo.Create(
-				LogLevel.FullName + ".None"
+			public static readonly PurviewTypeInfo LogLevel_None = PurviewTypeFactory.Create(
+				LogLevel.FullyQualifiedName + ".None"
 			);
 		}
 	}

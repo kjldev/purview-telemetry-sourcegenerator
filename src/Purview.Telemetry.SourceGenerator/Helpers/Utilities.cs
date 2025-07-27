@@ -1,81 +1,46 @@
-﻿using System.Collections.Immutable;
-using System.Text;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Purview.Telemetry.SourceGenerator.Records;
+using Purview.Telemetry.SourceGenerator.Templates;
 
 namespace Purview.Telemetry.SourceGenerator.Helpers;
 
 static partial class Utilities
 {
-	static readonly SymbolDisplayFormat SymbolDisplayFormat = new(
-		typeQualificationStyle: SymbolDisplayTypeQualificationStyle.NameAndContainingTypesAndNamespaces
-	);
-
-	static readonly Lazy<
-		ImmutableDictionary<Templates.TypeInfo, string>
-	> TypeInfoToSystemTypeMapper = new(GenerateSystemTypeMap);
-	static readonly Lazy<ImmutableDictionary<string, string>> FullTypeNameToSystemTypeMapper = new(
-		() =>
-			TypeInfoToSystemTypeMapper.Value.ToImmutableDictionary(
-				x => x.Key.FullName,
-				x => x.Value
-			)
-	);
-
-	static ImmutableDictionary<Templates.TypeInfo, string> GenerateSystemTypeMap()
-		// Putting this here ensures it's not accessed
-		// before the static fields have been initialised.
-		=>
-		new Dictionary<Templates.TypeInfo, string>
-		{
-			{ Constants.System.String, Constants.System.StringKeyword },
-			{ Constants.System.Boolean, Constants.System.BoolKeyword },
-			{ Constants.System.Byte, Constants.System.ByteKeyword },
-			{ Constants.System.Int16, Constants.System.ShortKeyword },
-			{ Constants.System.Int32, Constants.System.IntKeyword },
-			{ Constants.System.Int64, Constants.System.LongKeyword },
-			{ Constants.System.Single, Constants.System.FloatKeyword },
-			{ Constants.System.Double, Constants.System.DoubleKeyword },
-			{ Constants.System.Decimal, Constants.System.DecimalKeyword },
-		}.ToImmutableDictionary();
-
-	public static string Convert(this Templates.TypeInfo type) =>
-		TypeInfoToSystemTypeMapper.Value.GetValueOrDefault(type, type.FullName);
-
-	public static string Convert(this string type) =>
-		FullTypeNameToSystemTypeMapper.Value.GetValueOrDefault(type, type);
-
 	public static TargetGeneration IsValidGenerationTarget(
 		IMethodSymbol method,
 		GenerationType generationType,
 		GenerationType requestedType
 	)
 	{
-		var attributes = method.GetAttributes();
-		var activityCount = attributes.Count(m =>
-			Constants.Activities.ActivityAttribute.Equals(m)
-			|| Constants.Activities.EventAttribute.Equals(m)
-			|| Constants.Activities.ContextAttribute.Equals(m)
+		var attributes = method
+			.GetAttributes()
+			.Where(m => m.AttributeClass != null)
+			.Select(m => PurviewTypeFactory.Create(m.AttributeClass!))
+			.ToArray();
+		var activityCount = attributes.Count(static m =>
+			Constants.Activities.ActivityAttribute == m
+			|| Constants.Activities.EventAttribute == m
+			|| Constants.Activities.ContextAttribute == m
 		);
-		var loggingCount = attributes.Count(m =>
-			Constants.Logging.LogAttribute.Equals(m)
-			|| Constants.Logging.TraceAttribute.Equals(m)
-			|| Constants.Logging.DebugAttribute.Equals(m)
-			|| Constants.Logging.InfoAttribute.Equals(m)
-			|| Constants.Logging.WarningAttribute.Equals(m)
-			|| Constants.Logging.ErrorAttribute.Equals(m)
-			|| Constants.Logging.CriticalAttribute.Equals(m)
+		var loggingCount = attributes.Count(static m =>
+			Constants.Logging.LogAttribute == m
+			|| Constants.Logging.TraceAttribute == m
+			|| Constants.Logging.DebugAttribute == m
+			|| Constants.Logging.InfoAttribute == m
+			|| Constants.Logging.WarningAttribute == m
+			|| Constants.Logging.ErrorAttribute == m
+			|| Constants.Logging.CriticalAttribute == m
 		);
-		var metricsCount = attributes.Count(m =>
-			Constants.Metrics.CounterAttribute.Equals(m)
-			|| Constants.Metrics.AutoCounterAttribute.Equals(m)
-			|| Constants.Metrics.UpDownCounterAttribute.Equals(m)
-			|| Constants.Metrics.HistogramAttribute.Equals(m)
-			|| Constants.Metrics.ObservableCounterAttribute.Equals(m)
-			|| Constants.Metrics.ObservableGaugeAttribute.Equals(m)
-			|| Constants.Metrics.ObservableUpDownCounterAttribute.Equals(m)
+		var metricsCount = attributes.Count(static m =>
+			Constants.Metrics.CounterAttribute == m
+			|| Constants.Metrics.AutoCounterAttribute == m
+			|| Constants.Metrics.UpDownCounterAttribute == m
+			|| Constants.Metrics.HistogramAttribute == m
+			|| Constants.Metrics.ObservableCounterAttribute == m
+			|| Constants.Metrics.ObservableGaugeAttribute == m
+			|| Constants.Metrics.ObservableUpDownCounterAttribute == m
 		);
 
 		var count = activityCount + loggingCount + metricsCount;
@@ -121,168 +86,10 @@ static partial class Utilities
 		);
 	}
 
-	public static string WithNullable(this string value) => value + '?';
-
 	public static string WithComma(this string value, bool andSpace = true) =>
 		value + ',' + (andSpace ? ' ' : null);
 
-	public static string OrNullKeyword(this string? value) => value ?? Constants.System.NullKeyword;
-
-	public static string WithGlobal(this string value) => "global::" + value;
-
-	public static StringBuilder AggressiveInlining(this StringBuilder builder, int indent) =>
-		builder.Append(indent, Constants.System.AggressiveInlining);
-
-	public static StringBuilder CodeGen(this StringBuilder builder, int indent) =>
-		builder.Append(indent, Constants.System.GeneratedCode.Value);
-
-	public static StringBuilder IfDefines(
-		this StringBuilder builder,
-		string condition,
-		params string[] values
-	) => builder.IfDefines(condition, 0, values);
-
-	public static StringBuilder IfDefines(
-		this StringBuilder builder,
-		string condition,
-		int indent,
-		params string[] values
-	)
-	{
-		builder.AppendLine().Append("#if ").AppendLine(condition).WithIndent(indent);
-
-		foreach (var value in values)
-			builder.Append(value);
-
-		builder.AppendLine().AppendLine("#endif");
-
-		return builder;
-	}
-
-	public static StringBuilder WithIndent(this StringBuilder builder, int tabs)
-	{
-		for (var i = 0; i < tabs; i++)
-			builder.Append('\t');
-
-		return builder;
-	}
-
-	public static StringBuilder Append(
-		this StringBuilder builder,
-		int tabs,
-		char value,
-		bool withNewLine = true
-	)
-	{
-		builder.WithIndent(tabs).Append(value);
-
-		if (withNewLine)
-			builder.AppendLine();
-
-		return builder;
-	}
-
-	public static StringBuilder Append(
-		this StringBuilder builder,
-		int tabs,
-		string value,
-		bool withNewLine = true
-	)
-	{
-		builder.WithIndent(tabs).Append(value);
-
-		if (withNewLine)
-			builder.AppendLine();
-
-		return builder;
-	}
-
-	public static StringBuilder Append(
-		this StringBuilder builder,
-		int tabs,
-		Templates.TypeInfo typeInfo,
-		bool withNewLine = true
-	)
-	{
-		builder.WithIndent(tabs).Append(typeInfo.Convert());
-
-		if (withNewLine)
-			builder.AppendLine();
-
-		return builder;
-	}
-
-	//public static StringBuilder Append(this StringBuilder builder, Templates.TypeInfo typeInfo)
-	//{
-	//	builder.Append(typeInfo.Convert());
-
-	//	return builder;
-	//}
-
-	//static public StringBuilder AppendLines(this StringBuilder builder, int lineCount = 2) {
-	//	for (var i = 0; i < lineCount; i++) {
-	//		builder.AppendLine();
-	//	}
-
-	//	return builder;
-	//}
-
-	public static StringBuilder AppendLine(this StringBuilder builder, char @char) =>
-		builder.Append(@char).AppendLine();
-
-	//static public StringBuilder AppendWrap(this StringBuilder builder, string value, char c = '"')
-	//	=> builder
-	//			.Append(c)
-	//			.Append(value)
-	//			.Append(c);
-
 	public static string Wrap(this string value, char c = '"') => c + value + c;
-
-	//public static string Strip(this string value, char c = '"')
-	//{
-	//	if (value.Length > 1 && value[0] == c)
-	//		value = value.Substring(1);
-
-	//	if (value.Length > 1 && value[value.Length - 1] == c)
-	//		value = value.Substring(0, value.Length - 1);
-
-	//	return value;
-	//}
-
-	//static public string? GetMemberIdentity(MemberDeclarationSyntax memberSyntax) {
-	//	if (memberSyntax is MethodDeclarationSyntax method) {
-	//		return method.Identifier.ValueText;
-	//	}
-	//	else if (memberSyntax is PropertyDeclarationSyntax property) {
-	//		return property.Identifier.ValueText;
-	//	}
-	//	else if (memberSyntax is FieldDeclarationSyntax field) {
-	//		var variable = field.Declaration.Variables.FirstOrDefault();
-	//		return variable?.Identifier.ValueText;
-	//	}
-	//	else if (memberSyntax is EventFieldDeclarationSyntax @event) {
-	//		var variable = @event.Declaration.Variables.FirstOrDefault();
-	//		return variable?.Identifier.ValueText;
-	//	}
-	//	else if (memberSyntax is IndexerDeclarationSyntax indexer) {
-	//		return indexer.ToString();
-	//	}
-
-	//	return null;
-	//}
-
-	//public static ClassDeclarationSyntax? GetParentClass(SyntaxNode? node)
-	//{
-	//	while (node != null)
-	//	{
-	//		if (node.Parent is ClassDeclarationSyntax classNode)
-	//			return classNode;
-
-	//		node = node.Parent;
-	//	}
-
-	//	return null;
-	//}
 
 	public static string[] GetParentClasses(TypeDeclarationSyntax classDeclaration)
 	{
@@ -345,32 +152,6 @@ static partial class Utilities
 		return null;
 	}
 
-	public static string GetFullyQualifiedOrSystemName(
-		ITypeSymbol namedType,
-		bool trimNullableAnnotation = true
-	)
-	{
-		var result = namedType.ToDisplayString(SymbolDisplayFormat) ?? namedType.ToString();
-		if (
-			namedType as INamedTypeSymbol is { IsGenericType: true, IsValueType: false } genericType
-		)
-		{
-			List<string> typeArguments = [];
-			foreach (var typeArgument in genericType.TypeArguments)
-				typeArguments.Add(GetFullyQualifiedOrSystemName(typeArgument));
-
-			result += $"<{string.Join(", ", typeArguments)}>";
-		}
-
-		if (trimNullableAnnotation && namedType.NullableAnnotation == NullableAnnotation.Annotated)
-			result = result.TrimEnd('?');
-
-		return result.Convert();
-	}
-
-	//static public string GetFullyQualifiedName(TypeDeclarationSyntax type)
-	//	=> GetFullNamespace(type, true) + type.Identifier.Text;
-
 	public static string? GetFullNamespace(
 		TypeDeclarationSyntax type,
 		bool includeTrailingSeparator
@@ -410,7 +191,7 @@ static partial class Utilities
 	//	=> IsArray(parameterType, fullTypeName)
 	//		|| IsEnumerable(parameterType, fullTypeName);
 
-	public static bool IsComplexType(ITypeSymbol typeSymbol)
+	public static bool IsComplexType(this ITypeSymbol typeSymbol)
 	{
 		// Check for class, struct, or record types
 		if (typeSymbol.TypeKind == TypeKind.Class || typeSymbol.TypeKind == TypeKind.Struct)
@@ -423,14 +204,11 @@ static partial class Utilities
 		return false;
 	}
 
-	public static bool IsArray(ITypeSymbol typeSymbol) =>
+	public static bool IsArray(this ITypeSymbol typeSymbol) =>
 		typeSymbol.SpecialType != SpecialType.System_String
 		&& typeSymbol.TypeKind is TypeKind.Array;
 
-	public static bool IsArray(string parameterType, string fullTypeName) =>
-		parameterType == (fullTypeName + "[]");
-
-	public static bool IsIEnumerable(ITypeSymbol typeSymbol, Compilation compilation)
+	public static bool IsIEnumerable(this ITypeSymbol typeSymbol, Compilation compilation)
 	{
 		if (typeSymbol.SpecialType == SpecialType.System_String)
 			return false;
@@ -440,25 +218,6 @@ static partial class Utilities
 
 		// Get the `IEnumerable` symbol from the compilation
 		var ienumerableSymbol = compilation.GetTypeByMetadataName(Constants.System.IEnumerable);
-
-		// Check if the type implements `IEnumerable`
-		return ienumerableSymbol != null
-			&& typeSymbol.AllInterfaces.Any(i =>
-				SymbolEqualityComparer.Default.Equals(i, ienumerableSymbol)
-			);
-	}
-
-	public static bool IsGenericIEnumerable(ITypeSymbol typeSymbol, Compilation compilation)
-	{
-		if (typeSymbol.SpecialType == SpecialType.System_String)
-			return false;
-		if (IsIEnumerable(typeSymbol))
-			return true;
-
-		// Get the `IEnumerable` symbol from the compilation
-		var ienumerableSymbol = compilation.GetTypeByMetadataName(
-			Constants.System.GenericIEnumerable + "`1"
-		);
 
 		// Check if the type implements `IEnumerable`
 		return ienumerableSymbol != null
@@ -483,33 +242,15 @@ static partial class Utilities
 				or SpecialType.System_Collections_Generic_IEnumerable_T;
 	}
 
-	public static bool IsEnumerable(string parameterType, string fullTypeName) =>
-		parameterType == (Constants.System.GenericIEnumerable.FullName + "<" + fullTypeName + ">")
-		|| parameterType.StartsWith(
-			Constants.System.GenericIEnumerable.FullName + "<" + fullTypeName,
-			StringComparison.Ordinal
-		);
-
-	public static bool IsBoolean(ITypeSymbol type) => Constants.System.Boolean.Equals(type);
-
-	public static bool IsBoolean(string type) =>
-		type == Constants.System.BoolKeyword || Constants.System.Boolean.Equals(type);
-
-	public static bool IsString(ITypeSymbol type) =>
-		type.ToDisplayString() == Constants.System.StringKeyword
-		|| Constants.System.String.Equals(type);
-
-	public static bool IsString(string type) =>
-		type == Constants.System.StringKeyword || Constants.System.String.Equals(type);
-
-	public static bool IsExceptionType(ITypeSymbol? typeSymbol)
+	public static bool IsExceptionType(this ITypeSymbol typeSymbol)
 	{
-		while (typeSymbol != null)
+		ITypeSymbol? localTypeSymbol = typeSymbol;
+		while (localTypeSymbol != null)
 		{
-			if (Constants.System.Exception.Equals(typeSymbol))
+			if (Constants.System.Exception.Equals(localTypeSymbol))
 				return true;
 
-			typeSymbol = typeSymbol.BaseType;
+			localTypeSymbol = localTypeSymbol.BaseType;
 		}
 
 		return false;
@@ -518,57 +259,30 @@ static partial class Utilities
 	public static string Flatten(this SyntaxNode syntax) =>
 		syntax.WithoutTrivia().ToString().Flatten();
 
-	//public static string Flatten(this SyntaxToken syntax)
-	//	=> syntax.WithoutTrivia()
-	//		.ToString()
-	//		.Flatten();
-
 	public static string Flatten(this string value) =>
 		Regex.Replace(value, @"\s+", " ", RegexOptions.None, TimeSpan.FromMilliseconds(2000));
 
-	//public static bool ContainsAttribute(ISymbol symbol, Templates.TypeInfo typeInfo, CancellationToken token)
-	//	=> TryContainsAttribute(symbol, typeInfo, token, out _);
-
-	//public static bool TryContainsAttribute(ISymbol symbol, Templates.TypeInfo typeInfo, CancellationToken token, out AttributeData? attributeData)
-	//{
-	//	attributeData = null;
-
-	//	var attributes = symbol.GetAttributes();
-	//	foreach (var attribute in attributes)
-	//	{
-	//		token.ThrowIfCancellationRequested();
-
-	//		if (attribute.AttributeClass != null && typeInfo.Equals(attribute.AttributeClass))
-	//		{
-	//			attributeData = attribute;
-	//			return true;
-	//		}
-	//	}
-
-	//	return false;
-	//}
-
 	public static bool ContainsAttribute(
 		ISymbol symbol,
-		string typeName,
+		PurviewTypeInfo type,
 		CancellationToken token
-	) => TryContainsAttribute(symbol, typeName, token, out _);
+	) => TryContainsAttribute(symbol, type, token, out _);
 
 	public static bool ContainsAttribute(
 		ISymbol symbol,
-		Templates.TemplateInfo templateInfo,
+		TemplateInfo templateInfo,
 		CancellationToken token
 	) => TryContainsAttribute(symbol, templateInfo, token, out _);
 
 	public static bool ContainsAttribute(
 		ISymbol symbol,
-		Templates.TemplateInfo[] templateInfo,
+		TemplateInfo[] templateInfo,
 		CancellationToken token
 	) => TryContainsAttribute(symbol, templateInfo, token, out _, out _);
 
 	public static bool TryContainsAttribute(
 		ISymbol symbol,
-		string typeName,
+		PurviewTypeInfo type,
 		CancellationToken token,
 		out AttributeData? attributeData
 	)
@@ -579,11 +293,11 @@ static partial class Utilities
 		foreach (var attribute in attributes)
 		{
 			token.ThrowIfCancellationRequested();
+			if (attribute.AttributeClass == null)
+				continue;
 
-			if (
-				attribute.AttributeClass != null
-				&& typeName == attribute.AttributeClass?.ToString()
-			)
+			var attributeType = PurviewTypeFactory.Create(attribute.AttributeClass);
+			if (attributeType == type)
 			{
 				attributeData = attribute;
 				return true;
@@ -595,7 +309,7 @@ static partial class Utilities
 
 	public static bool TryContainsAttribute(
 		ISymbol symbol,
-		Templates.TemplateInfo templateInfo,
+		TemplateInfo templateInfo,
 		CancellationToken token,
 		out AttributeData? attributeData
 	)
@@ -606,8 +320,11 @@ static partial class Utilities
 		foreach (var attribute in attributes)
 		{
 			token.ThrowIfCancellationRequested();
+			if (attribute.AttributeClass == null)
+				continue;
 
-			if (attribute.AttributeClass != null && templateInfo.Equals(attribute.AttributeClass))
+			var attributeType = PurviewTypeFactory.Create(attribute.AttributeClass);
+			if (attributeType == templateInfo)
 			{
 				attributeData = attribute;
 				return true;
@@ -619,10 +336,10 @@ static partial class Utilities
 
 	public static bool TryContainsAttribute(
 		ISymbol symbol,
-		Templates.TemplateInfo[] templateInfo,
+		TemplateInfo[] templateInfo,
 		CancellationToken token,
 		out AttributeData? attributeData,
-		out Templates.TemplateInfo? matchingTemplate
+		out TemplateInfo? matchingTemplate
 	)
 	{
 		attributeData = null;
@@ -636,9 +353,10 @@ static partial class Utilities
 			if (attribute.AttributeClass == null)
 				continue;
 
+			var attributeType = PurviewTypeFactory.Create(attribute.AttributeClass);
 			foreach (var template in templateInfo)
 			{
-				if (template.Equals(attribute.AttributeClass))
+				if (template.Equals(attributeType))
 				{
 					attributeData = attribute;
 					matchingTemplate = template;

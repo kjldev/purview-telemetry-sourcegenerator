@@ -39,22 +39,7 @@ namespace Testing
 			state.ReserveTagSpace(2);
 
 			state.TagArray[0] = new("{OriginalFormat}", "Log: ParamValue = {ParamValue}");
-			state.TagArray[1] = new("paramValue", paramValue == null ? null : global::Microsoft.Extensions.Logging.LoggerMessageHelper.Stringify(paramValue));
-
-			if (paramValue != null)
-			{
-				var tmp_i = 0;
-				foreach (var item in paramValue)
-				{
-					if (tmp_i == 5)
-					{
-						break;
-					}
-
-					state.AddTag($"paramValue[{tmp_i}]", item);
-					tmp_i++;
-				}
-			}
+			state.TagArray[1] = new("paramValue", paramValue);
 
 			_logger.Log(
 				global::Microsoft.Extensions.Logging.LogLevel.Information,

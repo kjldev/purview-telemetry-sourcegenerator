@@ -20,7 +20,7 @@ namespace Testing
 	{
 		readonly global::Microsoft.Extensions.Logging.ILogger<global::Testing.ITestLogger> _logger;
 
-		static readonly global::System.Action<global::Microsoft.Extensions.Logging.ILogger, System.Collections.Generic.List<string>, global::System.Exception?> _logEntryWithGenericTypeParamAction = global::Microsoft.Extensions.Logging.LoggerMessage.Define<System.Collections.Generic.List<string>>(global::Microsoft.Extensions.Logging.LogLevel.Information, new global::Microsoft.Extensions.Logging.EventId(842060863, "LogEntryWithGenericTypeParam"), "LogEntryWithGenericTypeParam: ParamName = {ParamName}");
+		static readonly global::System.Action<global::Microsoft.Extensions.Logging.ILogger, global::System.Collections.Generic.List<string>, global::System.Exception?> _logEntryWithGenericTypeParamAction = global::Microsoft.Extensions.Logging.LoggerMessage.Define<global::System.Collections.Generic.List<string>>(global::Microsoft.Extensions.Logging.LogLevel.Information, new global::Microsoft.Extensions.Logging.EventId(842060863, "LogEntryWithGenericTypeParam"), "LogEntryWithGenericTypeParam: ParamName = {ParamName}");
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		public TestLoggerCore(global::Microsoft.Extensions.Logging.ILogger<global::Testing.ITestLogger> logger)
@@ -30,7 +30,7 @@ namespace Testing
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void LogEntryWithGenericTypeParam(System.Collections.Generic.List<string> paramName)
+		public void LogEntryWithGenericTypeParam(global::System.Collections.Generic.List<string> paramName)
 		{
 			if (!_logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Information))
 			{

@@ -17,7 +17,7 @@ record ActivitySourceGenerationAttributeRecord(
 	AttributeValue<bool> GenerateDiagnosticsForMissingActivity
 );
 
-record ActivityAttributeRecord(
+readonly record struct ActivityAttributeRecord(
 	AttributeStringValue Name,
 	AttributeValue<int> Kind,
 	AttributeValue<bool> CreateOnly

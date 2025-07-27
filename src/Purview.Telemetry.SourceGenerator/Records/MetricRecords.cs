@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Purview.Telemetry.SourceGenerator.Templates;
 
 namespace Purview.Telemetry.SourceGenerator.Records;
 
@@ -11,8 +12,7 @@ record MeterTarget(
 	string[] ParentClasses,
 	string? FullNamespace,
 	string? FullyQualifiedName,
-	string InterfaceName,
-	string FullyQualifiedInterfaceName,
+	PurviewTypeInfo InterfaceType,
 	string? MeterName,
 	MeterGenerationAttributeRecord? MeterGeneration,
 	ImmutableArray<InstrumentTarget> InstrumentationMethods,
@@ -32,8 +32,7 @@ record MeterTarget(
 			null!,
 			null,
 			null,
-			null!,
-			null!,
+			Constants.Empty,
 			null,
 			null,
 			[],
@@ -44,11 +43,11 @@ record MeterTarget(
 
 record InstrumentTarget(
 	string MethodName,
-	string ReturnType,
+	PurviewTypeInfo ReturnType,
 	bool ReturnsBool,
 	bool IsNullableReturn,
 	string FieldName,
-	string InstrumentMeasurementType,
+	PurviewTypeInfo InstrumentMeasurementType,
 	bool IsObservable,
 	string MetricName,
 	ImmutableArray<Location> Locations,
@@ -64,13 +63,12 @@ record InstrumentTarget(
 
 record InstrumentParameterTarget(
 	string ParameterName,
-	string ParameterType,
+	PurviewTypeInfo ParameterType,
 	bool IsFunc,
 	bool IsIEnumerable,
 	bool IsMeasurement,
 	bool IsValidInstrumentType,
-	string? InstrumentType,
-	bool IsNullable,
+	PurviewTypeInfo? InstrumentType,
 	string GeneratedName,
 	InstrumentParameterDestination ParamDestination,
 	bool SkipOnNullOrEmpty,

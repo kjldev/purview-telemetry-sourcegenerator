@@ -28,7 +28,8 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 				return;
 			}
 
-			global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();			tagsCollection.Add("exception.escaped", escape);
+			global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();
+			tagsCollection.Add("exception.escaped", escape);
 			tagsCollection.Add("exception.message", exception.Message);
 			tagsCollection.Add("exception.type", exception.GetType().FullName);
 			tagsCollection.Add("exception.stacktrace", exception.StackTrace);
@@ -40,14 +41,14 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public System.Diagnostics.Activity? GetFromCache()
+		public global::System.Diagnostics.Activity? GetFromCache()
 		{
 			if (!_activitySource.HasListeners())
 			{
 				return null;
 			}
 
-			global::System.Diagnostics.Activity? activityGetFromCache = _activitySource.StartActivity(name: "GetFromCache", kind: global::System.Diagnostics.ActivityKind.Client, parentId: default, tags: default, links: default, startTime: default);
+			global::System.Diagnostics.Activity? activityGetFromCache = _activitySource.StartActivity("GetFromCache", global::System.Diagnostics.ActivityKind.Client, parentId: default, tags: default, links: default, startTime: default);
 
 			return activityGetFromCache;
 		}
@@ -61,25 +62,25 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 				return;
 			}
 
-			if (System.Diagnostics.Activity.Current != null)
+			if (global::System.Diagnostics.Activity.Current != null)
 			{
 
 				global::System.Diagnostics.ActivityEvent activityEventNoValueProvided = new(name: "NoValueProvided", timestamp: default, tags: default);
 
-				System.Diagnostics.Activity.Current.AddEvent(activityEventNoValueProvided);
+				global::System.Diagnostics.Activity.Current.AddEvent(activityEventNoValueProvided);
 			}
 		}
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public System.Diagnostics.Activity? SerializePayload()
+		public global::System.Diagnostics.Activity? SerializePayload()
 		{
 			if (!_activitySource.HasListeners())
 			{
 				return null;
 			}
 
-			global::System.Diagnostics.Activity? activitySerializePayload = _activitySource.StartActivity(name: "SerializePayload", kind: global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
+			global::System.Diagnostics.Activity? activitySerializePayload = _activitySource.StartActivity("SerializePayload", global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
 
 			return activitySerializePayload;
 		}
@@ -93,22 +94,22 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 				return;
 			}
 
-			if (System.Diagnostics.Activity.Current != null)
+			if (global::System.Diagnostics.Activity.Current != null)
 			{
-				System.Diagnostics.Activity.Current.SetTag("payloadstringlength", payloadStringLength);
+				global::System.Diagnostics.Activity.Current.SetTag("payloadstringlength", payloadStringLength);
 			}
 		}
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public System.Diagnostics.Activity? SetInCache()
+		public global::System.Diagnostics.Activity? SetInCache()
 		{
 			if (!_activitySource.HasListeners())
 			{
 				return null;
 			}
 
-			global::System.Diagnostics.Activity? activitySetInCache = _activitySource.StartActivity(name: "SetInCache", kind: global::System.Diagnostics.ActivityKind.Client, parentId: default, tags: default, links: default, startTime: default);
+			global::System.Diagnostics.Activity? activitySetInCache = _activitySource.StartActivity("SetInCache", global::System.Diagnostics.ActivityKind.Client, parentId: default, tags: default, links: default, startTime: default);
 
 			return activitySetInCache;
 		}
@@ -122,11 +123,11 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 				return;
 			}
 
-			if (System.Diagnostics.Activity.Current != null)
+			if (global::System.Diagnostics.Activity.Current != null)
 			{
-				System.Diagnostics.Activity.Current.SetTag("distributedcachetype", distributedCacheType);
-				System.Diagnostics.Activity.Current.SetTag("cachekey", cacheKey);
-				System.Diagnostics.Activity.Current.SetTag("entitytype", entityType);
+				global::System.Diagnostics.Activity.Current.SetTag("distributedcachetype", distributedCacheType);
+				global::System.Diagnostics.Activity.Current.SetTag("cachekey", cacheKey);
+				global::System.Diagnostics.Activity.Current.SetTag("entitytype", entityType);
 			}
 		}
 
@@ -139,12 +140,12 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 				return;
 			}
 
-			if (System.Diagnostics.Activity.Current != null)
+			if (global::System.Diagnostics.Activity.Current != null)
 			{
 
 				global::System.Diagnostics.ActivityEvent activityEventValueCached = new(name: "ValueCached", timestamp: default, tags: default);
 
-				System.Diagnostics.Activity.Current.AddEvent(activityEventValueCached);
+				global::System.Diagnostics.Activity.Current.AddEvent(activityEventValueCached);
 			}
 		}
 
@@ -157,32 +158,32 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 				return;
 			}
 
-			if (System.Diagnostics.Activity.Current != null)
+			if (global::System.Diagnostics.Activity.Current != null)
 			{
 
 				global::System.Diagnostics.ActivityEvent activityEventRequestingValueFromCache = new(name: "RequestingValueFromCache", timestamp: default, tags: default);
 
-				System.Diagnostics.Activity.Current.AddEvent(activityEventRequestingValueFromCache);
+				global::System.Diagnostics.Activity.Current.AddEvent(activityEventRequestingValueFromCache);
 			}
 		}
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void CacheHit(int? dataLength)
+		public void CacheHit(global::System.Int32? dataLength)
 		{
 			if (!_activitySource.HasListeners())
 			{
 				return;
 			}
 
-			if (System.Diagnostics.Activity.Current != null)
+			if (global::System.Diagnostics.Activity.Current != null)
 			{
 				global::System.Diagnostics.ActivityTagsCollection tagsCollectionCacheHit = new();
 				tagsCollectionCacheHit.Add("datalength", dataLength);
 
 				global::System.Diagnostics.ActivityEvent activityEventCacheHit = new(name: "CacheHit", timestamp: default, tags: tagsCollectionCacheHit);
 
-				System.Diagnostics.Activity.Current.AddEvent(activityEventCacheHit);
+				global::System.Diagnostics.Activity.Current.AddEvent(activityEventCacheHit);
 			}
 		}
 
@@ -195,53 +196,53 @@ namespace Purview.Interfaces.ApplicationServices.Caching
 				return;
 			}
 
-			if (System.Diagnostics.Activity.Current != null)
+			if (global::System.Diagnostics.Activity.Current != null)
 			{
 
 				global::System.Diagnostics.ActivityEvent activityEventCacheMiss = new(name: "CacheMiss", timestamp: default, tags: default);
 
-				System.Diagnostics.Activity.Current.AddEvent(activityEventCacheMiss);
+				global::System.Diagnostics.Activity.Current.AddEvent(activityEventCacheMiss);
 			}
 		}
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public System.Diagnostics.Activity? DeserializePayload()
+		public global::System.Diagnostics.Activity? DeserializePayload()
 		{
 			if (!_activitySource.HasListeners())
 			{
 				return null;
 			}
 
-			global::System.Diagnostics.Activity? activityDeserializePayload = _activitySource.StartActivity(name: "DeserializePayload", kind: global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
+			global::System.Diagnostics.Activity? activityDeserializePayload = _activitySource.StartActivity("DeserializePayload", global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
 
 			return activityDeserializePayload;
 		}
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public System.Diagnostics.Activity? Refresh()
+		public global::System.Diagnostics.Activity? Refresh()
 		{
 			if (!_activitySource.HasListeners())
 			{
 				return null;
 			}
 
-			global::System.Diagnostics.Activity? activityRefresh = _activitySource.StartActivity(name: "Refresh", kind: global::System.Diagnostics.ActivityKind.Client, parentId: default, tags: default, links: default, startTime: default);
+			global::System.Diagnostics.Activity? activityRefresh = _activitySource.StartActivity("Refresh", global::System.Diagnostics.ActivityKind.Client, parentId: default, tags: default, links: default, startTime: default);
 
 			return activityRefresh;
 		}
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public System.Diagnostics.Activity? Remove()
+		public global::System.Diagnostics.Activity? Remove()
 		{
 			if (!_activitySource.HasListeners())
 			{
 				return null;
 			}
 
-			global::System.Diagnostics.Activity? activityRemove = _activitySource.StartActivity(name: "Remove", kind: global::System.Diagnostics.ActivityKind.Client, parentId: default, tags: default, links: default, startTime: default);
+			global::System.Diagnostics.Activity? activityRemove = _activitySource.StartActivity("Remove", global::System.Diagnostics.ActivityKind.Client, parentId: default, tags: default, links: default, startTime: default);
 
 			return activityRemove;
 		}

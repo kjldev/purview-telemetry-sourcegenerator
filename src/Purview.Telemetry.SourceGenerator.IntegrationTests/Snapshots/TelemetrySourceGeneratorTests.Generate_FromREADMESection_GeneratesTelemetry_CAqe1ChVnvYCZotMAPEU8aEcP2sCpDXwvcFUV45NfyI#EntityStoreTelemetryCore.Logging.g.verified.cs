@@ -58,7 +58,7 @@ sealed partial class EntityStoreTelemetryCore : global::IEntityStoreTelemetry
 
 	[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 	[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-	public void ExplicitErrorMessage(int entityId, System.Exception exception)
+	public void ExplicitErrorMessage(int entityId, global::System.Exception exception)
 	{
 		if (!_logger.IsEnabled(global::Microsoft.Extensions.Logging.LogLevel.Error))
 		{

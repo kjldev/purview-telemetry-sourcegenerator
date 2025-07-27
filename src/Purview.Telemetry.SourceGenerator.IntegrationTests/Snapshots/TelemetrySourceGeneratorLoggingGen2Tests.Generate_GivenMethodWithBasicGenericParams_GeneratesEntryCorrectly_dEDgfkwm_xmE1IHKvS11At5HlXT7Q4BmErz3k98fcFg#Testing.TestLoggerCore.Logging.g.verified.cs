@@ -39,7 +39,7 @@ namespace Testing
 			state.ReserveTagSpace(2);
 
 			state.TagArray[0] = new("{OriginalFormat}", "LogEntryWithGenericTypeParam: ParamName = {ParamName}");
-			state.TagArray[1] = new("paramName", paramName == null ? null : global::Microsoft.Extensions.Logging.LoggerMessageHelper.Stringify(paramName));
+			state.TagArray[1] = new("paramName", paramName);
 
 			_logger.Log(
 				global::Microsoft.Extensions.Logging.LogLevel.Information,

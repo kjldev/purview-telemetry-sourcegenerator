@@ -28,7 +28,7 @@ public interface ITestTelemetry
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true
+			expectsDiagnostics: true
 		);
 	}
 
@@ -61,7 +61,7 @@ public interface ITestTelemetry
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true
+			expectsDiagnostics: true
 		);
 	}
 
@@ -98,7 +98,7 @@ public interface ITestTelemetry
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			parameters: [includeLoggerTypes]
 		);
 	}
@@ -129,7 +129,7 @@ public interface ITestTelemetry
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true
+			expectsDiagnostics: true
 		);
 	}
 
@@ -185,7 +185,7 @@ public interface ITestTelemetry
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			parameters: [includeLoggerType]
 		);
 	}

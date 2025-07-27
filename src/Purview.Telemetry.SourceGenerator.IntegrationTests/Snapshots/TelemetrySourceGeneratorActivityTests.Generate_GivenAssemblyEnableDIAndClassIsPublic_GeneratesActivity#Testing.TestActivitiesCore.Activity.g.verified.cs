@@ -29,7 +29,8 @@ namespace Testing
 				return;
 			}
 
-			global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();			tagsCollection.Add("exception.escaped", escape);
+			global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();
+			tagsCollection.Add("exception.escaped", escape);
 			tagsCollection.Add("exception.message", exception.Message);
 			tagsCollection.Add("exception.type", exception.GetType().FullName);
 			tagsCollection.Add("exception.stacktrace", exception.StackTrace);
@@ -41,14 +42,14 @@ namespace Testing
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public System.Diagnostics.Activity? Activity(string stringParam, int intParam, bool boolParam)
+		public global::System.Diagnostics.Activity? Activity(string stringParam, int intParam, bool boolParam)
 		{
 			if (!_activitySource.HasListeners())
 			{
 				return null;
 			}
 
-			global::System.Diagnostics.Activity? activityActivity = _activitySource.StartActivity(name: "Activity", kind: global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
+			global::System.Diagnostics.Activity? activityActivity = _activitySource.StartActivity("Activity", global::System.Diagnostics.ActivityKind.Internal, parentId: default, tags: default, links: default, startTime: default);
 
 			if (activityActivity != null)
 			{
@@ -66,7 +67,7 @@ namespace Testing
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void Event(System.Diagnostics.Activity? activity, string stringParam, int intParam, bool boolParam)
+		public void Event(global::System.Diagnostics.Activity? activity, string stringParam, int intParam, bool boolParam)
 		{
 			if (!_activitySource.HasListeners())
 			{

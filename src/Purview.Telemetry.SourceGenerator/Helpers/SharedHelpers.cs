@@ -99,7 +99,7 @@ static partial class SharedHelpers
 
 				var name = constructorMethod.Parameters[i].Name;
 				var value = Utilities.GetTypedConstantValue(items[i])!;
-				if (Constants.System.String.Equals(constructorMethod.Parameters[i].Type))
+				if (constructorMethod.Parameters[i].Type.SpecialType == SpecialType.System_String)
 				{
 					var v = (string)value;
 					if (string.IsNullOrWhiteSpace(v))
@@ -122,7 +122,7 @@ static partial class SharedHelpers
 					continue;
 				}
 
-				if (Constants.System.String.Equals(namedArgument.Value.Type))
+				if (namedArgument.Value.Type.SpecialType == SpecialType.System_String)
 				{
 					var v = (string)value;
 					if (string.IsNullOrWhiteSpace(v))

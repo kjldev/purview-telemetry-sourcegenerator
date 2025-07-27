@@ -101,7 +101,7 @@ namespace Testing
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void AutoCounter(System.Collections.Generic.Dictionary<string, int> genericParameter)
+		public void AutoCounter(global::System.Collections.Generic.Dictionary<string, int> genericParameter)
 		{
 			if (_autoCounterInstrument == null)
 			{
@@ -116,7 +116,7 @@ namespace Testing
 		}
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void Counter_AutoIncrement(System.Collections.Generic.Dictionary<string, int> genericParameter)
+		public void Counter_AutoIncrement(global::System.Collections.Generic.Dictionary<string, int> genericParameter)
 		{
 			if (_counter_AutoIncrementInstrument == null)
 			{
@@ -131,7 +131,7 @@ namespace Testing
 		}
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void Counter(int value, System.Collections.Generic.Dictionary<string, int> genericParameter)
+		public void Counter(int value, global::System.Collections.Generic.Dictionary<string, int> genericParameter)
 		{
 			if (_counterInstrument == null)
 			{
@@ -146,7 +146,7 @@ namespace Testing
 		}
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void Histogram(int value, System.Collections.Generic.Dictionary<string, int> genericParameter)
+		public void Histogram(int value, global::System.Collections.Generic.Dictionary<string, int> genericParameter)
 		{
 			if (_histogramInstrument == null)
 			{
@@ -161,7 +161,7 @@ namespace Testing
 		}
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void UpDownCounter(int value, System.Collections.Generic.Dictionary<string, int> genericParameter)
+		public void UpDownCounter(int value, global::System.Collections.Generic.Dictionary<string, int> genericParameter)
 		{
 			if (_upDownCounterInstrument == null)
 			{
@@ -176,7 +176,7 @@ namespace Testing
 		}
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void ObservableCounter(System.Func<int> valueFunc, System.Collections.Generic.Dictionary<string, int> genericParameter)
+		public void ObservableCounter(global::System.Func<int> valueFunc, global::System.Collections.Generic.Dictionary<string, int> genericParameter)
 		{
 			if (_observableCounterInstrument != null)
 			{
@@ -193,7 +193,7 @@ namespace Testing
 		}
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void ObservableGauge(System.Func<int> valueFunc, System.Collections.Generic.Dictionary<string, int> genericParameter)
+		public void ObservableGauge(global::System.Func<int> valueFunc, global::System.Collections.Generic.Dictionary<string, int> genericParameter)
 		{
 			if (_observableGaugeInstrument != null)
 			{
@@ -210,7 +210,7 @@ namespace Testing
 		}
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public void ObservableUpDownCounter(System.Func<int> valueFunc, System.Collections.Generic.Dictionary<string, int> genericParameter)
+		public void ObservableUpDownCounter(global::System.Func<int> valueFunc, global::System.Collections.Generic.Dictionary<string, int> genericParameter)
 		{
 			if (_observableUpDownCounterInstrument != null)
 			{

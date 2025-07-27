@@ -42,7 +42,7 @@ static partial class ActivitySourceTargetClassEmitter
 			GenerationType.Activities,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.FullyQualifiedInterfaceName,
+			target.InterfaceType,
 			builder,
 			indent,
 			context.CancellationToken
@@ -73,7 +73,7 @@ static partial class ActivitySourceTargetClassEmitter
 			target.TelemetryGeneration,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.InterfaceName,
+			target.InterfaceType.TypeName,
 			target.FullNamespace,
 			context,
 			logger

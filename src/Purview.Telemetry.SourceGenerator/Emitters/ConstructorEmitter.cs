@@ -58,9 +58,9 @@ static class ConstructorEmitter
 		if (generationType.HasFlag(GenerationType.Logging))
 		{
 			builder
-				.Append(Constants.Logging.MicrosoftExtensions.ILogger.WithGlobal())
+				.Append(Constants.Logging.MicrosoftExtensions.ILogger)
 				.Append('<')
-				.Append(loggerFullyQualifiedInterfaceName!.WithGlobal())
+				.Append(loggerFullyQualifiedInterfaceName!)
 				.Append("> ")
 				.Append(LoggerParameterName);
 		}
@@ -71,7 +71,7 @@ static class ConstructorEmitter
 				builder.Append(", ");
 
 			builder
-				.Append(Constants.Metrics.SystemDiagnostics.IMeterFactory.WithGlobal())
+				.Append(Constants.Metrics.SystemDiagnostics.IMeterFactory)
 				.Append(' ')
 				.Append(Constants.Metrics.MeterFactoryParameterName);
 		}

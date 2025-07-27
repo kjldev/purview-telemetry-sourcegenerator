@@ -52,7 +52,7 @@ public interface ITestMetrics
 		await TestHelpers.Verify(
 			generationResult,
 			config: c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			validationCompilation: false
 		);
 	}
@@ -107,7 +107,7 @@ public interface ITestMetrics
 		await TestHelpers.Verify(
 			generationResult,
 			c => c.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			validationCompilation: false
 		);
 	}

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
+using Purview.Telemetry.SourceGenerator.Templates;
 
 namespace Purview.Telemetry.SourceGenerator.Records;
 
@@ -11,8 +12,7 @@ record ActivitySourceTarget(
 	string[] ParentClasses,
 	string? FullNamespace,
 	string? FullyQualifiedName,
-	string InterfaceName,
-	string FullyQualifiedInterfaceName,
+	PurviewTypeInfo InterfaceType,
 	ActivitySourceGenerationAttributeRecord? ActivitySourceGenerationAttribute,
 	string? ActivitySourceName,
 	ImmutableArray<ActivityBasedGenerationTarget> ActivityMethods,
@@ -34,8 +34,7 @@ record ActivitySourceTarget(
 			null!,
 			null,
 			null!,
-			null!,
-			null!,
+			Constants.Empty,
 			null,
 			null,
 			[],
@@ -48,8 +47,7 @@ record ActivitySourceTarget(
 
 record ActivityBasedGenerationTarget(
 	string MethodName,
-	string ReturnType,
-	bool IsNullableReturn,
+	PurviewTypeInfo ReturnType,
 	string ActivityOrEventName,
 	bool HasActivityParameter,
 	ImmutableArray<Location> Locations,
@@ -64,8 +62,7 @@ record ActivityBasedGenerationTarget(
 
 record ActivityBasedParameterTarget(
 	string ParameterName,
-	string ParameterType,
-	bool IsNullable,
+	PurviewTypeInfo ParameterType,
 	string GeneratedName,
 	ActivityParameterDestination ParamDestination,
 	bool SkipOnNullOrEmpty,

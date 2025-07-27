@@ -56,7 +56,7 @@ namespace Testing
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public bool Counter(System.Func<int> counterValue, int intParam, bool boolParam)
+		public bool Counter(global::System.Func<int> counterValue, int intParam, bool boolParam)
 		{
 			if (_counterInstrument != null)
 			{
@@ -76,7 +76,7 @@ namespace Testing
 		}
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public bool Gauge(System.Func<int> counterValue, int intParam, bool boolParam)
+		public bool Gauge(global::System.Func<int> counterValue, int intParam, bool boolParam)
 		{
 			if (_gaugeInstrument != null)
 			{
@@ -96,7 +96,7 @@ namespace Testing
 		}
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public bool UpDown(System.Func<int> counterValue, int intParam, bool boolParam)
+		public bool UpDown(global::System.Func<int> counterValue, int intParam, bool boolParam)
 		{
 			if (_upDownInstrument != null)
 			{

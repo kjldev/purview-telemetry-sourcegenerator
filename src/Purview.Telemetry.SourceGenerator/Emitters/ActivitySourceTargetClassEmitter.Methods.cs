@@ -62,11 +62,11 @@ partial class ActivitySourceTargetClassEmitter
 			.Append(indent, "static void ", withNewLine: false)
 			.Append(Constants.Activities.RecordExceptionMethodName)
 			.Append('(')
-			.Append(Constants.Activities.SystemDiagnostics.Activity.WithGlobal())
+			.Append(Constants.Activities.SystemDiagnostics.Activity)
 			.Append("? activity, ")
-			.Append(Constants.System.Exception.WithGlobal())
+			.Append(Constants.System.Exception)
 			.Append("? exception, ")
-			.Append(Constants.System.BoolKeyword)
+			.Append(Constants.System.BuiltInTypes.BoolKeyword)
 			.AppendLine(" escape)")
 			.Append(indent, '{');
 
@@ -83,12 +83,12 @@ partial class ActivitySourceTargetClassEmitter
 		builder
 			.Append(
 				indent,
-				Constants.Activities.SystemDiagnostics.ActivityTagsCollection.WithGlobal(),
+				Constants.Activities.SystemDiagnostics.ActivityTagsCollection,
 				withNewLine: false
 			)
 			.Append(' ')
 			.Append(tagsListVariableName)
-			.Append(" = new();");
+			.AppendLine(" = new();");
 
 		EmitExceptionParam(builder, indent, tagsListVariableName, "escape", "exception");
 
@@ -98,7 +98,7 @@ partial class ActivitySourceTargetClassEmitter
 			.AppendLine()
 			.Append(
 				indent,
-				Constants.Activities.SystemDiagnostics.ActivityEvent.WithGlobal(),
+				Constants.Activities.SystemDiagnostics.ActivityEvent,
 				withNewLine: false
 			)
 			.Append(' ')
@@ -184,9 +184,6 @@ partial class ActivitySourceTargetClassEmitter
 			.Append(indent, "public ", withNewLine: false)
 			.Append(methodTarget.ReturnType);
 
-		if (methodTarget.IsNullableReturn)
-			builder.Append('?');
-
 		builder.Append(' ').Append(methodTarget.MethodName).Append('(');
 
 		var index = 0;
@@ -194,12 +191,7 @@ partial class ActivitySourceTargetClassEmitter
 		{
 			context.CancellationToken.ThrowIfCancellationRequested();
 
-			builder.Append(parameter.ParameterType);
-
-			if (parameter.IsNullable)
-				builder.Append('?');
-
-			builder.Append(' ').Append(parameter.ParameterName);
+			builder.Append(parameter.ParameterType).Append(' ').Append(parameter.ParameterName);
 
 			if (index < methodTarget.Parameters.Length - 1)
 				builder.Append(", ");
@@ -233,7 +225,7 @@ partial class ActivitySourceTargetClassEmitter
 			if (methodTarget.TargetGenerationState.RaiseMultiGenerationTargetsNotSupported)
 			{
 				logger?.Debug(
-					$"Identified {target.InterfaceName}.{methodTarget.MethodName} as problematic as it has another target types."
+					$"Identified {target.InterfaceType.TypeName}.{methodTarget.MethodName} as problematic as it has another target types."
 				);
 
 				TelemetryDiagnostics.Report(
@@ -247,7 +239,7 @@ partial class ActivitySourceTargetClassEmitter
 			)
 			{
 				logger?.Debug(
-					$"Identified {target.InterfaceName}.{methodTarget.MethodName} as problematic as it is inferred."
+					$"Identified {target.InterfaceType.TypeName}.{methodTarget.MethodName} as problematic as it is inferred."
 				);
 
 				TelemetryDiagnostics.Report(
@@ -261,7 +253,7 @@ partial class ActivitySourceTargetClassEmitter
 		}
 
 		if (
-			methodTarget.ReturnType != Constants.System.VoidKeyword
+			methodTarget.ReturnType.SpecialType != SpecialType.System_Void
 			&& !Constants.Activities.SystemDiagnostics.Activity.Equals(methodTarget.ReturnType)
 		)
 		{

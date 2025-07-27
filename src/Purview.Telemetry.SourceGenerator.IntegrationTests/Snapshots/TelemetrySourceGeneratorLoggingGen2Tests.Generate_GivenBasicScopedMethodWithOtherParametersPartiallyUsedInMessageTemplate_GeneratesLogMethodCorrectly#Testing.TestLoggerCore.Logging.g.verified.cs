@@ -28,7 +28,7 @@ namespace Testing
 
 		[global::System.CodeDom.Compiler.GeneratedCodeAttribute("Purview.Telemetry.SourceGenerator", "0.1.0.0")]
 		[global::System.Runtime.CompilerServices.MethodImpl(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
-		public global::System.IDisposable? BasicScoped(int intValue, string? UNUSEDnullableStringValue, System.UInt32 uintValue)
+		public global::System.IDisposable? BasicScoped(int intValue, string? UNUSEDnullableStringValue, uint uintValue)
 		{
 			var state = global::Microsoft.Extensions.Logging.LoggerMessageHelper.ThreadLocalState;
 			state.ReserveTagSpace(4);

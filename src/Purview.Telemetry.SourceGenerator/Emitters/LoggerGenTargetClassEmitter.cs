@@ -42,7 +42,7 @@ static partial class LoggerGenTargetClassEmitter
 			GenerationType.Logging,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.FullyQualifiedInterfaceName,
+			target.InterfaceType,
 			builder,
 			indent,
 			context.CancellationToken
@@ -54,7 +54,7 @@ static partial class LoggerGenTargetClassEmitter
 			GenerationType.Logging,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.FullyQualifiedInterfaceName,
+			target.InterfaceType,
 			builder,
 			indent,
 			context,
@@ -85,7 +85,7 @@ static partial class LoggerGenTargetClassEmitter
 			target.TelemetryGeneration,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.InterfaceName,
+			target.InterfaceType.TypeName,
 			target.FullNamespace,
 			context,
 			logger
@@ -103,9 +103,9 @@ static partial class LoggerGenTargetClassEmitter
 
 		builder
 			.Append(indent + 1, "readonly ", withNewLine: false)
-			.Append(Constants.Logging.MicrosoftExtensions.ILogger.WithGlobal())
+			.Append(Constants.Logging.MicrosoftExtensions.ILogger)
 			.Append('<')
-			.Append(target.FullyQualifiedInterfaceName.WithGlobal())
+			.Append(target.InterfaceType)
 			.Append('>')
 			.Append(' ')
 			.Append(Constants.Logging.LoggerFieldName)

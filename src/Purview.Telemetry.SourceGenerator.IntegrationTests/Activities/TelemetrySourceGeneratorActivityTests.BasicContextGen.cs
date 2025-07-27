@@ -42,7 +42,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -102,7 +102,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -134,7 +134,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();
@@ -166,7 +166,7 @@ using System.Diagnostics;
 namespace Testing;
 
 [ActivitySource(""testing-activity-source"")]
-public interface ITestActivities 
+public interface ITestActivities
 {
 	[Activity]
 	System.Diagnostics.Activity? Activity();

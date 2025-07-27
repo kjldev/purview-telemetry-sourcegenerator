@@ -103,7 +103,7 @@ partial class ActivitySourceTargetClassEmitter
 			builder
 				.Append(
 					indent,
-					Constants.Activities.SystemDiagnostics.ActivityTagsCollection.WithGlobal(),
+					Constants.Activities.SystemDiagnostics.ActivityTagsCollection,
 					withNewLine: false
 				)
 				.Append(' ')
@@ -225,7 +225,7 @@ partial class ActivitySourceTargetClassEmitter
 			.AppendLine()
 			.Append(
 				indent,
-				Constants.Activities.SystemDiagnostics.ActivityEvent.WithGlobal(),
+				Constants.Activities.SystemDiagnostics.ActivityEvent,
 				withNewLine: false
 			)
 			.Append(' ')
@@ -272,7 +272,7 @@ partial class ActivitySourceTargetClassEmitter
 				.AppendLine()
 				.Append(indent, activityVariableName, withNewLine: false)
 				.Append(".SetStatus(")
-				.Append(Constants.Activities.ActivityStatusCodeMap[statusCode].WithGlobal());
+				.Append(Constants.Activities.ActivityStatusCodeMap[statusCode]);
 
 			// Error
 			if (statusCode == 2)

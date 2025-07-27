@@ -28,7 +28,7 @@ partial class TelemetrySourceGenerator
 		// Register
 		var activityTargetsPredicate = context
 			.SyntaxProvider.ForAttributeWithMetadataName(
-				Constants.Activities.ActivitySourceAttribute,
+				Constants.Activities.ActivitySourceAttribute.TypeInfo.FullyQualifiedName,
 				static (node, token) => PipelineHelpers.HasActivityTargetAttribute(node, token),
 				activityTargetTransform
 			)

@@ -82,7 +82,7 @@ static class EmitHelpers
 			.Append(indent, "sealed partial class ", withNewLine: false)
 			.Append(className)
 			.Append(" : ")
-			.Append(fullyQualifiedInterface.WithGlobal())
+			.Append(fullyQualifiedInterface)
 			.AppendLine()
 			.Append(indent, '{');
 

@@ -355,7 +355,7 @@ public interface ITestTelemetry
 		await TestHelpers.Verify(
 			generationResult,
 			s => s.ScrubInlineGuids(),
-			validateNonEmptyDiagnostics: true,
+			expectsDiagnostics: true,
 			validationCompilation: false
 		);
 	}

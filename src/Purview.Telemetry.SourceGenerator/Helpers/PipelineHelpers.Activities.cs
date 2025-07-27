@@ -2,6 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Purview.Telemetry.SourceGenerator.Records;
+using Purview.Telemetry.SourceGenerator.Templates;
 
 namespace Purview.Telemetry.SourceGenerator.Helpers;
 
@@ -108,8 +109,7 @@ partial class PipelineHelpers
 			ParentClasses: Utilities.GetParentClasses(interfaceDeclaration),
 			FullNamespace: fullNamespace,
 			FullyQualifiedName: fullNamespace + className,
-			InterfaceName: interfaceSymbol.Name,
-			FullyQualifiedInterfaceName: fullNamespace + interfaceSymbol.Name,
+			InterfaceType: PurviewTypeFactory.Create(interfaceSymbol),
 			ActivitySourceGenerationAttribute: activitySourceGenerationAttribute,
 			ActivitySourceName: activitySourceName,
 			ActivityTargetAttributeRecord: activitySourceAttribute,
@@ -183,7 +183,7 @@ partial class PipelineHelpers
 			);
 			var activityOrEventName =
 				activityAttribute?.Name.IsSet == true
-					? activityAttribute.Name.Value
+					? activityAttribute.Value.Name.Value
 					: eventAttribute?.Name.Value;
 
 			if (string.IsNullOrWhiteSpace(activityOrEventName))
@@ -207,16 +207,10 @@ partial class PipelineHelpers
 				.Where(m => m.ParamDestination == ActivityParameterDestination.Tag)
 				.ToImmutableArray();
 
-			var returnType = method.ReturnsVoid
-				? Constants.System.VoidKeyword
-				: Utilities.GetFullyQualifiedOrSystemName(method.ReturnType);
-
 			methodTargets.Add(
 				new(
 					MethodName: method.Name,
-					ReturnType: returnType,
-					IsNullableReturn: method.ReturnType.NullableAnnotation
-						== NullableAnnotation.Annotated,
+					ReturnType: PurviewTypeFactory.Create(method.ReturnType),
 					ActivityOrEventName: activityOrEventName!,
 					HasActivityParameter: parameters.Any(m =>
 						Constants.Activities.SystemDiagnostics.Activity.Equals(m.ParameterType)
@@ -257,6 +251,7 @@ partial class PipelineHelpers
 		{
 			token.ThrowIfCancellationRequested();
 
+			var parameterType = PurviewTypeFactory.Create(parameter.Type);
 			var destination = defaultToTags
 				? ActivityParameterDestination.Tag
 				: ActivityParameterDestination.Baggage;
@@ -302,39 +297,39 @@ partial class PipelineHelpers
 				logger?.Debug($"Found status description parameter: {parameter.Name}.");
 				destination = ActivityParameterDestination.StatusDescription;
 			}
-			else if (Constants.Activities.SystemDiagnostics.Activity.Equals(parameter.Type))
+			else if (Constants.Activities.SystemDiagnostics.Activity.Equals(parameterType))
 				destination = ActivityParameterDestination.Activity;
 			else if (
-				Constants.Activities.SystemDiagnostics.ActivityTagsCollection.Equals(parameter.Type)
+				Constants.Activities.SystemDiagnostics.ActivityTagsCollection.Equals(parameterType)
 				|| Constants.Activities.SystemDiagnostics.ActivityTagIEnumerable.Equals(
-					parameter.Type
+					parameterType
 				)
-				|| Constants.System.TagList.Equals(parameter.Type)
+				|| Constants.System.TagList.Equals(parameterType)
 			)
 				destination = ActivityParameterDestination.TagsEnumerable;
 			else if (
-				Constants.Activities.SystemDiagnostics.ActivityContext.Equals(parameter.Type)
+				Constants.Activities.SystemDiagnostics.ActivityContext.Equals(parameterType)
 				|| (
 					parameter.Name == Constants.Activities.ParentIdParameterName
-					&& Utilities.IsString(parameter.Type)
+					&& parameterType.SpecialType == SpecialType.System_String
 				)
 			)
 				destination = ActivityParameterDestination.ParentContextOrId;
 			else if (
-				Constants.Activities.SystemDiagnostics.ActivityLinkArray.Equals(parameter.Type)
+				Constants.Activities.SystemDiagnostics.ActivityLinkArray.Equals(parameterType)
 				|| Constants.Activities.SystemDiagnostics.ActivityLinkIEnumerable.Equals(
-					parameter.Type
+					parameterType
 				)
 			)
 				destination = ActivityParameterDestination.LinksEnumerable;
 			else if (
 				parameter.Name == Constants.Activities.StartTimeParameterName
-				&& Constants.System.DateTimeOffset.Equals(parameter.Type)
+				&& Constants.System.DateTimeOffset.Equals(parameterType)
 			)
 				destination = ActivityParameterDestination.StartTime;
 			else if (
 				parameter.Name == Constants.Activities.TimeStampParameterName
-				&& Constants.System.DateTimeOffset.Equals(parameter.Type)
+				&& Constants.System.DateTimeOffset.Equals(parameterType)
 			)
 				destination = ActivityParameterDestination.Timestamp;
 			else
@@ -353,7 +348,6 @@ partial class PipelineHelpers
 				);
 
 			var parameterName = parameter.Name;
-			var parameterType = Utilities.GetFullyQualifiedOrSystemName(parameter.Type);
 			var generatedName = GenerateParameterName(
 				tagOrBaggageAttribute?.Name.Value ?? parameterName,
 				prefix,
@@ -364,7 +358,6 @@ partial class PipelineHelpers
 				new(
 					ParameterName: parameterName,
 					ParameterType: parameterType,
-					IsNullable: parameter.Type.NullableAnnotation == NullableAnnotation.Annotated,
 					IsException: Utilities.IsExceptionType(parameter.Type),
 					GeneratedName: generatedName,
 					ParamDestination: destination,

@@ -8,12 +8,11 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 
 static partial class MeterTargetClassEmitter
 {
-	static readonly string DictionaryStringObject = Constants
-		.System.Dictionary.MakeGeneric(
-			Constants.System.StringKeyword,
-			Constants.System.ObjectKeyword.WithNullable()
-		)
-		.WithGlobal();
+	static readonly PurviewTypeInfo DictionaryStringObjectType =
+		Constants.System.Dictionary.MakeGeneric(
+			Constants.System.BuiltInTypes.String,
+			Constants.System.BuiltInTypes.Object.WithNullable()
+		);
 
 	const string MeterFieldName = "_meter";
 	const string PartialMeterTagsMethod = "PopulateMeterTags";
@@ -52,7 +51,7 @@ static partial class MeterTargetClassEmitter
 			GenerationType.Metrics,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.FullyQualifiedInterfaceName,
+			target.InterfaceType,
 			builder,
 			indent,
 			context.CancellationToken
@@ -63,7 +62,7 @@ static partial class MeterTargetClassEmitter
 			GenerationType.Metrics,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.FullyQualifiedInterfaceName,
+			target.InterfaceType,
 			builder,
 			indent,
 			context,
@@ -95,7 +94,7 @@ static partial class MeterTargetClassEmitter
 			target.TelemetryGeneration,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.InterfaceName,
+			target.InterfaceType.TypeName,
 			target.FullNamespace,
 			context,
 			logger

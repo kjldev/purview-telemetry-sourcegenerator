@@ -28,7 +28,8 @@ namespace Testing
 				return;
 			}
 
-			global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();			tagsCollection.Add("exception.escaped", escape);
+			global::System.Diagnostics.ActivityTagsCollection tagsCollection = new();
+			tagsCollection.Add("exception.escaped", escape);
 			tagsCollection.Add("exception.message", exception.Message);
 			tagsCollection.Add("exception.type", exception.GetType().FullName);
 			tagsCollection.Add("exception.stacktrace", exception.StackTrace);

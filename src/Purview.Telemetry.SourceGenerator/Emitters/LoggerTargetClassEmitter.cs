@@ -42,7 +42,7 @@ static partial class LoggerTargetClassEmitter
 			GenerationType.Logging,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.FullyQualifiedInterfaceName,
+			target.InterfaceType,
 			builder,
 			indent,
 			context.CancellationToken
@@ -54,7 +54,7 @@ static partial class LoggerTargetClassEmitter
 			GenerationType.Logging,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.FullyQualifiedInterfaceName,
+			target.InterfaceType,
 			builder,
 			indent,
 			context,
@@ -85,7 +85,7 @@ static partial class LoggerTargetClassEmitter
 			target.TelemetryGeneration,
 			target.GenerationType,
 			target.ClassNameToGenerate,
-			target.InterfaceName,
+			target.InterfaceType.TypeName,
 			target.FullNamespace,
 			context,
 			logger
