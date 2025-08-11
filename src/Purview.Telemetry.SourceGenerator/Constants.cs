@@ -30,16 +30,8 @@ static partial class Constants
 		RegexOptions.ExplicitCapture | RegexOptions.Compiled | RegexOptions.IgnorePatternWhitespace
 	);
 
-	public static TemplateInfo[] GetAllTemplates()
-	{
-		return
-		[
-			.. Activities.GetTemplates(),
-			.. Logging.GetTemplates(),
-			.. Metrics.GetTemplates(),
-			.. Shared.GetTemplates(),
-		];
-	}
+	public static string[] GetEmbeddedFileNames() =>
+		["ActivityTypes", "LoggingTypes", "MetricTypes", "SharedTypes"];
 
 	public static readonly PurviewTypeInfo Empty = PurviewTypeFactory.Create(
 		"Fake.Fake.Fake.Fake.Empty"
@@ -47,18 +39,14 @@ static partial class Constants
 
 	public static partial class Shared
 	{
-		public static readonly TemplateInfo TagAttribute = TemplateInfo.Create(
+		public static readonly PurviewTypeInfo TagAttribute = PurviewTypeFactory.Create(
 			"Purview.Telemetry.TagAttribute"
 		);
-		public static readonly TemplateInfo ExcludeAttribute = TemplateInfo.Create(
+		public static readonly PurviewTypeInfo ExcludeAttribute = PurviewTypeFactory.Create(
 			"Purview.Telemetry.ExcludeAttribute"
 		);
-		public static readonly TemplateInfo TelemetryGenerationAttribute = TemplateInfo.Create(
-			"Purview.Telemetry.TelemetryGenerationAttribute"
-		);
-
-		public static TemplateInfo[] GetTemplates() =>
-			[TagAttribute, ExcludeAttribute, TelemetryGenerationAttribute];
+		public static readonly PurviewTypeInfo TelemetryGenerationAttribute =
+			PurviewTypeFactory.Create("Purview.Telemetry.TelemetryGenerationAttribute");
 	}
 
 	public static partial class DependencyInjection

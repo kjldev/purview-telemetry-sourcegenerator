@@ -179,6 +179,8 @@ static partial class SharedHelpers
 		)
 			return false;
 
+		var hasDiagnostic = attributeSyntax.ContainsDiagnostics;
+
 		try
 		{
 			var diagnostics = semanticModel.GetDiagnostics(attributeSyntax.Span, cancellationToken);
@@ -190,7 +192,7 @@ static partial class SharedHelpers
 
 			return diagnostics.Any(diagnostic => diagnostic.Severity == DiagnosticSeverity.Error);
 		}
-		catch (ArgumentException)
+		catch (ArgumentException ex)
 		{
 			// For partial interfaces or other cases where the span might be invalid,
 			// fall back to getting diagnostics without a span

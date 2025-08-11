@@ -295,7 +295,7 @@ partial class MeterTargetClassEmitter
 
 		indent++;
 
-		var tagVariableName = Utilities.LowercaseFirstChar(methodTarget.MethodName + "TagList");
+		var tagVariableName = Utilities.LowerCaseFirstChar(methodTarget.MethodName + "TagList");
 		builder
 			.Append(indent, Constants.System.TagList, withNewLine: false)
 			.Append(' ')

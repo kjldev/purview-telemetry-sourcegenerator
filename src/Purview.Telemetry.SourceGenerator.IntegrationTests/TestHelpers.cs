@@ -17,11 +17,8 @@ static partial class TestHelpers
 	static readonly string NamespaceRoot = typeof(TestHelpers).Namespace!;
 
 	public const string DefaultUsingSet =
-		@"
-using System;
-using Purview.Telemetry;
-
-";
+		@"using System;
+using Purview.Telemetry;";
 
 	public static string Wrap(this string value, char c = '"') => c + value + c;
 
@@ -166,9 +163,9 @@ using Purview.Telemetry;
 			{
 				if (autoVerifyTemplates)
 				{
-					foreach (var template in Constants.GetAllTemplates())
+					foreach (var template in Constants.GetEmbeddedFileNames())
 					{
-						var potentialName = $"#{template.Name}.g.";
+						var potentialName = $"#{template}.g.cs";
 						if (file.IndexOf(potentialName, StringComparison.Ordinal) > -1)
 							return true;
 					}
@@ -184,7 +181,7 @@ using Purview.Telemetry;
 
 		config?.Invoke(verifierTask);
 
-		//verifierTask = verifierTask.AutoVerify();
+		// verifierTask = verifierTask.AutoVerify();
 
 		await verifierTask;
 
