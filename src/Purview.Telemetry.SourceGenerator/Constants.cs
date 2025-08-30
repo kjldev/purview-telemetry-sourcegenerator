@@ -58,8 +58,8 @@ static partial class Constants
 		);
 
 		// Multi-target attributes
-		public static readonly TemplateInfo MultiTargetTelemetryAttribute = TemplateInfo.Create(
-			"Purview.Telemetry.MultiTargetTelemetryAttribute"
+		public static readonly TemplateInfo TelemetryAttribute = TemplateInfo.Create(
+			"Purview.Telemetry.TelemetryAttribute"
 		);
 		public static readonly TemplateInfo EnableMultiTargetGenerationAttribute = TemplateInfo.Create(
 			"Purview.Telemetry.EnableMultiTargetGenerationAttribute"

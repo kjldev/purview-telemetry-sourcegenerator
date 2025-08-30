@@ -29,10 +29,10 @@ partial class TelemetrySourceGenerator
 				: (context, cancellationToken) =>
 					PipelineHelpers.BuildMultiTargetTransform(context, logger, cancellationToken);
 
-		// Register for methods with MultiTargetTelemetryAttribute
+		// Register for methods with TelemetryAttribute
 		var multiTargetMethodsPredicate = context
 			.SyntaxProvider.ForAttributeWithMetadataName(
-				Constants.Shared.MultiTargetTelemetryAttribute.TypeInfo.FullyQualifiedName,
+				Constants.Shared.TelemetryAttribute.TypeInfo.FullyQualifiedName,
 				static (node, token) => PipelineHelpers.HasMultiTargetAttribute(node, token),
 				multiTargetTransform
 			)

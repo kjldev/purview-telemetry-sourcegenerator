@@ -11,12 +11,12 @@ namespace Purview.Telemetry;
 	"Design",
 	"CA1019:Define accessors for attribute arguments"
 )]
-sealed class MultiTargetTelemetryAttribute : global::System.Attribute
+sealed class TelemetryAttribute : global::System.Attribute
 {
 	/// <summary>
-	/// Initializes a new instance of the <see cref="MultiTargetTelemetryAttribute"/> class.
+	/// Initializes a new instance of the <see cref="TelemetryAttribute"/> class.
 	/// </summary>
-	public MultiTargetTelemetryAttribute() { }
+	public TelemetryAttribute() { }
 
 	/// <summary>
 	/// Determines if Activity telemetry should be generated for this method.

@@ -42,7 +42,7 @@ static partial class PipelineHelpers
 
 		if (!multiTargetConfig.IsMultiTargetEnabled)
 		{
-			logger?.Debug($"Method {methodSymbol.Name} has MultiTargetTelemetryAttribute but multi-target is not enabled");
+			logger?.Debug($"Method {methodSymbol.Name} has TelemetryAttribute but multi-target is not enabled");
 			return null;
 		}
 

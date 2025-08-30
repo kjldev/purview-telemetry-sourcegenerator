@@ -2,7 +2,7 @@ namespace Purview.Telemetry;
 
 /// <summary>
 /// Assembly-level attribute to enable multi-target telemetry generation.
-/// When applied to an assembly, allows methods to use <see cref="MultiTargetTelemetryAttribute"/>
+/// When applied to an assembly, allows methods to use <see cref="TelemetryAttribute"/>
 /// and related exclusion attributes.
 /// </summary>
 [global::System.AttributeUsage(global::System.AttributeTargets.Assembly, AllowMultiple = false)]

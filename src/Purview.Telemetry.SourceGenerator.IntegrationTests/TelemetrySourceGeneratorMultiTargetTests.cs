@@ -20,7 +20,7 @@ public class TelemetrySourceGeneratorMultiTargetTests(ITestOutputHelper testOutp
 			[Purview.Telemetry.TelemetryGeneration]
 			public partial interface ITestService
 			{
-				[Purview.Telemetry.MultiTargetTelemetry(
+				[Purview.Telemetry.Telemetry(
 					GenerateActivity = true,
 					GenerateLogging = true,
 					ActivityName = "test_operation",
@@ -49,7 +49,7 @@ public class TelemetrySourceGeneratorMultiTargetTests(ITestOutputHelper testOutp
 			[Purview.Telemetry.TelemetryGeneration]
 			public partial interface ITestService
 			{
-				[Purview.Telemetry.MultiTargetTelemetry(
+				[Purview.Telemetry.Telemetry(
 					GenerateActivity = true,
 					GenerateLogging = true,
 					GenerateMetrics = true
@@ -82,7 +82,7 @@ public class TelemetrySourceGeneratorMultiTargetTests(ITestOutputHelper testOutp
 			[Purview.Telemetry.TelemetryGeneration]
 			public partial interface ITestService
 			{
-				[Purview.Telemetry.MultiTargetTelemetry(
+				[Purview.Telemetry.Telemetry(
 					GenerateActivity = true,
 					GenerateLogging = true
 				)]
