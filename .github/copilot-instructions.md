@@ -150,7 +150,7 @@ When `EmitCompilerGeneratedFiles` is true (as in the sample app), generated file
 
 - Version is managed in `package.json` (currently 3.2.4)
 
-- `bun .build/update-version.js` synchronizes version across all files
+- `bun .build/update-version.ts` synchronizes version across all files
 - `make release-final` and `make release-pre` create new releases using commit-and-tag-version
 
 ## CRITICAL Timing and Cancellation Warnings
