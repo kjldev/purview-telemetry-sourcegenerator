@@ -161,21 +161,7 @@ using Purview.Telemetry;
 			.DisableRequireUniquePrefix()
 			.DisableDateCounting()
 			//.UniqueForTargetFrameworkAndVersion(typeof(TestHelpers).Assembly)
-			.ScrubInlineDateTimeOffsets("yyyy-MM-dd HH:mm:ss zzzz") // 2024-22-02 14:43:22 +00:00
-			.AutoVerify(file =>
-			{
-				if (autoVerifyTemplates)
-				{
-					foreach (var template in Constants.GetAllTemplates())
-					{
-						var potentialName = $"#{template.Name}.g.";
-						if (file.IndexOf(potentialName, StringComparison.Ordinal) > -1)
-							return true;
-					}
-				}
-
-				return false;
-			});
+			.ScrubInlineDateTimeOffsets("yyyy-MM-dd HH:mm:ss zzzz"); // 2024-22-02 14:43:22 +00:00
 
 		if (parameters.Length > 0)
 			verifierTask = verifierTask.UseTextForParameters(
