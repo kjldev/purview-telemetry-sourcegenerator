@@ -1,0 +1,58 @@
+namespace Purview.Telemetry;
+
+/// <summary>
+/// Excludes a parameter from Activity telemetry generation when using multi-target generation.
+/// Only applicable when the method has <see cref="MultiTargetTelemetryAttribute"/> with 
+/// <see cref="MultiTargetTelemetryAttribute.GenerateActivity"/> set to true.
+/// </summary>
+[global::System.AttributeUsage(global::System.AttributeTargets.Parameter, AllowMultiple = false)]
+[global::System.Diagnostics.Conditional("PURVIEW_TELEMETRY_ATTRIBUTES")]
+[global::System.Diagnostics.CodeAnalysis.SuppressMessage(
+	"Design",
+	"CA1019:Define accessors for attribute arguments"
+)]
+sealed class ExcludeFromActivityAttribute : global::System.Attribute
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ExcludeFromActivityAttribute"/> class.
+	/// </summary>
+	public ExcludeFromActivityAttribute() { }
+}
+
+/// <summary>
+/// Excludes a parameter from Logging telemetry generation when using multi-target generation.
+/// Only applicable when the method has <see cref="MultiTargetTelemetryAttribute"/> with 
+/// <see cref="MultiTargetTelemetryAttribute.GenerateLogging"/> set to true.
+/// </summary>
+[global::System.AttributeUsage(global::System.AttributeTargets.Parameter, AllowMultiple = false)]
+[global::System.Diagnostics.Conditional("PURVIEW_TELEMETRY_ATTRIBUTES")]
+[global::System.Diagnostics.CodeAnalysis.SuppressMessage(
+	"Design",
+	"CA1019:Define accessors for attribute arguments"
+)]
+sealed class ExcludeFromLoggingAttribute : global::System.Attribute
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ExcludeFromLoggingAttribute"/> class.
+	/// </summary>
+	public ExcludeFromLoggingAttribute() { }
+}
+
+/// <summary>
+/// Excludes a parameter from Metrics telemetry generation when using multi-target generation.
+/// Only applicable when the method has <see cref="MultiTargetTelemetryAttribute"/> with 
+/// <see cref="MultiTargetTelemetryAttribute.GenerateMetrics"/> set to true.
+/// </summary>
+[global::System.AttributeUsage(global::System.AttributeTargets.Parameter, AllowMultiple = false)]
+[global::System.Diagnostics.Conditional("PURVIEW_TELEMETRY_ATTRIBUTES")]
+[global::System.Diagnostics.CodeAnalysis.SuppressMessage(
+	"Design",
+	"CA1019:Define accessors for attribute arguments"
+)]
+sealed class ExcludeFromMetricsAttribute : global::System.Attribute
+{
+	/// <summary>
+	/// Initializes a new instance of the <see cref="ExcludeFromMetricsAttribute"/> class.
+	/// </summary>
+	public ExcludeFromMetricsAttribute() { }
+}

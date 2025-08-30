@@ -8,17 +8,169 @@ namespace Purview.Telemetry.SourceGenerator.Helpers;
 
 static partial class Utilities
 {
+	public static MultiTargetConfiguration GetMultiTargetConfiguration(
+		IMethodSymbol method,
+		IAssemblySymbol assembly
+	)
+	{
+		// Check if assembly has EnableMultiTargetGeneration attribute
+		var assemblyAttributes = assembly.GetAttributes();
+		var enableMultiTargetAttr = assemblyAttributes.FirstOrDefault(attr =>
+			attr.AttributeClass != null &&
+			PurviewTypeFactory.Create(attr.AttributeClass) == Constants.Shared.EnableMultiTargetGenerationAttribute);
+
+		if (enableMultiTargetAttr == null)
+		{
+			return new MultiTargetConfiguration(
+				IsMultiTargetEnabled: false,
+				BackwardsCompatibility: true,
+				TargetTypes: GenerationType.None,
+				ActivityName: null,
+				ActivityKind: 0,
+				LogLevel: 2, // Information
+				LogMessage: null,
+				LogEventId: null
+			);
+		}
+
+		// Get backwards compatibility setting
+		var backwardsCompatibility = true;
+		if (enableMultiTargetAttr.NamedArguments.Any())
+		{
+			var backCompatArg = enableMultiTargetAttr.NamedArguments.FirstOrDefault(kv => 
+				kv.Key.Equals("BackwardsCompatibility", StringComparison.OrdinalIgnoreCase));
+			if (backCompatArg.Key != null && backCompatArg.Value.Value is bool backCompat)
+				backwardsCompatibility = backCompat;
+		}
+
+		// Check if method has MultiTargetTelemetry attribute
+		var methodAttributes = method.GetAttributes();
+		var multiTargetAttr = methodAttributes.FirstOrDefault(attr =>
+			attr.AttributeClass != null &&
+			PurviewTypeFactory.Create(attr.AttributeClass) == Constants.Shared.MultiTargetTelemetryAttribute);
+
+		if (multiTargetAttr == null)
+		{
+			return new MultiTargetConfiguration(
+				IsMultiTargetEnabled: false,
+				BackwardsCompatibility: backwardsCompatibility,
+				TargetTypes: GenerationType.None,
+				ActivityName: null,
+				ActivityKind: 0,
+				LogLevel: 2,
+				LogMessage: null,
+				LogEventId: null
+			);
+		}
+
+		// Parse multi-target configuration
+		var generateActivity = false;
+		var generateLogging = false;
+		var generateMetrics = false;
+		string? activityName = null;
+		var activityKind = 0; // Internal
+		var logLevel = 2; // Information
+		string? logMessage = null;
+		int? logEventId = null;
+
+		// Parse named arguments
+		foreach (var namedArg in multiTargetAttr.NamedArguments)
+		{
+			var value = namedArg.Value.Value;
+			switch (namedArg.Key)
+			{
+				case "GenerateActivity":
+					generateActivity = value is bool ba && ba;
+					break;
+				case "GenerateLogging":
+					generateLogging = value is bool bl && bl;
+					break;
+				case "GenerateMetrics":
+					generateMetrics = value is bool bm && bm;
+					break;
+				case "ActivityName":
+					activityName = value as string;
+					break;
+				case "ActivityKind":
+					if (value is int ak) activityKind = ak;
+					break;
+				case "LogLevel":
+					if (value is int ll) logLevel = ll;
+					break;
+				case "LogMessage":
+					logMessage = value as string;
+					break;
+				case "LogEventId":
+					if (value is int lei) logEventId = lei;
+					break;
+			}
+		}
+
+		var targetTypes = GenerationType.None;
+		if (generateActivity) targetTypes |= GenerationType.Activities;
+		if (generateLogging) targetTypes |= GenerationType.Logging;
+		if (generateMetrics) targetTypes |= GenerationType.Metrics;
+
+		return new MultiTargetConfiguration(
+			IsMultiTargetEnabled: targetTypes != GenerationType.None,
+			BackwardsCompatibility: backwardsCompatibility,
+			TargetTypes: targetTypes,
+			ActivityName: activityName,
+			ActivityKind: activityKind,
+			LogLevel: logLevel,
+			LogMessage: logMessage,
+			LogEventId: logEventId
+		);
+	}
+
+	public static ParameterExclusions GetParameterExclusions(IParameterSymbol parameter)
+	{
+		var attributes = parameter.GetAttributes();
+		var excludeFromActivity = attributes.Any(attr =>
+			attr.AttributeClass != null &&
+			PurviewTypeFactory.Create(attr.AttributeClass) == Constants.Shared.ExcludeFromActivityAttribute);
+		var excludeFromLogging = attributes.Any(attr =>
+			attr.AttributeClass != null &&
+			PurviewTypeFactory.Create(attr.AttributeClass) == Constants.Shared.ExcludeFromLoggingAttribute);
+		var excludeFromMetrics = attributes.Any(attr =>
+			attr.AttributeClass != null &&
+			PurviewTypeFactory.Create(attr.AttributeClass) == Constants.Shared.ExcludeFromMetricsAttribute);
+
+		return new ParameterExclusions(excludeFromActivity, excludeFromLogging, excludeFromMetrics);
+	}
+
 	public static TargetGeneration IsValidGenerationTarget(
 		IMethodSymbol method,
 		GenerationType generationType,
 		GenerationType requestedType
 	)
 	{
+		return IsValidGenerationTarget(method, generationType, requestedType, null);
+	}
+
+	public static TargetGeneration IsValidGenerationTarget(
+		IMethodSymbol method,
+		GenerationType generationType,
+		GenerationType requestedType,
+		IAssemblySymbol? assembly
+	)
+	{
+		// Check for multi-target configuration first
+		MultiTargetConfiguration? multiTargetConfig = null;
+		if (assembly != null)
+		{
+			multiTargetConfig = GetMultiTargetConfiguration(method, assembly);
+		}
+
 		var attributes = method
 			.GetAttributes()
 			.Where(m => m.AttributeClass != null)
 			.Select(m => PurviewTypeFactory.Create(m.AttributeClass!))
 			.ToArray();
+		
+		// Check for MultiTargetTelemetryAttribute
+		var hasMultiTargetAttribute = attributes.Any(m => m == Constants.Shared.MultiTargetTelemetryAttribute);
+		
 		var activityCount = attributes.Count(static m =>
 			Constants.Activities.ActivityAttribute == m
 			|| Constants.Activities.EventAttribute == m
@@ -46,20 +198,62 @@ static partial class Utilities
 		var count = activityCount + loggingCount + metricsCount;
 		var inferenceNotSupportedWithMultiTargeting = false;
 		var multiGenerationTargetsNotSupported = false;
-		if (generationType != requestedType)
-		{
-			// This means it's multi-target generation so we need everything to be explicit.
-			if (count == 0)
-				inferenceNotSupportedWithMultiTargeting = true;
-		}
 
-		if (count > 1)
-			multiGenerationTargetsNotSupported = true;
+		// Handle multi-target scenario
+		if (hasMultiTargetAttribute && multiTargetConfig?.IsMultiTargetEnabled == true)
+		{
+			// Multi-target generation is enabled - allow multiple targets
+			// In this case, the validation is different - we support multiple target types
+			if (count > 0)
+			{
+				// If they have both multi-target attribute AND traditional attributes, that's an error
+				multiGenerationTargetsNotSupported = true;
+			}
+			else
+			{
+				// Multi-target attribute without traditional attributes - this is valid
+				// The target validation will be based on the multi-target configuration
+				var targetTypes = multiTargetConfig.TargetTypes;
+				if (targetTypes.HasFlag(requestedType))
+				{
+					// The requested type is enabled in the multi-target configuration
+					return new(
+						IsValid: true,
+						RaiseInferenceNotSupportedWithMultiTargeting: false,
+						RaiseMultiGenerationTargetsNotSupported: false
+					);
+				}
+				else
+				{
+					// The requested type is not enabled in the multi-target configuration
+					return new(
+						IsValid: false,
+						RaiseInferenceNotSupportedWithMultiTargeting: false,
+						RaiseMultiGenerationTargetsNotSupported: false
+					);
+				}
+			}
+		}
+		else
+		{
+			// Traditional single-target logic
+			if (generationType != requestedType)
+			{
+				// This means it's multi-target generation so we need everything to be explicit.
+				if (count == 0)
+					inferenceNotSupportedWithMultiTargeting = true;
+			}
+
+			if (count > 1)
+				multiGenerationTargetsNotSupported = true;
+		}
 
 		var isValid =
 			!multiGenerationTargetsNotSupported && !inferenceNotSupportedWithMultiTargeting;
-		if (isValid)
+		
+		if (isValid && !hasMultiTargetAttribute)
 		{
+			// Traditional validation logic for single-target scenarios
 			if (
 				generationType.HasFlag(GenerationType.Activities)
 				&& requestedType == GenerationType.Activities

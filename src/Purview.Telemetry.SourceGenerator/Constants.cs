@@ -57,8 +57,34 @@ static partial class Constants
 			"Purview.Telemetry.TelemetryGenerationAttribute"
 		);
 
+		// Multi-target attributes
+		public static readonly TemplateInfo MultiTargetTelemetryAttribute = TemplateInfo.Create(
+			"Purview.Telemetry.MultiTargetTelemetryAttribute"
+		);
+		public static readonly TemplateInfo EnableMultiTargetGenerationAttribute = TemplateInfo.Create(
+			"Purview.Telemetry.EnableMultiTargetGenerationAttribute"
+		);
+		public static readonly TemplateInfo ExcludeFromActivityAttribute = TemplateInfo.Create(
+			"Purview.Telemetry.ExcludeFromActivityAttribute"
+		);
+		public static readonly TemplateInfo ExcludeFromLoggingAttribute = TemplateInfo.Create(
+			"Purview.Telemetry.ExcludeFromLoggingAttribute"
+		);
+		public static readonly TemplateInfo ExcludeFromMetricsAttribute = TemplateInfo.Create(
+			"Purview.Telemetry.ExcludeFromMetricsAttribute"
+		);
+
 		public static TemplateInfo[] GetTemplates() =>
-			[TagAttribute, ExcludeAttribute, TelemetryGenerationAttribute];
+			[
+				TagAttribute, 
+				ExcludeAttribute, 
+				TelemetryGenerationAttribute,
+				MultiTargetTelemetryAttribute,
+				EnableMultiTargetGenerationAttribute,
+				ExcludeFromActivityAttribute,
+				ExcludeFromLoggingAttribute,
+				ExcludeFromMetricsAttribute
+			];
 	}
 
 	public static partial class DependencyInjection
