@@ -1,3 +1,6 @@
+/*
+// TODO: Re-enable after implementing complete multi-target functionality
+
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Purview.Telemetry.SourceGenerator.Emitters;
@@ -143,3 +146,4 @@ partial class TelemetrySourceGenerator
 		logger?.Debug($"Generating Metrics for multi-target method: {method.MethodName}");
 	}
 }
+*/

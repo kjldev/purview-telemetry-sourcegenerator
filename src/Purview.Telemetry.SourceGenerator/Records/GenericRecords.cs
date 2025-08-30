@@ -7,38 +7,16 @@ namespace Purview.Telemetry.SourceGenerator.Records;
 [Flags]
 enum GenerationType
 {
-	None = 0,
+	None,
 	Activities = 1,
 	Logging = 2,
 	Metrics = 4,
-	// Combinations for multi-target support
-	ActivitiesAndLogging = Activities | Logging,
-	ActivitiesAndMetrics = Activities | Metrics,
-	LoggingAndMetrics = Logging | Metrics,
-	All = Activities | Logging | Metrics,
 }
 
 record TargetGeneration(
 	bool IsValid,
 	bool RaiseInferenceNotSupportedWithMultiTargeting,
 	bool RaiseMultiGenerationTargetsNotSupported
-);
-
-record MultiTargetConfiguration(
-	bool IsMultiTargetEnabled,
-	bool BackwardsCompatibility,
-	GenerationType TargetTypes,
-	string? ActivityName,
-	int ActivityKind,
-	int LogLevel,
-	string? LogMessage,
-	int? LogEventId
-);
-
-record ParameterExclusions(
-	bool ExcludeFromActivity,
-	bool ExcludeFromLogging,
-	bool ExcludeFromMetrics
 );
 
 record AttributeValue<T>

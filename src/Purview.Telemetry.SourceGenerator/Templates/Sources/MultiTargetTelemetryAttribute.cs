@@ -43,13 +43,13 @@ sealed class MultiTargetTelemetryAttribute : global::System.Attribute
 	/// Optional activity kind for the Activity. Defaults to Internal.
 	/// Only used when <see cref="GenerateActivity"/> is true.
 	/// </summary>
-	public global::System.Diagnostics.ActivityKind ActivityKind { get; set; } = global::System.Diagnostics.ActivityKind.Internal;
+	public global::System.Diagnostics.ActivityKind ActivityKind { get; set; }
 
 	/// <summary>
-	/// Optional log level for the Logging telemetry. Defaults to Information.
+	/// Optional log level for the Logging telemetry. Use Microsoft.Extensions.Logging.LogLevel values.
 	/// Only used when <see cref="GenerateLogging"/> is true.
 	/// </summary>
-	public global::Microsoft.Extensions.Logging.LogLevel LogLevel { get; set; } = global::Microsoft.Extensions.Logging.LogLevel.Information;
+	public int LogLevel { get; set; }
 
 	/// <summary>
 	/// Optional log message template for the Logging telemetry.

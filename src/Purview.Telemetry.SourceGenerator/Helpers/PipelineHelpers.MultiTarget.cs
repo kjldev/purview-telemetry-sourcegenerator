@@ -1,3 +1,6 @@
+/*
+// TODO: Re-enable after implementing complete multi-target functionality
+
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -169,3 +172,4 @@ static partial class PipelineHelpers
 		});
 	}
 }
+*/

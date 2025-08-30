@@ -78,12 +78,7 @@ static partial class Constants
 			[
 				TagAttribute, 
 				ExcludeAttribute, 
-				TelemetryGenerationAttribute,
-				MultiTargetTelemetryAttribute,
-				EnableMultiTargetGenerationAttribute,
-				ExcludeFromActivityAttribute,
-				ExcludeFromLoggingAttribute,
-				ExcludeFromMetricsAttribute
+				TelemetryGenerationAttribute
 			];
 	}
 
