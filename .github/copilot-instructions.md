@@ -71,7 +71,7 @@ Always run these validation steps before committing:
 - `make test` (takes 42 seconds)
 - Sample app build and test (takes 22 seconds total)
 
-The CI pipeline (`./github/workflows/ci.yml`) runs the same dotnet restore → build → test workflow.
+The CI pipeline (`./.github/workflows/ci.yml`) runs the same dotnet restore → build → test workflow.
 
 ## Common Tasks
 
