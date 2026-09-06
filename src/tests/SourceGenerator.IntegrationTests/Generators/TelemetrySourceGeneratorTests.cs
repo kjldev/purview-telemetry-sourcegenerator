@@ -56,7 +56,7 @@ namespace Testing;
 		var generationResult = await GenerateAsync(empty, cancellationToken: cancellationToken);
 
 		// Assert
-		var autoCounterAttribute = generationResult.GetSource("Purview.Telemetry.AutoCounterAttribute.g.cs");
+		var autoCounterAttribute = generationResult.GetSource("AutoCounterAttribute.g.cs");
 		await Assert
 			.That(autoCounterAttribute)
 			.ContainsGeneratedCode("#pragma warning disable CS8625")
@@ -67,7 +67,7 @@ namespace Testing;
 			.IsFalse()
 			.Because("missing-documentation warnings must be resolved with XML summaries, not pragmas");
 
-		var targetsEnum = generationResult.GetSource("Purview.Telemetry.Targets.g.cs");
+		var targetsEnum = generationResult.GetSource("Targets.g.cs");
 		await Assert
 			.That(targetsEnum)
 			.ContainsGeneratedCode("/// <summary>Excludes logging targets.</summary>")

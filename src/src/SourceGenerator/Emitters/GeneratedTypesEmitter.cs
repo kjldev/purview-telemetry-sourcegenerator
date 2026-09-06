@@ -178,7 +178,7 @@ static class GeneratedTypesEmitter
 
 			emitter.Emitter(writer, emitter.Type);
 
-			context.AddSource($"{emitter.Type.MetadataFullName}.g.cs", writer);
+			context.AddSource($"{emitter.Type.Name}.g.cs", writer);
 		}
 	}
 
