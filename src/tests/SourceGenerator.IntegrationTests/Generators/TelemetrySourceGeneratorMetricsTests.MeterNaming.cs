@@ -29,7 +29,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -67,7 +67,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -105,7 +105,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -143,7 +143,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -179,7 +179,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -215,7 +215,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -251,7 +251,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -287,7 +287,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -323,7 +323,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -361,7 +361,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
@@ -397,7 +397,7 @@ interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounterMetric"))
+			.That(metricsClass.HasMethod("AutoCounterMetric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert

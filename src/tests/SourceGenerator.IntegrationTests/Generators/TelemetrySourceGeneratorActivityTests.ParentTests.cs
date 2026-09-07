@@ -31,7 +31,7 @@ public interface ITestActivities {
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity", TypeReference.Create<ActivityContext>()))
+			.That(implClass.HasMethod("Activity", TypeReference.Create<ActivityContext>()))
 			.IsTrue()
 			.Because("the generated implementation must contain the activity method with an ActivityContext parameter");
 	}
@@ -64,7 +64,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference
 						.Create<ActivityContext>()
@@ -101,7 +100,7 @@ public interface ITestActivities {
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity", TypeReference.Create<string>()))
+			.That(implClass.HasMethod("Activity", TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated implementation must contain the activity method with a parent-id string parameter");
 	}
@@ -132,7 +131,7 @@ public interface ITestActivities {
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity", TypeReference.Create<string>()))
+			.That(implClass.HasMethod("Activity", TypeReference.Create<string>()))
 			.IsTrue()
 			.Because(
 				"the generated implementation must contain the activity method with a nullable parent-id string parameter"

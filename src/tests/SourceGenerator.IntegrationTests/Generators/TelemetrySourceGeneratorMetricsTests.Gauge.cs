@@ -34,15 +34,15 @@ public interface ITestMetrics {
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "ObservableGauge"))
+			.That(metricsClass.HasMethod("ObservableGauge"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the observable gauge method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "ObservableGauge2"))
+			.That(metricsClass.HasMethod("ObservableGauge2"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the second observable gauge method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "ObservableGauge3"))
+			.That(metricsClass.HasMethod("ObservableGauge3"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the third observable gauge method");
 	}

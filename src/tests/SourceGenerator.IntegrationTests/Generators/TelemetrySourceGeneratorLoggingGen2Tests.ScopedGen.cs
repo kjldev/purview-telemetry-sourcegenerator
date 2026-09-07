@@ -34,11 +34,11 @@ public interface ITestLogger
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
-			.That(loggerClass.HasMethod(query, "BasicScoped"))
+			.That(loggerClass.HasMethod("BasicScoped"))
 			.IsTrue()
 			.Because("the generated logger must contain the scoped log method");
 		await Assert
-			.That(loggerClass.HasMethodReturnType(query, "BasicScoped", TypeReference.Create<IDisposable>()))
+			.That(loggerClass.HasMethodReturnType("BasicScoped", TypeReference.Create<IDisposable>()))
 			.IsTrue()
 			.Because("the scoped log method must return IDisposable");
 	}
@@ -70,7 +70,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"BasicScoped",
 					TypeReference.Create<int>(),
 					TypeReference.Create<string>(),
@@ -80,7 +79,7 @@ public interface ITestLogger
 			.IsTrue()
 			.Because("the generated logger must contain the scoped log method with its parameter signature");
 		await Assert
-			.That(loggerClass.HasMethodReturnType(query, "BasicScoped", TypeReference.Create<IDisposable>()))
+			.That(loggerClass.HasMethodReturnType("BasicScoped", TypeReference.Create<IDisposable>()))
 			.IsTrue()
 			.Because("the scoped log method must return IDisposable");
 	}
@@ -114,7 +113,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"BasicScoped",
 					TypeReference.Create<int>(),
 					TypeReference.Create<string>(),
@@ -124,7 +122,7 @@ public interface ITestLogger
 			.IsTrue()
 			.Because("the generated logger must contain the scoped log method with its parameter signature");
 		await Assert
-			.That(loggerClass.HasMethodReturnType(query, "BasicScoped", TypeReference.Create<IDisposable>()))
+			.That(loggerClass.HasMethodReturnType("BasicScoped", TypeReference.Create<IDisposable>()))
 			.IsTrue()
 			.Because("the scoped log method must return IDisposable");
 	}
@@ -158,7 +156,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"BasicScoped",
 					TypeReference.Create<int>(),
 					TypeReference.Create<string>(),
@@ -168,7 +165,7 @@ public interface ITestLogger
 			.IsTrue()
 			.Because("the generated logger must contain the scoped log method with its parameter signature");
 		await Assert
-			.That(loggerClass.HasMethodReturnType(query, "BasicScoped", TypeReference.Create<IDisposable>()))
+			.That(loggerClass.HasMethodReturnType("BasicScoped", TypeReference.Create<IDisposable>()))
 			.IsTrue()
 			.Because("the scoped log method must return IDisposable");
 	}

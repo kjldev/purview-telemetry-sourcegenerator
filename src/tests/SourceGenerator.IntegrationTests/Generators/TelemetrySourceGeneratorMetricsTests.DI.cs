@@ -37,7 +37,6 @@ public interface ITestMetrics {
 		await Assert
 			.That(
 				metricsClass.HasMethod(
-					query,
 					"Counter",
 					TypeReference.Create<int>(),
 					TypeReference.Create<int>(),
@@ -48,7 +47,7 @@ public interface ITestMetrics {
 			.Because("the generated metrics class must contain the counter method");
 		var diClass = query.GetClass("TestMetricsCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestMetrics", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestMetrics", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the DI extension must register the metrics via AddTestMetrics");
 	}
@@ -84,7 +83,6 @@ public interface ITestMetrics {
 		await Assert
 			.That(
 				metricsClass.HasMethod(
-					query,
 					"Counter",
 					TypeReference.Create<int>(),
 					TypeReference.Create<int>(),
@@ -95,7 +93,7 @@ public interface ITestMetrics {
 			.Because("the generated metrics class must contain the counter method");
 		var diClass = query.GetClass("TestMetricsCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestMetrics", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestMetrics", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the DI extension must be generated when the interface opts in");
 	}
@@ -135,7 +133,6 @@ public interface ITestMetrics {
 		await Assert
 			.That(
 				metricsClass.HasMethod(
-					query,
 					"Counter",
 					TypeReference.Create<int>(),
 					TypeReference.Create<int>(),
@@ -146,7 +143,7 @@ public interface ITestMetrics {
 			.Because("the generated metrics class must contain the counter method");
 		var diClass = query.GetClass("TestMetricsCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestMetrics", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestMetrics", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the DI extension must be generated when the interface overrides the disabled assembly default");
 	}
@@ -186,7 +183,6 @@ public interface ITestMetrics {
 		await Assert
 			.That(
 				metricsClass.HasMethod(
-					query,
 					"Counter",
 					TypeReference.Create<int>(),
 					TypeReference.Create<int>(),

@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Purview.Telemetry.SourceGenerator.Helpers;
 
 namespace Purview.Telemetry.SourceGenerator;
 
@@ -23,10 +22,10 @@ partial class DiagnosticLibrary
 				id: "TSG1001",
 				title: "Inferring generation targets is not supported when using multi-target generation",
 				messageFormat: "When using multiple generation targets - Activities, Logs or Metrics, each method must be either excluded or have an explicit generation target: "
-					+ $"{TypeLibrary.Activities.ActivityAttribute.Name}, {TypeLibrary.Activities.EventAttribute.Name}, {TypeLibrary.Activities.ContextAttribute.Name}, {TypeLibrary.Logging.LogAttribute.Name}, "
-					+ $"{TypeLibrary.Logging.WarningAttribute.Name}, "
-					+ $"{TypeLibrary.Metrics.CounterAttribute.Name}, {TypeLibrary.Metrics.HistogramAttribute.Name}, {TypeLibrary.Metrics.UpDownCounterAttribute.Name}, "
-					+ $"{TypeLibrary.Metrics.ObservableCounterAttribute.Name}, {TypeLibrary.Metrics.ObservableGaugeAttribute.Name} or {TypeLibrary.Metrics.ObservableUpDownCounterAttribute.Name}.",
+					+ $"{TypeLibrary.Purview.Telemetry.ActivityAttribute.Name}, {TypeLibrary.Purview.Telemetry.EventAttribute.Name}, {TypeLibrary.Purview.Telemetry.ContextAttribute.Name}, {TypeLibrary.Purview.Telemetry.LogAttribute.Name}, "
+					+ $"{TypeLibrary.Purview.Telemetry.WarningAttribute.Name}, "
+					+ $"{TypeLibrary.Purview.Telemetry.CounterAttribute.Name}, {TypeLibrary.Purview.Telemetry.HistogramAttribute.Name}, {TypeLibrary.Purview.Telemetry.UpDownCounterAttribute.Name}, "
+					+ $"{TypeLibrary.Purview.Telemetry.ObservableCounterAttribute.Name}, {TypeLibrary.Purview.Telemetry.ObservableGaugeAttribute.Name} or {TypeLibrary.Purview.Telemetry.ObservableUpDownCounterAttribute.Name}.",
 				defaultSeverity: DiagnosticSeverity.Error,
 				category: Categories.Usage,
 				isEnabledByDefault: true
@@ -118,7 +117,7 @@ partial class DiagnosticLibrary
 				id: "TSG1010",
 				title: "Method target not registered on interface",
 				messageFormat: "Method has attribute(s) for a generation target that is not registered on the interface. "
-					+ $"Add the corresponding source attribute ([{TypeLibrary.Activities.ActivitySourceAttribute.Name}], [{TypeLibrary.Logging.LoggerAttribute.Name}], or [{TypeLibrary.Metrics.MeterAttribute.Name}]) "
+					+ $"Add the corresponding source attribute ([{TypeLibrary.Purview.Telemetry.ActivitySourceAttribute.Name}], [{TypeLibrary.Purview.Telemetry.LoggerAttribute.Name}], or [{TypeLibrary.Purview.Telemetry.MeterAttribute.Name}]) "
 					+ "to the interface to enable generation for the target(s) used by this method.",
 				defaultSeverity: DiagnosticSeverity.Error,
 				category: Categories.Usage,

@@ -30,11 +30,7 @@ public interface ITestLogger {
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
 			.That(
-				loggerClass.HasMethod(
-					query,
-					"LogEntryWithCustomExceptionType",
-					TypeReference.Create<NullReferenceException>()
-				)
+				loggerClass.HasMethod("LogEntryWithCustomExceptionType", TypeReference.Create<NullReferenceException>())
 			)
 			.IsTrue()
 			.Because("the generated logger must treat the non-specific exception type as the exception parameter");
@@ -68,7 +64,6 @@ public class BadLuckException : Exception { }
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"LogEntryWithCustomExceptionType",
 					new TypeReference(new TypeIdentity("BadLuckException", "Testing"))
 				)

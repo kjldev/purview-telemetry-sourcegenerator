@@ -33,7 +33,6 @@ public interface ITestMetrics {
 		await Assert
 			.That(
 				metricsClass.HasMethod(
-					query,
 					"UpDown",
 					TypeReference.Create<int>(),
 					TypeReference.Create<int>(),
@@ -45,7 +44,6 @@ public interface ITestMetrics {
 		await Assert
 			.That(
 				metricsClass.HasMethod(
-					query,
 					"UpDown2",
 					TypeReference.Create<int>(),
 					TypeReference.Create<int>(),
@@ -88,15 +86,15 @@ public interface ITestMetrics {
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "ObservableUpDown"))
+			.That(metricsClass.HasMethod("ObservableUpDown"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the observable up-down counter method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "ObservableUpDown2"))
+			.That(metricsClass.HasMethod("ObservableUpDown2"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the second observable up-down counter method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "ObservableUpDown3"))
+			.That(metricsClass.HasMethod("ObservableUpDown3"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the third observable up-down counter method");
 	}

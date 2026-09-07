@@ -22,6 +22,14 @@ partial class TelemetrySourceGenerator
 			source: outputContexts,
 			action: static (spc, output) =>
 			{
+				if (output.Context.Settings.IsSourceGeneratorDisabled)
+				{
+					output.Context.Debug(
+						$"Activity generation skipped for {output.Target.FullyQualifiedName} because the generator is disabled"
+					);
+					return;
+				}
+
 				output.Context.Debug($"Activity generation target: {output.Target.FullyQualifiedName}");
 
 				RunSafely(spc, () => ActivitySourceTargetClassEmitter.GenerateImplementation(output, spc));

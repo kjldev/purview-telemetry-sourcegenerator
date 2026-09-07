@@ -58,7 +58,7 @@ public interface ITestMetrics
 		foreach (var methodName in autoCounters)
 		{
 			await Assert
-				.That(metricsClass.HasMethod(query, methodName))
+				.That(metricsClass.HasMethod(methodName))
 				.IsTrue()
 				.Because($"the generated metrics class must contain the {methodName} method");
 		}

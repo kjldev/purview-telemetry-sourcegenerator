@@ -44,28 +44,19 @@ public interface ITestMetrics {
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounter", TypeReference.Create<string>()))
+			.That(metricsClass.HasMethod("AutoCounter", TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "Counter", TypeReference.Create<int>(), TypeReference.Create<string>()))
+			.That(metricsClass.HasMethod("Counter", TypeReference.Create<int>(), TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated metrics class must contain the counter method");
 		await Assert
-			.That(
-				metricsClass.HasMethod(query, "Histogram", TypeReference.Create<int>(), TypeReference.Create<string>())
-			)
+			.That(metricsClass.HasMethod("Histogram", TypeReference.Create<int>(), TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated metrics class must contain the histogram method");
 		await Assert
-			.That(
-				metricsClass.HasMethod(
-					query,
-					"UpDownCounter",
-					TypeReference.Create<int>(),
-					TypeReference.Create<string>()
-				)
-			)
+			.That(metricsClass.HasMethod("UpDownCounter", TypeReference.Create<int>(), TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated metrics class must contain the up-down counter method");
 	}

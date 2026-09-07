@@ -39,11 +39,7 @@ public class WeatherForecast
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
 			.That(
-				loggerClass.HasMethod(
-					query,
-					"LogWeather",
-					new TypeReference(new TypeIdentity("WeatherForecast", "Testing"))
-				)
+				loggerClass.HasMethod("LogWeather", new TypeReference(new TypeIdentity("WeatherForecast", "Testing")))
 			)
 			.IsTrue()
 			.Because("the generated logger must contain the log method with the class-typed parameter");
@@ -118,9 +114,7 @@ public interface ITestLogger
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
-			.That(
-				loggerClass.HasMethod(query, "Log", TypeReference.Create<string>(), TypeReference.Create<Exception>())
-			)
+			.That(loggerClass.HasMethod("Log", TypeReference.Create<string>(), TypeReference.Create<Exception>()))
 			.IsTrue()
 			.Because("the generated logger must contain the log method with the exception parameter");
 		await Assert
@@ -164,7 +158,6 @@ public class WeatherForecast
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"LogWeatherWithOmit",
 					new TypeReference(new TypeIdentity("WeatherForecast", "Testing"))
 				)
@@ -211,11 +204,7 @@ public class WeatherForecast
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
 			.That(
-				loggerClass.HasMethod(
-					query,
-					"LogWeather",
-					new TypeReference(new TypeIdentity("WeatherForecast", "Testing"))
-				)
+				loggerClass.HasMethod("LogWeather", new TypeReference(new TypeIdentity("WeatherForecast", "Testing")))
 			)
 			.IsTrue()
 			.Because("the generated logger must contain the log method with the class-typed parameter");
@@ -259,11 +248,7 @@ public class WeatherForecast
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
 			.That(
-				loggerClass.HasMethod(
-					query,
-					"LogWeather",
-					new TypeReference(new TypeIdentity("WeatherForecast", "Testing"))
-				)
+				loggerClass.HasMethod("LogWeather", new TypeReference(new TypeIdentity("WeatherForecast", "Testing")))
 			)
 			.IsTrue()
 			.Because("the generated logger must contain the log method with the class-typed parameter");
@@ -310,11 +295,7 @@ public class WeatherForecast
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
 			.That(
-				loggerClass.HasMethod(
-					query,
-					"LogWeather",
-					new TypeReference(new TypeIdentity("WeatherForecast", "Testing"))
-				)
+				loggerClass.HasMethod("LogWeather", new TypeReference(new TypeIdentity("WeatherForecast", "Testing")))
 			)
 			.IsTrue()
 			.Because("the generated logger must contain the log method with the class-typed parameter");

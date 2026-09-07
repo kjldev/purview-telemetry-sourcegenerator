@@ -35,7 +35,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -47,7 +46,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethodReturnType(
-					query,
 					"Activity",
 					TypeReference.Create<Activity>().Nullable(GenerationSettings.Create<TelemetrySourceGenerator>())
 				)
@@ -57,7 +55,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Event",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -130,7 +127,6 @@ public interface ITestActivities
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -142,7 +138,6 @@ public interface ITestActivities
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Event",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -285,7 +280,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>().Nullable(GenerationSettings.Create<TelemetrySourceGenerator>()),
@@ -297,7 +291,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"ActivityWithNullableParams",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>().Nullable(GenerationSettings.Create<TelemetrySourceGenerator>()),

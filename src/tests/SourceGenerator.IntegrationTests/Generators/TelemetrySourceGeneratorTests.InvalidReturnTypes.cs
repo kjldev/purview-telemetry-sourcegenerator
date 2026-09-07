@@ -272,7 +272,7 @@ public interface IInvalidTelemetry
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("InvalidTelemetryCore", "Testing");
 		await Assert
-			.That(loggerClass.HasMethod(query, "ValidNonScopedLog", TypeReference.Create<string>()))
+			.That(loggerClass.HasMethod("ValidNonScopedLog", TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated logger must contain the valid non-scoped log method");
 	}

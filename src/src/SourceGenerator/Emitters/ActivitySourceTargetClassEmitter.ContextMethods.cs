@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Purview.Telemetry.SourceGenerator.Helpers;
 using Purview.Telemetry.SourceGenerator.Records;
 
 namespace Purview.Telemetry.SourceGenerator.Emitters;
@@ -34,7 +33,7 @@ partial class ActivitySourceTargetClassEmitter
 		}
 
 		var activityVariableName =
-			activityParam?.ParameterName ?? TypeLibrary.Activities.SystemDiagnostics.Activity.StaticMember("Current");
+			activityParam?.ParameterName ?? TypeLibrary.System.Diagnostics.Activity.StaticMember("Current");
 
 		if (tagsParam != null)
 		{
@@ -63,7 +62,7 @@ partial class ActivitySourceTargetClassEmitter
 
 		context.CancellationToken.ThrowIfCancellationRequested();
 
-		if (methodTarget.ReturnType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity))
+		if (methodTarget.ReturnType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity))
 		{
 			writer.NewLine().Write("return ").Write(activityVariableName).Write(";").NewLine();
 		}

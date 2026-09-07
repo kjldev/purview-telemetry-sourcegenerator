@@ -10,7 +10,7 @@ partial class LoggerTargetClassEmitter
 	{
 		var returnType = methodTarget.IsScoped
 			? TypeLibrary.System.IDisposable.AsTypeReference().Nullable(writer)
-			: PurviewTypeLibrary.System.Void.AsTypeReference();
+			: TypeLibrary.System.Void.AsTypeReference();
 
 		writer.NewLine();
 		using (
@@ -108,7 +108,7 @@ partial class LoggerTargetClassEmitter
 
 		var returnType =
 			generatePrivateLogging || !methodTarget.IsScoped
-				? PurviewTypeLibrary.System.Void.AsTypeReference()
+				? TypeLibrary.System.Void.AsTypeReference()
 				: TypeLibrary.System.IDisposable.AsTypeReference().Nullable(writer);
 
 		writer.NewLine();
@@ -192,7 +192,7 @@ partial class LoggerTargetClassEmitter
 
 		var returnType = methodTarget.IsScoped
 			? TypeLibrary.System.IDisposable.AsTypeReference().Nullable(writer)
-			: PurviewTypeLibrary.System.Void.AsTypeReference();
+			: TypeLibrary.System.Void.AsTypeReference();
 
 		writer.NewLine();
 

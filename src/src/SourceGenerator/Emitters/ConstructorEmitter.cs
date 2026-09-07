@@ -50,8 +50,8 @@ static class ConstructorEmitter
 
 		if (generationType.HasFlag(GenerationType.Logging))
 		{
-			var loggerType = TypeLibrary.Logging.MicrosoftExtensions.ILogger.MakeGeneric(interfaceType);
-			builder.Add(new ParameterDeclarationOptions(LoggerParameterName, new TypeReference(loggerType)));
+			var loggerType = TypeLibrary.Microsoft.Extensions.Logging.ILogger.MakeGeneric(interfaceType);
+			builder.Add(new(LoggerParameterName, new TypeReference(loggerType)));
 		}
 
 		if (generationType.HasFlag(GenerationType.Metrics) && generationContext.Capabilities.SupportsIMeterFactory)
@@ -59,7 +59,7 @@ static class ConstructorEmitter
 			builder.Add(
 				new ParameterDeclarationOptions(
 					PropertyLibrary.Metrics.MeterFactoryParameterName,
-					TypeLibrary.Metrics.SystemDiagnostics.IMeterFactory
+					TypeLibrary.System.Diagnostics.Metrics.IMeterFactory
 				)
 			);
 		}

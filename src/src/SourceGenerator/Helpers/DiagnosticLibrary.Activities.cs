@@ -34,7 +34,7 @@ partial class DiagnosticLibrary
 			new DiagnosticDescriptor(
 				id: "TSG3002",
 				title: "Invalid return type",
-				messageFormat: $"An activity or event must return either void or an {TypeLibrary.Activities.SystemDiagnostics.Activity.Name}.",
+				messageFormat: $"An activity or event must return either void or an {TypeLibrary.System.Diagnostics.Activity.Name}.",
 				defaultSeverity: DiagnosticSeverity.Error,
 				category: Categories.Activity.Usage,
 				isEnabledByDefault: true

@@ -34,7 +34,7 @@ partial class ActivitySourceTargetClassEmitter
 		}
 
 		var activityVariableName =
-			activityParam?.ParameterName ?? (TypeLibrary.Activities.SystemDiagnostics.Activity + ".Current");
+			activityParam?.ParameterName ?? (TypeLibrary.System.Diagnostics.Activity + ".Current");
 		if (parentContextOrId != null)
 		{
 			output.Context.Diagnostic("Parent context/ Id not allowed on event method, only activities.");
@@ -77,12 +77,12 @@ partial class ActivitySourceTargetClassEmitter
 
 				writer
 					.NewLine()
-					.Write(TypeLibrary.Activities.SystemDiagnostics.ActivityEvent)
+					.Write(TypeLibrary.System.Diagnostics.ActivityEvent)
 					.Write(' ')
 					.Write(eventVariableName)
 					.Write(" = new ")
 					// Use explicit type for C# 7.3 compatibility (target-typed new() requires C# 9+)
-					.Write(TypeLibrary.Activities.SystemDiagnostics.ActivityEvent)
+					.Write(TypeLibrary.System.Diagnostics.ActivityEvent)
 					.Write("(name: ")
 					.Write(methodTarget.ActivityOrEventName.Wrap())
 					// timestamp:
@@ -108,7 +108,7 @@ partial class ActivitySourceTargetClassEmitter
 
 		context.CancellationToken.ThrowIfCancellationRequested();
 
-		if (methodTarget.ReturnType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity))
+		if (methodTarget.ReturnType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity))
 		{
 			writer.NewLine().Write("return ").Write(activityVariableName).Write(";").NewLine();
 		}
@@ -128,11 +128,11 @@ partial class ActivitySourceTargetClassEmitter
 
 		var tagsListVariableName = "tagsCollection" + methodTarget.MethodName;
 		writer
-			.Write(TypeLibrary.Activities.SystemDiagnostics.ActivityTagsCollection)
+			.Write(TypeLibrary.System.Diagnostics.ActivityTagsCollection)
 			.Write(' ')
 			.Write(tagsListVariableName)
 			.Write(
-				" = new(" // : $" = new {TypeLibrary.Activities.SystemDiagnostics.ActivityTagsCollection}("
+				" = new(" // : $" = new {TypeLibrary.System.Diagnostics.ActivityTagsCollection}("
 			);
 
 		if (tagsParam != null)

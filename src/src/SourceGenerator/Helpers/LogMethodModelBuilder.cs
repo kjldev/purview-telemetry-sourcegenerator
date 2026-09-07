@@ -29,7 +29,7 @@ static class LogMethodModelBuilder
 		List<LogMethodTarget> methodTargets = [];
 		foreach (var method in PipelineHelpers.GetAllInterfaceMethods(interfaceSymbol, token))
 		{
-			if (Utilities.ContainsAttribute(method, TypeLibrary.TelemetryShared.ExcludeAttribute, token))
+			if (Utilities.ContainsAttribute(method, TypeLibrary.Purview.Telemetry.ExcludeAttribute, token))
 				continue;
 
 			// For multi-target interfaces (generationType != GenerationType.Logging means interface has multiple targets):
@@ -422,11 +422,11 @@ static class LogMethodModelBuilder
 			// Skip Activity-related parameters and TagList - they are not valid for logging
 			var parameterType = TypeReference.Create(parameter.Type);
 			if (
-				parameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity)
-				|| parameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityContext)
-				|| parameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityLink)
-				|| parameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityLinkArray)
-				|| parameterType.Identity.Equals(TypeLibrary.System.TagList)
+				parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity)
+				|| parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityContext)
+				|| parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityLink)
+				|| parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityLinkArray)
+				|| parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.TagList)
 			)
 			{
 				continue;
@@ -454,7 +454,7 @@ static class LogMethodModelBuilder
 					if (
 						Utilities.ContainsAttribute(
 							property,
-							TypeLibrary.Logging.MicrosoftExtensions.LogPropertyIgnoreAttribute,
+							TypeLibrary.Microsoft.Extensions.Logging.LogPropertyIgnoreAttribute,
 							token
 						)
 					)

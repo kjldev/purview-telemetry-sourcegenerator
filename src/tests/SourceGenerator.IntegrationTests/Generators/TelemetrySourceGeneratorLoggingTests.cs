@@ -30,7 +30,7 @@ public interface ITestLogger {{
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
-			.That(loggerClass.HasMethod(query, "LogEntryWithGenericTypeParam"))
+			.That(loggerClass.HasMethod("LogEntryWithGenericTypeParam"))
 			.IsTrue()
 			.Because("the generated logger must contain the log method");
 	}

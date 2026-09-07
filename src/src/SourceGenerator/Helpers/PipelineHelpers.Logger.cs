@@ -25,7 +25,7 @@ partial class PipelineHelpers
 			return GeneratorResult<LoggerTarget?>.Empty;
 
 		var iLoggerTypeSymbol = compilation.GetTypeByMetadataName(
-			TypeLibrary.Logging.MicrosoftExtensions.ILogger.MetadataFullName
+			TypeLibrary.Microsoft.Extensions.Logging.ILogger.MetadataFullName
 		);
 		if (iLoggerTypeSymbol is null)
 			return GeneratorResult<LoggerTarget?>.Empty;

@@ -135,11 +135,19 @@ static partial class TelemetryRules
 
 		var hasActivitySource = Utilities.ContainsAttribute(
 			interfaceSymbol,
-			TypeLibrary.Activities.ActivitySourceAttribute,
+			TypeLibrary.Purview.Telemetry.ActivitySourceAttribute,
 			token
 		);
-		var hasLogger = Utilities.ContainsAttribute(interfaceSymbol, TypeLibrary.Logging.LoggerAttribute, token);
-		var hasMeter = Utilities.ContainsAttribute(interfaceSymbol, TypeLibrary.Metrics.MeterAttribute, token);
+		var hasLogger = Utilities.ContainsAttribute(
+			interfaceSymbol,
+			TypeLibrary.Purview.Telemetry.LoggerAttribute,
+			token
+		);
+		var hasMeter = Utilities.ContainsAttribute(
+			interfaceSymbol,
+			TypeLibrary.Purview.Telemetry.MeterAttribute,
+			token
+		);
 
 		if (!hasActivitySource && !hasLogger && !hasMeter)
 			return diagnostics.ToImmutable();
@@ -148,7 +156,7 @@ static partial class TelemetryRules
 		if (hasLogger)
 		{
 			var iLoggerSymbol = compilation.GetTypeByMetadataName(
-				TypeLibrary.Logging.MicrosoftExtensions.ILogger.MetadataFullName
+				TypeLibrary.Microsoft.Extensions.Logging.ILogger.MetadataFullName
 			);
 			if (iLoggerSymbol is null)
 				diagnostics.Add(
@@ -212,7 +220,7 @@ static partial class TelemetryRules
 		CancellationToken token
 	)
 	{
-		if (TypeHelpers.HasAttribute(method, TypeLibrary.TelemetryShared.ExcludeAttribute))
+		if (TypeHelpers.HasAttribute(method, TypeLibrary.Purview.Telemetry.ExcludeAttribute))
 			return;
 
 		// TSG1005: generic method.

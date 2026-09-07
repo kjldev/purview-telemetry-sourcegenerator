@@ -32,13 +32,12 @@ public interface ITestActivities
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity"))
+			.That(implClass.HasMethod("Activity"))
 			.IsTrue()
 			.Because("the generated implementation must contain the activity method");
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Context",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -83,7 +82,6 @@ public interface ITestActivities
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Context",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -94,7 +92,7 @@ public interface ITestActivities
 			.IsTrue()
 			.Because("the generated implementation must contain the context method");
 		await Assert
-			.That(implClass.HasMethodReturnType(query, "Context", TypeReference.Create<Activity>()))
+			.That(implClass.HasMethodReturnType("Context", TypeReference.Create<Activity>()))
 			.IsTrue()
 			.Because("the context method must return an Activity");
 	}
@@ -134,7 +132,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Context",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -147,7 +144,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"ContextWithNullableReturnActivity",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -160,7 +156,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethodReturnType(
-					query,
 					"ContextWithNullableReturnActivity",
 					TypeReference.Create<Activity>().Nullable(GenerationSettings.Create<TelemetrySourceGenerator>())
 				)
@@ -205,7 +200,6 @@ public interface ITestActivities
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Context",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -218,7 +212,6 @@ public interface ITestActivities
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"ContextWithNullableParams",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -264,7 +257,6 @@ public interface ITestActivities
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Context",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -277,7 +269,6 @@ public interface ITestActivities
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"ContextWithNullableParams",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -325,7 +316,6 @@ public interface ITestActivities
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Context",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -338,7 +328,6 @@ public interface ITestActivities
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"ContextWithNullableParams",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),

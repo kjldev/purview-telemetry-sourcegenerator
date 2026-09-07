@@ -41,6 +41,14 @@ partial class TelemetrySourceGenerator
 
 	static void GenerateTelemetryNames(TelemetryNamesOutputContext output, SourceProductionContext spc)
 	{
+		if (output.Context.Settings.IsSourceGeneratorDisabled)
+		{
+			output.Context.Debug(
+				$"Telemetry names generation skipped for {output.AssemblyName} because the generator is disabled"
+			);
+			return;
+		}
+
 		// Only generate if we have at least one target
 		if (output.MeterTargets.IsEmpty && output.ActivityTargets.IsEmpty)
 		{

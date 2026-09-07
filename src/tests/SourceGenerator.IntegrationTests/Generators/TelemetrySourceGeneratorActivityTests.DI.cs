@@ -43,7 +43,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -55,7 +54,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethodReturnType(
-					query,
 					"Activity",
 					TypeReference.Create<Activity>().Nullable(GenerationSettings.Create<TelemetrySourceGenerator>())
 				)
@@ -65,7 +63,7 @@ public interface ITestActivities {
 
 		var diClass = query.GetClass("TestActivitiesCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestActivities", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestActivities", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the DI extension must register the implementation via AddTestActivities");
 	}
@@ -105,7 +103,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -116,7 +113,7 @@ public interface ITestActivities {
 			.Because("the generated implementation must contain the activity method");
 		var diClass = query.GetClass("TestActivitiesCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestActivities", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestActivities", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the DI extension must register the implementation via AddTestActivities");
 	}
@@ -160,7 +157,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -171,7 +167,7 @@ public interface ITestActivities {
 			.Because("the generated implementation must contain the activity method");
 		var diClass = query.GetClass("TestActivitiesCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestActivities", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestActivities", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the DI extension must be generated when the interface opts in");
 	}
@@ -215,7 +211,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -268,7 +263,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -279,7 +273,7 @@ public interface ITestActivities {
 			.Because("the generated implementation must contain the activity method");
 		var diClass = query.GetClass("TestActivitiesCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestActivities", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestActivities", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the public DI extension must register the implementation via AddTestActivities");
 	}

@@ -39,15 +39,15 @@ public interface ITestActivities
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity"))
+			.That(implClass.HasMethod("Activity"))
 			.IsTrue()
 			.Because("the generated implementation must contain the activity method");
 		await Assert
-			.That(implClass.HasMethod(query, "Event"))
+			.That(implClass.HasMethod("Event"))
 			.IsTrue()
 			.Because("the generated implementation must contain the event method");
 		await Assert
-			.That(implClass.HasMethod(query, "Context"))
+			.That(implClass.HasMethod("Context"))
 			.IsTrue()
 			.Because("the generated implementation must contain the context method");
 	}

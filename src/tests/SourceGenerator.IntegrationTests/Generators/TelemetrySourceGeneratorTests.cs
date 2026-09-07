@@ -6,6 +6,31 @@ namespace Purview.Telemetry.SourceGenerator;
 public partial class TelemetrySourceGeneratorTests : IncrementalSourceGeneratorTestBase<TelemetrySourceGenerator>
 {
 	[Test]
+	public async Task Generate_GivenGeneratedAttributes_GeneratesWithGenerationAttributes(
+		CancellationToken cancellationToken
+	)
+	{
+		// Arrange
+		const string empty = "namespace Testing;";
+		var generatedAttributes = TypeLibrary.Purview.Telemetry.GetTypes().Select(m => m.Identity);
+
+		// Act
+		var generationResult = await GenerateAsync(empty, cancellationToken: cancellationToken);
+		var query = generationResult.Generated();
+
+		// Assert
+		foreach (var type in generatedAttributes)
+		{
+			var generatedType = query.GetTypeDeclaration(type);
+
+			await Assert.That(generatedType).IsNotNull().Because($"the {type.Name} must be generated");
+
+			var attributes = query.GetAttributes(generatedType);
+			await Assert.That(attributes).IsNotEmpty();
+		}
+	}
+
+	[Test]
 	public async Task Generate_GivenGeneratedAttributes_GeneratesAsExpected(CancellationToken cancellationToken)
 	{
 		// Arrange

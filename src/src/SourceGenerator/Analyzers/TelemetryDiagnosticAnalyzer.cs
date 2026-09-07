@@ -38,11 +38,19 @@ public sealed class TelemetryDiagnosticAnalyzer : DiagnosticAnalyzer
 
 		var hasActivitySource = Utilities.ContainsAttribute(
 			interfaceSymbol,
-			TypeLibrary.Activities.ActivitySourceAttribute,
+			TypeLibrary.Purview.Telemetry.ActivitySourceAttribute,
 			token
 		);
-		var hasLogger = Utilities.ContainsAttribute(interfaceSymbol, TypeLibrary.Logging.LoggerAttribute, token);
-		var hasMeter = Utilities.ContainsAttribute(interfaceSymbol, TypeLibrary.Metrics.MeterAttribute, token);
+		var hasLogger = Utilities.ContainsAttribute(
+			interfaceSymbol,
+			TypeLibrary.Purview.Telemetry.LoggerAttribute,
+			token
+		);
+		var hasMeter = Utilities.ContainsAttribute(
+			interfaceSymbol,
+			TypeLibrary.Purview.Telemetry.MeterAttribute,
+			token
+		);
 
 		if (!hasActivitySource && !hasLogger && !hasMeter)
 			return;

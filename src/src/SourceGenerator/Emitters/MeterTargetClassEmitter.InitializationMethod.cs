@@ -18,7 +18,7 @@ partial class MeterTargetClassEmitter
 			writer.MethodScope(
 				new MethodDeclarationOptions(
 					PropertyLibrary.Metrics.MeterInitializationMethod,
-					PurviewTypeLibrary.System.Void.AsTypeReference()
+					TypeLibrary.System.Void.AsTypeReference()
 				)
 				{
 					Parameters = supportsIMeterFactory
@@ -26,7 +26,7 @@ partial class MeterTargetClassEmitter
 						[
 							new ParameterDeclarationOptions(
 								PropertyLibrary.Metrics.MeterFactoryParameterName,
-								TypeLibrary.Metrics.SystemDiagnostics.IMeterFactory.AsTypeReference()
+								TypeLibrary.System.Diagnostics.Metrics.IMeterFactory.AsTypeReference()
 							),
 						]
 						: [],
@@ -72,7 +72,7 @@ partial class MeterTargetClassEmitter
 						[
 							new ParameterDeclarationOptions(
 								PropertyLibrary.Metrics.MeterFactoryParameterName,
-								TypeLibrary.Metrics.SystemDiagnostics.IMeterFactory.AsTypeReference()
+								TypeLibrary.System.Diagnostics.Metrics.IMeterFactory.AsTypeReference()
 							),
 						]
 						: [],
@@ -103,7 +103,7 @@ partial class MeterTargetClassEmitter
 				.Write(" = ")
 				.Write(PropertyLibrary.Metrics.MeterFactoryParameterName)
 				.Write(".Create(new ")
-				.Write(TypeLibrary.Metrics.SystemDiagnostics.MeterOptions)
+				.Write(TypeLibrary.System.Diagnostics.Metrics.MeterOptions)
 				.Write("(")
 				.Write(target.MeterName!.Wrap())
 				.Write(") {")
@@ -119,7 +119,7 @@ partial class MeterTargetClassEmitter
 			writer
 				.Write(MeterFieldName)
 				.Write(" = new ")
-				.Write(TypeLibrary.Metrics.SystemDiagnostics.Meter)
+				.Write(TypeLibrary.System.Diagnostics.Metrics.Meter)
 				.Write('(')
 				.Write(target.MeterName!.Wrap())
 				.Line(");")
