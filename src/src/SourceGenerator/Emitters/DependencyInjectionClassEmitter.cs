@@ -121,14 +121,17 @@ static class DependencyInjectionClassEmitter
 			writer.MethodScope(
 				new(
 					"Add" + methodName,
-					TypeLibrary.DependencyInjection.IServiceCollection,
+					TypeLibrary.Microsoft.Extensions.DependencyInjection.IServiceCollection,
 					TypeDeclarationAccessibility.Public
 				)
 				{
 					IsStatic = true,
 					Parameters =
 					[
-						new("services", TypeLibrary.DependencyInjection.IServiceCollection) { IsThis = true },
+						new("services", TypeLibrary.Microsoft.Extensions.DependencyInjection.IServiceCollection)
+						{
+							IsThis = true,
+						},
 					],
 					IncludeGeneratedAttributes = false,
 				}

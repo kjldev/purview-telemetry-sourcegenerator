@@ -19,7 +19,7 @@ static partial class TelemetryRules
 	{
 		var diagnostics = ImmutableArray.CreateBuilder<DiagnosticInfo>();
 
-		if (!Utilities.ContainsAttribute(interfaceSymbol, TypeLibrary.Logging.LoggerAttribute, token))
+		if (!Utilities.ContainsAttribute(interfaceSymbol, TypeLibrary.Purview.Telemetry.LoggerAttribute, token))
 			return diagnostics.ToImmutable();
 
 		var generationType = SharedHelpers.GetGenerationTypes(interfaceSymbol, token);
@@ -32,7 +32,7 @@ static partial class TelemetryRules
 		var methods = interfaceSymbol
 			.GetMembers()
 			.OfType<IMethodSymbol>()
-			.Where(m => !TypeHelpers.HasAttribute(m, TypeLibrary.TelemetryShared.ExcludeAttribute) && m.Arity == 0);
+			.Where(m => !TypeHelpers.HasAttribute(m, TypeLibrary.Purview.Telemetry.ExcludeAttribute) && m.Arity == 0);
 
 		foreach (var method in methods)
 		{
@@ -222,7 +222,7 @@ static partial class TelemetryRules
 			}
 		}
 
-		var isActivity = TypeLibrary.Activities.SystemDiagnostics.Activity.Equals(returnType);
+		var isActivity = TypeLibrary.System.Diagnostics.Activity.Equals(returnType);
 		if (isActivity && SharedHelpers.IsActivityMethod(method, token))
 			return false;
 

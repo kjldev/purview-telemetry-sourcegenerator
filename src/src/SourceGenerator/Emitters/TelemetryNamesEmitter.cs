@@ -35,7 +35,7 @@ static class TelemetryNamesEmitter
 				)
 			)
 			{
-				var stringArrayType = PurviewTypeLibrary.System.String.AsTypeReference().MakeArray();
+				var stringArrayType = TypeLibrary.System.String.AsTypeReference().MakeArray();
 				writer.XmlSummary("Gets the names of the meters generated for the assembly.");
 				writer.Field(
 					new("MeterNames", stringArrayType, TypeDeclarationAccessibility.Public)

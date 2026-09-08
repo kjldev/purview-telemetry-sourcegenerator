@@ -143,7 +143,7 @@ partial class PipelineHelpers
 				continue;
 			}
 
-			if (TypeHelpers.HasAttribute(method, TypeLibrary.TelemetryShared.ExcludeAttribute))
+			if (TypeHelpers.HasAttribute(method, TypeLibrary.Purview.Telemetry.ExcludeAttribute))
 				continue;
 
 			var (methodType, isInferred) = GetMethodType(
@@ -184,7 +184,7 @@ partial class PipelineHelpers
 					ReturnType: TypeReference.Create(method.ReturnType),
 					ActivityOrEventName: activityOrEventName!,
 					HasActivityParameter: parameters.Any(m =>
-						m.ParameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity)
+						m.ParameterType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity)
 					),
 					ActivityAttribute: activityAttribute,
 					EventAttribute: eventAttribute,
@@ -267,11 +267,11 @@ partial class PipelineHelpers
 		if (eventAttribute != null)
 			return (ActivityMethodType.Event, false);
 
-		if (Utilities.ContainsAttribute(method, TypeLibrary.Activities.ContextAttribute, token))
+		if (Utilities.ContainsAttribute(method, TypeLibrary.Purview.Telemetry.ContextAttribute, token))
 			return (ActivityMethodType.Context, false);
 
 		var returnType = method.ReturnType;
-		if (TypeLibrary.Activities.SystemDiagnostics.Activity.Equals(returnType))
+		if (TypeLibrary.System.Diagnostics.Activity.Equals(returnType))
 			return (ActivityMethodType.Activity, true);
 
 		if (method.Name.EndsWith("Event", StringComparison.Ordinal))
@@ -280,7 +280,7 @@ partial class PipelineHelpers
 		{
 			if (
 				method.Parameters.Length > 0
-				&& TypeLibrary.Activities.SystemDiagnostics.Activity.Equals(method.Parameters[0].Type)
+				&& TypeLibrary.System.Diagnostics.Activity.Equals(method.Parameters[0].Type)
 			)
 				return (ActivityMethodType.Event, true);
 		}
@@ -303,34 +303,41 @@ partial class PipelineHelpers
 		if (
 			Utilities.TryContainsAttribute(
 				parameter,
-				TypeLibrary.TelemetryShared.TagAttribute,
+				TypeLibrary.Purview.Telemetry.TagAttribute,
 				token,
 				out var attribute
 			)
 		)
 			return (ActivityParameterDestination.Tag, attribute);
 
-		if (Utilities.TryContainsAttribute(parameter, TypeLibrary.Activities.BaggageAttribute, token, out attribute))
+		if (
+			Utilities.TryContainsAttribute(
+				parameter,
+				TypeLibrary.Purview.Telemetry.BaggageAttribute,
+				token,
+				out attribute
+			)
+		)
 			return (ActivityParameterDestination.Baggage, attribute);
 
-		if (Utilities.ContainsAttribute(parameter, TypeLibrary.Activities.EscapeAttribute, token))
+		if (Utilities.ContainsAttribute(parameter, TypeLibrary.Purview.Telemetry.EscapeAttribute, token))
 			return (ActivityParameterDestination.Escape, null);
 
-		if (Utilities.ContainsAttribute(parameter, TypeLibrary.Activities.StatusDescriptionAttribute, token))
+		if (Utilities.ContainsAttribute(parameter, TypeLibrary.Purview.Telemetry.StatusDescriptionAttribute, token))
 			return (ActivityParameterDestination.StatusDescription, null);
 
-		if (parameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity))
+		if (parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity))
 			return (ActivityParameterDestination.Activity, null);
 
 		if (
-			parameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityTagsCollection)
-			|| TypeLibrary.Activities.SystemDiagnostics.ActivityTagIEnumerable.Similar(parameterType)
-			|| parameterType.Identity.Equals(TypeLibrary.System.TagList)
+			parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityTagsCollection)
+			|| TypeLibrary.System.Diagnostics.ActivityTagIEnumerable.Similar(parameterType)
+			|| parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.TagList)
 		)
 			return (ActivityParameterDestination.TagsEnumerable, null);
 
 		if (
-			parameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityContext)
+			parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityContext)
 			|| (
 				parameter.Name == PropertyLibrary.Activities.ParentIdParameterName
 				&& parameterType.Identity.SpecialType == SpecialType.System_String
@@ -339,8 +346,8 @@ partial class PipelineHelpers
 			return (ActivityParameterDestination.ParentContextOrId, null);
 
 		if (
-			parameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityLinkArray)
-			|| TypeLibrary.Activities.SystemDiagnostics.ActivityLinkIEnumerable.Equals(parameterType)
+			parameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityLinkArray)
+			|| TypeLibrary.System.Diagnostics.ActivityLinkIEnumerable.Equals(parameterType)
 		)
 			return (ActivityParameterDestination.LinksEnumerable, null);
 

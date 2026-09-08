@@ -31,7 +31,7 @@ public interface ITestLogger
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
-			.That(loggerClass.HasMethod(query, "Log"))
+			.That(loggerClass.HasMethod("Log"))
 			.IsTrue()
 			.Because("the generated logger must contain the log method with the expandable parameter");
 	}

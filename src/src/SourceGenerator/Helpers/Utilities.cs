@@ -93,27 +93,27 @@ static partial class Utilities
 	}
 
 	static bool IsActivityAttribute(TypeReference attributeType) =>
-		TypeLibrary.Activities.ActivityAttribute == attributeType
-		|| TypeLibrary.Activities.EventAttribute == attributeType
-		|| TypeLibrary.Activities.ContextAttribute == attributeType;
+		TypeLibrary.Purview.Telemetry.ActivityAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.EventAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.ContextAttribute == attributeType;
 
 	static bool IsLoggingAttribute(TypeReference attributeType) =>
-		TypeLibrary.Logging.LogAttribute == attributeType
-		|| TypeLibrary.Logging.TraceAttribute == attributeType
-		|| TypeLibrary.Logging.DebugAttribute == attributeType
-		|| TypeLibrary.Logging.InfoAttribute == attributeType
-		|| TypeLibrary.Logging.WarningAttribute == attributeType
-		|| TypeLibrary.Logging.ErrorAttribute == attributeType
-		|| TypeLibrary.Logging.CriticalAttribute == attributeType;
+		TypeLibrary.Purview.Telemetry.LogAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.TraceAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.DebugAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.InfoAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.WarningAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.ErrorAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.CriticalAttribute == attributeType;
 
 	static bool IsMetricsAttribute(TypeReference attributeType) =>
-		TypeLibrary.Metrics.CounterAttribute == attributeType
-		|| TypeLibrary.Metrics.AutoCounterAttribute == attributeType
-		|| TypeLibrary.Metrics.UpDownCounterAttribute == attributeType
-		|| TypeLibrary.Metrics.HistogramAttribute == attributeType
-		|| TypeLibrary.Metrics.ObservableCounterAttribute == attributeType
-		|| TypeLibrary.Metrics.ObservableGaugeAttribute == attributeType
-		|| TypeLibrary.Metrics.ObservableUpDownCounterAttribute == attributeType;
+		TypeLibrary.Purview.Telemetry.CounterAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.AutoCounterAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.UpDownCounterAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.HistogramAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.ObservableCounterAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.ObservableGaugeAttribute == attributeType
+		|| TypeLibrary.Purview.Telemetry.ObservableUpDownCounterAttribute == attributeType;
 
 	static int CountFlags(GenerationType type)
 	{
@@ -144,7 +144,7 @@ static partial class Utilities
 		foreach (var param in method.Parameters)
 		{
 			var paramType = TypeReference.Create(param.Type);
-			if (paramType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity))
+			if (paramType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity))
 				return param.Name;
 		}
 
@@ -274,7 +274,7 @@ static partial class Utilities
 			return true;
 
 		// Get the `IEnumerable` symbol from the compilation
-		var ienumerableSymbol = compilation.GetTypeByMetadataName(TypeLibrary.System.IEnumerable);
+		var ienumerableSymbol = compilation.GetTypeByMetadataName("System.Collections.IEnumerable");
 
 		// Check if the type implements `IEnumerable`
 		return ienumerableSymbol != null
@@ -475,12 +475,12 @@ static partial class Utilities
 	/// </summary>
 	public static bool HasMetricsAttribute(IMethodSymbol method, CancellationToken token)
 	{
-		return ContainsAttribute(method, TypeLibrary.Metrics.CounterAttribute, token)
-			|| ContainsAttribute(method, TypeLibrary.Metrics.AutoCounterAttribute, token)
-			|| ContainsAttribute(method, TypeLibrary.Metrics.UpDownCounterAttribute, token)
-			|| ContainsAttribute(method, TypeLibrary.Metrics.HistogramAttribute, token)
-			|| ContainsAttribute(method, TypeLibrary.Metrics.ObservableCounterAttribute, token)
-			|| ContainsAttribute(method, TypeLibrary.Metrics.ObservableGaugeAttribute, token)
-			|| ContainsAttribute(method, TypeLibrary.Metrics.ObservableUpDownCounterAttribute, token);
+		return ContainsAttribute(method, TypeLibrary.Purview.Telemetry.CounterAttribute, token)
+			|| ContainsAttribute(method, TypeLibrary.Purview.Telemetry.AutoCounterAttribute, token)
+			|| ContainsAttribute(method, TypeLibrary.Purview.Telemetry.UpDownCounterAttribute, token)
+			|| ContainsAttribute(method, TypeLibrary.Purview.Telemetry.HistogramAttribute, token)
+			|| ContainsAttribute(method, TypeLibrary.Purview.Telemetry.ObservableCounterAttribute, token)
+			|| ContainsAttribute(method, TypeLibrary.Purview.Telemetry.ObservableGaugeAttribute, token)
+			|| ContainsAttribute(method, TypeLibrary.Purview.Telemetry.ObservableUpDownCounterAttribute, token);
 	}
 }

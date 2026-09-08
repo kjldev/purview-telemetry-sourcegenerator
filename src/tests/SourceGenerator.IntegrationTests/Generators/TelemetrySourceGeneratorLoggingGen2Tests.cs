@@ -32,7 +32,7 @@ public interface ITestLogger
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
-			.That(loggerClass.HasMethod(query, "LogEntryWithGenericTypeParam"))
+			.That(loggerClass.HasMethod("LogEntryWithGenericTypeParam"))
 			.IsTrue()
 			.Because("the generated logger must contain the log method");
 	}
@@ -121,7 +121,7 @@ public interface ITestLogger {
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
-			.That(loggerClass.HasMethod(query, "LogEntryWithMoreThanSixParams"))
+			.That(loggerClass.HasMethod("LogEntryWithMoreThanSixParams"))
 			.IsTrue()
 			.Because("the generated logger must contain the log method with more than six parameters");
 	}

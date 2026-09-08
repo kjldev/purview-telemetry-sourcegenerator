@@ -17,7 +17,7 @@ partial class LoggerTargetClassEmitter
 			.Field(
 				new FieldDeclarationOptions(
 					PropertyLibrary.Logging.LoggerFieldName,
-					TypeLibrary.Logging.MicrosoftExtensions.ILogger.MakeGeneric(target.InterfaceType).AsTypeReference()
+					TypeLibrary.Microsoft.Extensions.Logging.ILogger.MakeGeneric(target.InterfaceType).AsTypeReference()
 				)
 				{
 					IsReadOnly = true,
@@ -91,7 +91,7 @@ partial class LoggerTargetClassEmitter
 
 		var typeName =
 			(methodTarget.IsScoped ? "global::System.Func<" : "global::System.Action<")
-			+ TypeLibrary.Logging.MicrosoftExtensions.ILogger.RenderFullNameForNullable(useNullable)
+			+ TypeLibrary.Microsoft.Extensions.Logging.ILogger.RenderFullNameForNullable(useNullable)
 			+ string.Concat(
 				methodTarget.ParametersSansException.Select(p =>
 					", " + p.ParameterType.RenderFullNameForNullable(useNullable)

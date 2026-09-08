@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Purview.Telemetry.SourceGenerator.Helpers;
 using Purview.Telemetry.SourceGenerator.Records;
 
 namespace Purview.Telemetry.SourceGenerator;
@@ -72,12 +71,12 @@ static partial class TelemetryRules
 		var isValidReturnType = isEvent
 			? method.ReturnType.Identity.SpecialType == SpecialType.System_Void
 			: method.ReturnType.Identity.SpecialType == SpecialType.System_Void
-				|| method.ReturnType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity);
+				|| method.ReturnType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity);
 
 		// TSG3013/TSG3022: activity methods should return a nullable Activity.
 		if (method.MethodType == ActivityMethodType.Activity && isValidReturnType)
 		{
-			var returnsActivity = method.ReturnType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity);
+			var returnsActivity = method.ReturnType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity);
 			if (!returnsActivity)
 				diagnostics.Add(
 					DiagnosticInfo.Create(DiagnosticLibrary.Activities.DoesNotReturnActivity.Descriptor, methodSymbol)

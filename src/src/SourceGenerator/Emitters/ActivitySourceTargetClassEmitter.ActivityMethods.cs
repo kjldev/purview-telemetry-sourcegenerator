@@ -50,7 +50,7 @@ partial class ActivitySourceTargetClassEmitter
 		var activityVariableName = "activity" + methodTarget.MethodName;
 
 		writer.Assignment(
-			TypeLibrary.Activities.SystemDiagnostics.Activity.MakeNullable(writer),
+			TypeLibrary.System.Diagnostics.Activity.MakeNullable(writer),
 			activityVariableName,
 			writeValue: assignmentWriter =>
 			{
@@ -62,9 +62,7 @@ partial class ActivitySourceTargetClassEmitter
 				var createOnly = methodTarget.ActivityAttribute?.CreateOnly == true;
 				var useParentContext =
 					parentContextOrId != null
-					&& parentContextOrId.ParameterType.Identity.Equals(
-						TypeLibrary.Activities.SystemDiagnostics.ActivityContext
-					);
+					&& parentContextOrId.ParameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityContext);
 				var parentContextParameterName = useParentContext ? "parentContext" : "parentId";
 
 				if (createOnly && startTimeParam != null)
@@ -120,7 +118,7 @@ partial class ActivitySourceTargetClassEmitter
 
 		context.CancellationToken.ThrowIfCancellationRequested();
 
-		if (methodTarget.ReturnType.Similar(TypeLibrary.Activities.SystemDiagnostics.Activity))
+		if (methodTarget.ReturnType.Similar(TypeLibrary.System.Diagnostics.Activity))
 		{
 			writer.Return(returnWriter =>
 				returnWriter.Write(activityVariableName).Write(methodTarget.ReturnType.IsNullable ? null : "!")

@@ -74,6 +74,11 @@ build *args:
     echo "Building {{ BLUE }}{{ solution_file }}{{ NORMAL }} with {{ YELLOW }}{{ build_configuration }}{{ NORMAL }}..."
     dotnet build "{{ solution_file }}" --configuration "{{ build_configuration }}" {{ args }}
 
+# Restore NuGet packages for the solution
+[group('Build and Test')]
+restore *args:
+    dotnet restore {{ solution_file }} {{ args }}
+
 # Runs tests for the solution with the specified configuration (default: Release)
 [group('Build and Test')]
 test filter="/*/*/*/*/" *args:
@@ -163,24 +168,32 @@ update-version:
 
 # Opens the solution in the default associated application
 
-[group('System/ Shell')]
+[group('Utilities')]
 vs:
     echo "Opening {{ BLUE }}{{ solution_file }}{{ NORMAL }}..."
     open "{{ solution_file }}"
 
 # Opens the root folder in Visual Studio Code
 
-[group('System/ Shell')]
+[group('Utilities')]
 code:
     echo "Opening {{ BLUE }}Visual Studio Code{{ NORMAL }}..."
     code "{{ root_folder }}"
 
 # Opens the sample solution in the default associated application
 
-[group('System/ Shell')]
+[group('Utilities')]
 vs-s:
     echo "Opening {{ BLUE }}{{ sample_solution_file }}{{ NORMAL }}..."
     open "{{ sample_solution_file }}"
+
+# Clean up the repository by removing build artifacts, bin/obj folders etc, and shutting down the build server
+[group('Utilities')]
+scrub:
+    find . -type d \( -name bin -o -name obj \) -exec rm -rf {} +
+    just clean
+    just restore --force-evaluate
+    dotnet build-server shutdown
 
 # -----------------------------------------------------------------------------
 # Benchmarking

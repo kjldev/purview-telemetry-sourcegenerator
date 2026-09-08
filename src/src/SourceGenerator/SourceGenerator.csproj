@@ -26,6 +26,7 @@
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<!--<PackageProjectUrl>https://kjl.dev/projects/purviewtelemetrysourcegenerator/</PackageProjectUrl>-->
 		<PackageTags>logs;log;logger;logging;source-generator;high-performance-logging;otel;open-telemetry;telemetry;traces;tracing;metric;metrics;meter;meters;instrumentation;instruments;events;distributed-traces;distributed-tracing;melt;dotnet;aspnet;</PackageTags>
+		<DisableTelemetryGenerator>true</DisableTelemetryGenerator>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />

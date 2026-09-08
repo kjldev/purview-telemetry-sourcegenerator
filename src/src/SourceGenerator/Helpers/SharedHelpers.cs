@@ -11,13 +11,13 @@ static partial class SharedHelpers
 
 		var generationType = GenerationType.None;
 
-		if (Utilities.ContainsAttribute(symbol, TypeLibrary.Activities.ActivitySourceAttribute, token))
+		if (Utilities.ContainsAttribute(symbol, TypeLibrary.Purview.Telemetry.ActivitySourceAttribute, token))
 			generationType |= GenerationType.Activities;
 
-		if (Utilities.ContainsAttribute(symbol, TypeLibrary.Logging.LoggerAttribute, token))
+		if (Utilities.ContainsAttribute(symbol, TypeLibrary.Purview.Telemetry.LoggerAttribute, token))
 			generationType |= GenerationType.Logging;
 
-		if (Utilities.ContainsAttribute(symbol, TypeLibrary.Metrics.MeterAttribute, token))
+		if (Utilities.ContainsAttribute(symbol, TypeLibrary.Purview.Telemetry.MeterAttribute, token))
 			generationType |= GenerationType.Metrics;
 
 		return generationType;
@@ -154,7 +154,7 @@ static partial class SharedHelpers
 		if (
 			!Utilities.TryContainsAttribute(
 				parameter,
-				TypeLibrary.TelemetryShared.ExcludeTargetsAttribute,
+				TypeLibrary.Purview.Telemetry.ExcludeTargetsAttribute,
 				token,
 				out var attributeData
 			)

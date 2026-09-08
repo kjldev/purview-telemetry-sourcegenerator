@@ -10,7 +10,7 @@ partial class SharedHelpers
 		if (
 			!Utilities.TryContainsAttribute(
 				symbol,
-				TypeLibrary.Logging.LogAttributeTargets,
+				TypeLibrary.Purview.Telemetry.LogAttributeTargets,
 				token,
 				out var matchingType,
 				out var attributeData
@@ -20,7 +20,7 @@ partial class SharedHelpers
 			return null;
 		}
 
-		if (matchingType == TypeLibrary.Logging.LogAttribute)
+		if (matchingType == TypeLibrary.Purview.Telemetry.LogAttribute)
 		{
 			var data = LogAttributeData.FromAttributeData(attributeData!);
 			return data.Exists
@@ -37,31 +37,31 @@ partial class SharedHelpers
 
 	static LogAttributeData GetSpecificLogData(TypeIdentity template, AttributeData attributeData)
 	{
-		if (template == TypeLibrary.Logging.TraceAttribute)
+		if (template == TypeLibrary.Purview.Telemetry.TraceAttribute)
 		{
 			var data = TraceAttributeData.FromAttributeData(attributeData);
 			return data.ToLogAttribute();
 		}
 
-		if (template == TypeLibrary.Logging.DebugAttribute)
+		if (template == TypeLibrary.Purview.Telemetry.DebugAttribute)
 		{
 			var data = DebugAttributeData.FromAttributeData(attributeData);
 			return data.ToLogAttribute();
 		}
 
-		if (template == TypeLibrary.Logging.InfoAttribute)
+		if (template == TypeLibrary.Purview.Telemetry.InfoAttribute)
 		{
 			var data = InfoAttributeData.FromAttributeData(attributeData);
 			return data.ToLogAttribute();
 		}
 
-		if (template == TypeLibrary.Logging.WarningAttribute)
+		if (template == TypeLibrary.Purview.Telemetry.WarningAttribute)
 		{
 			var data = WarningAttributeData.FromAttributeData(attributeData);
 			return data.ToLogAttribute();
 		}
 
-		if (template == TypeLibrary.Logging.ErrorAttribute)
+		if (template == TypeLibrary.Purview.Telemetry.ErrorAttribute)
 		{
 			var data = ErrorAttributeData.FromAttributeData(attributeData);
 			return data.ToLogAttribute();
@@ -73,7 +73,14 @@ partial class SharedHelpers
 
 	public static LoggerAttributeData? GetLoggerAttribute(ISymbol symbol, CancellationToken token)
 	{
-		if (!Utilities.TryContainsAttribute(symbol, TypeLibrary.Logging.LoggerAttribute, token, out var attributeData))
+		if (
+			!Utilities.TryContainsAttribute(
+				symbol,
+				TypeLibrary.Purview.Telemetry.LoggerAttribute,
+				token,
+				out var attributeData
+			)
+		)
 		{
 			return null;
 		}
@@ -87,7 +94,7 @@ partial class SharedHelpers
 		if (
 			!Utilities.TryContainsAttribute(
 				symbol,
-				TypeLibrary.Logging.LoggerGenerationAttribute,
+				TypeLibrary.Purview.Telemetry.LoggerGenerationAttribute,
 				token,
 				out var attributeData
 			)
@@ -105,7 +112,7 @@ partial class SharedHelpers
 		if (
 			!Utilities.TryContainsAttribute(
 				symbol,
-				TypeLibrary.Logging.MicrosoftExtensions.LogPropertiesAttribute,
+				TypeLibrary.Microsoft.Extensions.Logging.LogPropertiesAttribute,
 				token,
 				out var attributeData
 			)
@@ -123,7 +130,7 @@ partial class SharedHelpers
 		if (
 			!Utilities.TryContainsAttribute(
 				symbol,
-				TypeLibrary.Logging.ExpandEnumerableAttribute,
+				TypeLibrary.Purview.Telemetry.ExpandEnumerableAttribute,
 				token,
 				out var attributeData
 			)

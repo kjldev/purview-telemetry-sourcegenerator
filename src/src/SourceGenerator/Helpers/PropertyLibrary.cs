@@ -12,6 +12,7 @@ static class PropertyLibrary
 	public const string PurviewTelemetryNamespace = TelemetryAttributeNames.PurviewTelemetryNamespace;
 	public const string SystemDiagnosticsNamespace = TelemetryAttributeNames.SystemDiagnosticsNamespace;
 	public const string EmbedAttributesHashDefineName = "PURVIEW_TELEMETRY_ATTRIBUTES";
+	public const string DisableTelemetryGenerator = "DisableTelemetryGenerator";
 
 	public static readonly Lazy<Version> Version = new(() => typeof(PropertyLibrary).Assembly.GetName().Version);
 
@@ -65,23 +66,28 @@ static class PropertyLibrary
 		public const string Tag_ExceptionStackTrace = "exception.stacktrace";
 		public const string RecordExceptionMethodName = "RecordExceptionInternal";
 
-		public static readonly string ActivityKind_Internal =
-			TypeLibrary.Activities.SystemDiagnostics.ActivityKind.StaticMember("Internal");
-		public static readonly string ActivityKind_Server =
-			TypeLibrary.Activities.SystemDiagnostics.ActivityKind.StaticMember("Server");
-		public static readonly string ActivityKind_Client =
-			TypeLibrary.Activities.SystemDiagnostics.ActivityKind.StaticMember("Client");
-		public static readonly string ActivityKind_Producer =
-			TypeLibrary.Activities.SystemDiagnostics.ActivityKind.StaticMember("Producer");
-		public static readonly string ActivityKind_Consumer =
-			TypeLibrary.Activities.SystemDiagnostics.ActivityKind.StaticMember("Consumer");
+		public static readonly string ActivityKind_Internal = TypeLibrary.System.Diagnostics.ActivityKind.StaticMember(
+			"Internal"
+		);
+		public static readonly string ActivityKind_Server = TypeLibrary.System.Diagnostics.ActivityKind.StaticMember(
+			"Server"
+		);
+		public static readonly string ActivityKind_Client = TypeLibrary.System.Diagnostics.ActivityKind.StaticMember(
+			"Client"
+		);
+		public static readonly string ActivityKind_Producer = TypeLibrary.System.Diagnostics.ActivityKind.StaticMember(
+			"Producer"
+		);
+		public static readonly string ActivityKind_Consumer = TypeLibrary.System.Diagnostics.ActivityKind.StaticMember(
+			"Consumer"
+		);
 
 		public static readonly string ActivityStatusCode_Unset =
-			TypeLibrary.Activities.SystemDiagnostics.ActivityStatusCode.StaticMember("Unset");
+			TypeLibrary.System.Diagnostics.ActivityStatusCode.StaticMember("Unset");
 		public static readonly string ActivityStatusCode_Ok =
-			TypeLibrary.Activities.SystemDiagnostics.ActivityStatusCode.StaticMember("Ok");
+			TypeLibrary.System.Diagnostics.ActivityStatusCode.StaticMember("Ok");
 		public static readonly string ActivityStatusCode_Error =
-			TypeLibrary.Activities.SystemDiagnostics.ActivityStatusCode.StaticMember("Error");
+			TypeLibrary.System.Diagnostics.ActivityStatusCode.StaticMember("Error");
 
 		public static readonly ImmutableDictionary<int, string> ActivityKindTypeMap = new Dictionary<int, string>
 		{
@@ -112,24 +118,23 @@ static class PropertyLibrary
 
 		public static string ILoggerOfTMetadataName => TelemetryAttributeNames.Logging.ILoggerOfT.MetadataFullName;
 
-		public static readonly string LogLevel_Trace = TypeLibrary.Logging.MicrosoftExtensions.LogLevel.StaticMember(
+		public static readonly string LogLevel_Trace = TypeLibrary.Microsoft.Extensions.Logging.LogLevel.StaticMember(
 			"Trace"
 		);
-		public static readonly string LogLevel_Debug = TypeLibrary.Logging.MicrosoftExtensions.LogLevel.StaticMember(
+		public static readonly string LogLevel_Debug = TypeLibrary.Microsoft.Extensions.Logging.LogLevel.StaticMember(
 			"Debug"
 		);
 		public static readonly string LogLevel_Information =
-			TypeLibrary.Logging.MicrosoftExtensions.LogLevel.StaticMember("Information");
-		public static readonly string LogLevel_Warning = TypeLibrary.Logging.MicrosoftExtensions.LogLevel.StaticMember(
+			TypeLibrary.Microsoft.Extensions.Logging.LogLevel.StaticMember("Information");
+		public static readonly string LogLevel_Warning = TypeLibrary.Microsoft.Extensions.Logging.LogLevel.StaticMember(
 			"Warning"
 		);
-		public static readonly string LogLevel_Error = TypeLibrary.Logging.MicrosoftExtensions.LogLevel.StaticMember(
+		public static readonly string LogLevel_Error = TypeLibrary.Microsoft.Extensions.Logging.LogLevel.StaticMember(
 			"Error"
 		);
-		public static readonly string LogLevel_Critical = TypeLibrary.Logging.MicrosoftExtensions.LogLevel.StaticMember(
-			"Critical"
-		);
-		public static readonly string LogLevel_None = TypeLibrary.Logging.MicrosoftExtensions.LogLevel.StaticMember(
+		public static readonly string LogLevel_Critical =
+			TypeLibrary.Microsoft.Extensions.Logging.LogLevel.StaticMember("Critical");
+		public static readonly string LogLevel_None = TypeLibrary.Microsoft.Extensions.Logging.LogLevel.StaticMember(
 			"None"
 		);
 
@@ -188,8 +193,7 @@ static class PropertyLibrary
 	public static class DependencyInjection
 	{
 		public const string DependencyInjectionNamespace = "Microsoft.Extensions.DependencyInjection";
-		public static readonly string Singleton = TypeLibrary.DependencyInjection.ServiceLifetime.StaticMember(
-			"Singleton"
-		);
+		public static readonly string Singleton =
+			TypeLibrary.Microsoft.Extensions.DependencyInjection.ServiceLifetime.StaticMember("Singleton");
 	}
 }

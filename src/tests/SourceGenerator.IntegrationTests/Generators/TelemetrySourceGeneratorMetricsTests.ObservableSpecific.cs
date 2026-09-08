@@ -33,15 +33,15 @@ public interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "Counter"))
+			.That(metricsClass.HasMethod("Counter"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the observable counter method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "Gauge"))
+			.That(metricsClass.HasMethod("Gauge"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the observable gauge method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "UpDown"))
+			.That(metricsClass.HasMethod("UpDown"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the observable up-down counter method");
 	}
@@ -78,15 +78,15 @@ public interface ITestMetrics {
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "Counter"))
+			.That(metricsClass.HasMethod("Counter"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the observable counter method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "Gauge"))
+			.That(metricsClass.HasMethod("Gauge"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the observable gauge method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "UpDown"))
+			.That(metricsClass.HasMethod("UpDown"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the observable up-down counter method");
 	}

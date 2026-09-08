@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
-using Purview.Telemetry.SourceGenerator.Helpers;
 
 namespace Purview.Telemetry.SourceGenerator.Emitters;
 
@@ -15,140 +14,146 @@ static class GeneratedTypesEmitter
 	{
 		// Telemetry Shared
 		yield return (
-			TypeLibrary.TelemetryShared.TagAttribute,
+			TypeLibrary.Purview.Telemetry.TagAttribute,
 			(writer, type) =>
 				WriteTagLikeAttribute(writer, type, "Marks a parameter as a tag for an activity, event or instrument.")
 		);
 
 		yield return (
-			TypeLibrary.TelemetryShared.ExcludeAttribute,
+			TypeLibrary.Purview.Telemetry.ExcludeAttribute,
 			(writer, type) =>
 				WriteSimpleAttribute(
 					writer,
 					type,
 					AttributeTargets.Method,
 					includeSuppressMessage: false,
-					summary: "Marks a method to be excluded from telemetry generation."
+					"Marks a method to be excluded from telemetry generation."
 				)
 		);
-		yield return (TypeLibrary.TelemetryShared.TelemetryGenerationAttribute, WriteTelemetryGenerationAttribute);
-		yield return (TypeLibrary.TelemetryShared.Targets, WriteTargetsEnum);
-		yield return (TypeLibrary.TelemetryShared.NamingConvention, WriteNamingConventionEnum);
-		yield return (TypeLibrary.TelemetryShared.ExcludeTargetsAttribute, WriteExcludeTargetsAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.TelemetryGenerationAttribute, WriteTelemetryGenerationAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.Targets, WriteTargetsEnum);
+		yield return (TypeLibrary.Purview.Telemetry.NamingConvention, WriteNamingConventionEnum);
+		yield return (TypeLibrary.Purview.Telemetry.ExcludeTargetsAttribute, WriteExcludeTargetsAttribute);
+
 		// Activities
 		yield return (
-			TypeLibrary.Activities.BaggageAttribute,
+			TypeLibrary.Purview.Telemetry.BaggageAttribute,
 			(writer, type) =>
 				WriteTagLikeAttribute(writer, type, "Marks a parameter as baggage to be attached to an activity.")
 		);
-		yield return (TypeLibrary.Activities.ActivitySourceGenerationAttribute, WriteActivitySourceGenerationAttribute);
-		yield return (TypeLibrary.Activities.ActivitySourceAttribute, WriteActivitySourceAttribute);
-		yield return (TypeLibrary.Activities.ActivityAttribute, WriteActivityAttribute);
-		yield return (TypeLibrary.Activities.EventAttribute, WriteEventAttribute);
 		yield return (
-			TypeLibrary.Activities.ContextAttribute,
+			TypeLibrary.Purview.Telemetry.ActivitySourceGenerationAttribute,
+			WriteActivitySourceGenerationAttribute
+		);
+		yield return (TypeLibrary.Purview.Telemetry.ActivitySourceAttribute, WriteActivitySourceAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.ActivityAttribute, WriteActivityAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.EventAttribute, WriteEventAttribute);
+		yield return (
+			TypeLibrary.Purview.Telemetry.ContextAttribute,
 			(writer, type) =>
 				WriteSimpleAttribute(
 					writer,
 					type,
 					AttributeTargets.Method,
 					includeSuppressMessage: false,
-					summary: "Marks a parameter as an activity context."
+					"Marks a parameter as an activity context."
 				)
 		);
 		yield return (
-			TypeLibrary.Activities.EscapeAttribute,
+			TypeLibrary.Purview.Telemetry.EscapeAttribute,
 			(writer, type) =>
 				WriteSimpleAttribute(
 					writer,
 					type,
 					AttributeTargets.Parameter,
 					includeSuppressMessage: false,
-					summary: "Marks a parameter as the escape flag for a recorded exception."
+					"Marks a parameter as the escape flag for a recorded exception."
 				)
 		);
 		yield return (
-			TypeLibrary.Activities.StatusDescriptionAttribute,
+			TypeLibrary.Purview.Telemetry.StatusDescriptionAttribute,
 			(writer, type) =>
 				WriteSimpleAttribute(
 					writer,
 					type,
 					AttributeTargets.Parameter,
 					includeSuppressMessage: false,
-					summary: "Marks a parameter as the status description of an activity or event."
+					"Marks a parameter as the status description of an activity or event."
 				)
 		);
+
 		// Logging
-		yield return (TypeLibrary.Logging.LoggerGenerationAttribute, WriteLoggerGenerationAttribute);
-		yield return (TypeLibrary.Logging.LoggerAttribute, WriteLoggerAttribute);
-		yield return (TypeLibrary.Logging.LogAttribute, WriteLogAttribute);
-		yield return (TypeLibrary.Logging.LogPrefixType, WriteLogPrefixTypeEnum);
-		yield return (TypeLibrary.Logging.LoggerGenerationMode, WriteLoggerGenerationModeEnum);
-		yield return (TypeLibrary.Logging.ExpandEnumerableAttribute, WriteExpandEnumerableAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.LoggerGenerationAttribute, WriteLoggerGenerationAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.LoggerAttribute, WriteLoggerAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.LogAttribute, WriteLogAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.LogPrefixType, WriteLogPrefixTypeEnum);
+		yield return (TypeLibrary.Purview.Telemetry.LoggerGenerationMode, WriteLoggerGenerationModeEnum);
+		yield return (TypeLibrary.Purview.Telemetry.ExpandEnumerableAttribute, WriteExpandEnumerableAttribute);
 		yield return (
-			TypeLibrary.Logging.TraceAttribute,
+			TypeLibrary.Purview.Telemetry.TraceAttribute,
 			(writer, type) => WriteSpecificLogAttribute(writer, type, "Marks a method as a trace-level log method.")
 		);
 		yield return (
-			TypeLibrary.Logging.DebugAttribute,
+			TypeLibrary.Purview.Telemetry.DebugAttribute,
 			(writer, type) => WriteSpecificLogAttribute(writer, type, "Marks a method as a debug-level log method.")
 		);
 		yield return (
-			TypeLibrary.Logging.InfoAttribute,
+			TypeLibrary.Purview.Telemetry.InfoAttribute,
 			(writer, type) => WriteSpecificLogAttribute(writer, type, "Marks a method as an informational log method.")
 		);
 		yield return (
-			TypeLibrary.Logging.WarningAttribute,
+			TypeLibrary.Purview.Telemetry.WarningAttribute,
 			(writer, type) => WriteSpecificLogAttribute(writer, type, "Marks a method as a warning-level log method.")
 		);
 		yield return (
-			TypeLibrary.Logging.ErrorAttribute,
+			TypeLibrary.Purview.Telemetry.ErrorAttribute,
 			(writer, type) => WriteSpecificLogAttribute(writer, type, "Marks a method as an error-level log method.")
 		);
 		yield return (
-			TypeLibrary.Logging.CriticalAttribute,
+			TypeLibrary.Purview.Telemetry.CriticalAttribute,
 			(writer, type) => WriteSpecificLogAttribute(writer, type, "Marks a method as a critical-level log method.")
 		);
+
 		// Metrics
-		yield return (TypeLibrary.Metrics.MeterGenerationAttribute, WriteMeterGenerationAttribute);
-		yield return (TypeLibrary.Metrics.MeterAttribute, WriteMeterAttribute);
-		yield return (TypeLibrary.Metrics.MeterNameGenerationType, WriteMeterNameGenerationTypeEnum);
+		yield return (TypeLibrary.Purview.Telemetry.MeterGenerationAttribute, WriteMeterGenerationAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.MeterAttribute, WriteMeterAttribute);
+		yield return (TypeLibrary.Purview.Telemetry.MeterNameGenerationType, WriteMeterNameGenerationTypeEnum);
 		yield return (
-			TypeLibrary.Metrics.InstrumentMeasurementAttribute,
+			TypeLibrary.Purview.Telemetry.InstrumentMeasurementAttribute,
 			(writer, type) =>
 				WriteSimpleAttribute(
 					writer,
 					type,
 					AttributeTargets.Parameter,
 					includeSuppressMessage: false,
-					summary: "Marks a parameter as the measurement value of an instrument."
+					"Marks a parameter as the measurement value of an instrument."
 				)
 		);
 		yield return (
-			TypeLibrary.Metrics.AutoCounterAttribute,
+			TypeLibrary.Purview.Telemetry.AutoCounterAttribute,
 			(writer, type) =>
 				WriteAutoCounterAttribute(writer, type, "Marks a method as an auto-incrementing counter instrument.")
 		);
 		yield return (
-			TypeLibrary.Metrics.CounterAttribute,
+			TypeLibrary.Purview.Telemetry.CounterAttribute,
 			(writer, type) => WriteCounterLikeAttribute(writer, type, "Marks a method as a counter instrument.")
 		);
 		yield return (
-			TypeLibrary.Metrics.UpDownCounterAttribute,
+			TypeLibrary.Purview.Telemetry.UpDownCounterAttribute,
 			(writer, type) =>
 				WriteCounterLikeAttribute(writer, type, "Marks a method as an up-down counter instrument.")
 		);
 		yield return (
-			TypeLibrary.Metrics.HistogramAttribute,
+			TypeLibrary.Purview.Telemetry.HistogramAttribute,
 			(writer, type) => WriteCounterLikeAttribute(writer, type, "Marks a method as a histogram instrument.")
 		);
 		yield return (
-			TypeLibrary.Metrics.ObservableCounterAttribute,
+			TypeLibrary.Purview.Telemetry.ObservableCounterAttribute,
 			(writer, type) =>
 				WriteObservableCounterLikeAttribute(writer, type, "Marks a method as an observable counter instrument.")
 		);
 		yield return (
-			TypeLibrary.Metrics.ObservableUpDownCounterAttribute,
+			TypeLibrary.Purview.Telemetry.ObservableUpDownCounterAttribute,
 			(writer, type) =>
 				WriteObservableCounterLikeAttribute(
 					writer,
@@ -157,7 +162,7 @@ static class GeneratedTypesEmitter
 				)
 		);
 		yield return (
-			TypeLibrary.Metrics.ObservableGaugeAttribute,
+			TypeLibrary.Purview.Telemetry.ObservableGaugeAttribute,
 			(writer, type) =>
 				WriteObservableCounterLikeAttribute(writer, type, "Marks a method as an observable gauge instrument.")
 		);
@@ -209,11 +214,16 @@ static class GeneratedTypesEmitter
 		TypeIdentity type,
 		AttributeTargets targets,
 		Action<CodeWriter> body,
+		string summary,
 		bool wrapInExcludeLoggingGuard = false,
-		bool includeSuppressMessage = true,
-		string? summary = null
+		bool includeSuppressMessage = true
 	)
 	{
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
 		using var scope = wrapInExcludeLoggingGuard
 			? writer.HashDefinesScope("!EXCLUDE_PURVIEW_TELEMETRY_LOGGING")
 			: writer.EmptyScope();
@@ -223,14 +233,15 @@ static class GeneratedTypesEmitter
 		if (includeSuppressMessage)
 			attributes = attributes.Add(SuppressMessageAttribute());
 
-		writer.FileScopedNamespace(TypeLibrary.PurviewTelemetryNamespace);
-		if (summary != null)
-			writer.XmlSummary(summary);
-		writer.AttributeClass(
-			new(type.Name, TypeDeclarationAccessibility.Internal) { Attributes = attributes },
-			targets,
-			body
-		);
+		writer.FileScopedNamespace(TypeLibrary.Purview.Telemetry.Namespace);
+
+		writer
+			.XmlSummary(summary)
+			.AttributeClass(
+				new(type.Name, TypeDeclarationAccessibility.Internal) { Attributes = attributes },
+				targets,
+				body
+			);
 	}
 
 	static void WriteSimpleAttribute(
@@ -238,9 +249,14 @@ static class GeneratedTypesEmitter
 		TypeIdentity type,
 		AttributeTargets targets,
 		bool includeSuppressMessage,
-		string? summary = null
+		string summary
 	)
 	{
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
 		EmitAttribute(
 			writer,
 			type,
@@ -267,59 +283,76 @@ static class GeneratedTypesEmitter
 	// Members
 	// -------------------------------------------------------------------------------------------
 
-	static void WriteEmptyConstructor(CodeWriter writer, TypeIdentity type, string? summary = null)
+	static void WriteEmptyConstructor(CodeWriter writer, TypeIdentity type, string summary)
 	{
-		if (summary != null)
-			writer.XmlSummary(summary);
-		writer.Constructor(new(type.Name, TypeDeclarationAccessibility.Public), static _ => { });
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
+		writer.XmlSummary(summary).Constructor(new(type.Name, TypeDeclarationAccessibility.Public), static _ => { });
 	}
 
-	static void WriteNameConstructor(CodeWriter writer, TypeIdentity type, string? summary = null)
+	static void WriteNameConstructor(
+		CodeWriter writer,
+		TypeIdentity type,
+		string summary,
+		Action<CodeWriter>? xmlBody = null
+	)
 	{
-		if (summary != null)
-		{
-			writer.XmlSummary(summary);
-			writer.XmlParam("name", "The name of the telemetry entry.");
-		}
-		writer.Constructor(
-			new(type.Name, TypeDeclarationAccessibility.Public)
-			{
-				Parameters = [new("name", PurviewTypeLibrary.System.String.AsTypeReference())],
-			},
-			ctor => ctor.Assignment("Name", "name")
-		);
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
+		writer
+			.XmlSummary(summary)
+			.XmlParam("name", "The name of the telemetry entry.")
+			.Constructor(
+				new(type.Name, TypeDeclarationAccessibility.Public)
+				{
+					Parameters = [new("name", TypeLibrary.System.String)],
+				},
+				ctor => ctor.Assignment("Name", "name")
+			);
 	}
 
-	static void WriteMessageTemplateConstructor(CodeWriter writer, TypeIdentity type, string? summary = null)
+	static void WriteMessageTemplateConstructor(CodeWriter writer, TypeIdentity type, string summary)
 	{
-		if (summary != null)
-		{
-			writer.XmlSummary(summary);
-			writer.XmlParam("messageTemplate", "The message template used to generate the log message.");
-		}
-		writer.Constructor(
-			new(type.Name, TypeDeclarationAccessibility.Public)
-			{
-				Parameters = [new("messageTemplate", PurviewTypeLibrary.System.String.AsTypeReference())],
-			},
-			ctor => ctor.Assignment("MessageTemplate", "messageTemplate")
-		);
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
+		writer
+			.XmlSummary(summary)
+			.XmlParam("messageTemplate", "The message template used to generate the log message.")
+			.Constructor(
+				new(type.Name, TypeDeclarationAccessibility.Public)
+				{
+					Parameters = [new("messageTemplate", TypeLibrary.System.String)],
+				},
+				ctor => ctor.Assignment("MessageTemplate", "messageTemplate")
+			);
 	}
 
-	static void WriteEventIdConstructor(CodeWriter writer, TypeIdentity type, string? summary = null)
+	static void WriteEventIdConstructor(CodeWriter writer, TypeIdentity type, string summary)
 	{
-		if (summary != null)
-		{
-			writer.XmlSummary(summary);
-			writer.XmlParam("eventId", "The event identifier of the log entry.");
-		}
-		writer.Constructor(
-			new(type.Name, TypeDeclarationAccessibility.Public)
-			{
-				Parameters = [new("eventId", PurviewTypeLibrary.System.Int32.AsTypeReference())],
-			},
-			ctor => ctor.Assignment("EventId", "eventId")
-		);
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
+		writer
+			.XmlSummary(summary)
+			.XmlParam("eventId", "The event identifier of the log entry.")
+			.Constructor(
+				new(type.Name, TypeDeclarationAccessibility.Public)
+				{
+					Parameters = [new("eventId", TypeLibrary.System.Int32)],
+				},
+				ctor => ctor.Assignment("EventId", "eventId")
+			);
 	}
 
 	/// <summary>Writes a public property with generated attributes and an optional initializer.</summary>
@@ -327,36 +360,40 @@ static class GeneratedTypesEmitter
 		CodeWriter writer,
 		string name,
 		TypeReference type,
-		string? initializer = null,
-		string? summary = null
+		string summary,
+		string? initializer = null
 	)
 	{
-		if (summary != null)
-			writer.XmlSummary(summary);
-		writer.Property(
-			new(name, type, TypeDeclarationAccessibility.Public) { HasSetter = true, Initializer = initializer }
-		);
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
+		writer
+			.XmlSummary(summary)
+			.Property(
+				new(name, type, TypeDeclarationAccessibility.Public) { HasSetter = true, Initializer = initializer }
+			);
 	}
 
 	/// <summary>
 	/// Writes a public nullable-capable string property inside the <c>NET48_OR_GREATER</c>/
 	/// <c>PURVIEW_TELEMETRY_NON_NULLABLE</c> preprocessor guard used by the marker attributes.
 	/// </summary>
-	static void WriteNullableStringProperty(CodeWriter writer, string name, string? summary = null)
+	static void WriteNullableStringProperty(CodeWriter writer, string name, string summary)
 	{
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
 		writer.HashDefines(
 			"NET48_OR_GREATER || PURVIEW_TELEMETRY_NON_NULLABLE",
 			hashWriter =>
-			{
-				if (summary != null)
-					hashWriter.XmlSummary(summary);
 				hashWriter
+					.XmlSummary(summary)
 					.Property(
-						new(
-							name,
-							PurviewTypeLibrary.System.String.AsTypeReference(),
-							TypeDeclarationAccessibility.Public
-						)
+						new(name, TypeLibrary.System.String, TypeDeclarationAccessibility.Public)
 						{
 							HasSetter = true,
 							IncludeGeneratedAttributes = false,
@@ -364,46 +401,46 @@ static class GeneratedTypesEmitter
 					)
 					.HashElse()
 					.Property(
-						new(
-							name,
-							PurviewTypeLibrary.System.String.MakeNullable(writer),
-							TypeDeclarationAccessibility.Public
-						)
+						new(name, TypeLibrary.System.String.MakeNullable(writer), TypeDeclarationAccessibility.Public)
 						{
 							HasSetter = true,
 							IncludeGeneratedAttributes = false,
 						}
-					);
-			}
+					)
 		);
 	}
 
 	/// <summary>Writes a public non-nullable string property (used for defaults that always have a value).</summary>
-	static void WritePlainStringProperty(
-		CodeWriter writer,
-		string name,
-		string? initializer = null,
-		string? summary = null
-	)
+	static void WritePlainStringProperty(CodeWriter writer, string name, string summary, string? initializer = null)
 	{
-		if (summary != null)
-			writer.XmlSummary(summary);
-		writer.Property(
-			new(name, PurviewTypeLibrary.System.String.AsTypeReference(), TypeDeclarationAccessibility.Public)
-			{
-				HasSetter = true,
-				IncludeGeneratedAttributes = false,
-				Initializer = initializer,
-			}
-		);
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
+		writer
+			.XmlSummary(summary)
+			.Property(
+				new(name, TypeLibrary.System.String, TypeDeclarationAccessibility.Public)
+				{
+					HasSetter = true,
+					IncludeGeneratedAttributes = false,
+					Initializer = initializer,
+				}
+			);
 	}
 
 	// -------------------------------------------------------------------------------------------
 	// Shared templates
 	// -------------------------------------------------------------------------------------------
 
-	static void WriteTagLikeAttribute(CodeWriter writer, TypeIdentity type, string? summary = null)
+	static void WriteTagLikeAttribute(CodeWriter writer, TypeIdentity type, string summary)
 	{
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
 		EmitAttribute(
 			writer,
 			type,
@@ -414,7 +451,7 @@ static class GeneratedTypesEmitter
 				body.Constructor(
 					new(type.Name, TypeDeclarationAccessibility.Public)
 					{
-						Parameters = [new("skipOnNullOrEmpty", PurviewTypeLibrary.System.Boolean.AsTypeReference())],
+						Parameters = [new("skipOnNullOrEmpty", TypeLibrary.System.Boolean)],
 					},
 					ctor => ctor.Assignment("SkipOnNullOrEmpty", "skipOnNullOrEmpty")
 				);
@@ -428,11 +465,8 @@ static class GeneratedTypesEmitter
 					{
 						Parameters =
 						[
-							new("name", PurviewTypeLibrary.System.String.AsTypeReference()),
-							new("skipOnNullOrEmpty", PurviewTypeLibrary.System.Boolean.AsTypeReference())
-							{
-								DefaultValue = "false",
-							},
+							new("name", TypeLibrary.System.String),
+							new("skipOnNullOrEmpty", TypeLibrary.System.Boolean) { DefaultValue = "false" },
 						],
 					},
 					ctor =>
@@ -446,17 +480,17 @@ static class GeneratedTypesEmitter
 				WritePublicProperty(
 					body,
 					"SkipOnNullOrEmpty",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					summary: "Determines whether the value is skipped when it is null or empty."
+					TypeLibrary.System.Boolean,
+					"Determines whether the value is skipped when it is null or empty."
 				);
 			},
-			summary: summary
+			summary
 		);
 	}
 
 	static void WriteTelemetryGenerationAttribute(CodeWriter writer, TypeIdentity type)
 	{
-		var namingConvention = TypeLibrary.TelemetryShared.NamingConvention;
+		var namingConvention = TypeLibrary.Purview.Telemetry.NamingConvention;
 
 		EmitAttribute(
 			writer,
@@ -466,64 +500,61 @@ static class GeneratedTypesEmitter
 			{
 				WriteEmptyConstructor(body, type, $"Constructs a new instance of the {XmlSee(type.Name)}.");
 				body.XmlSummary(
-					"Constructs a new instance specifying whether a dependency-injection extension is generated, the generated class name and the dependency-injection class name."
-				);
-				body.XmlParam("generateDependencyExtension", "Whether to generate a dependency-injection extension.");
-				body.XmlParam("className", "The name of the generated telemetry class.");
-				body.XmlParam("dependencyInjectionClassName", "The name of the generated dependency-injection class.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("generateDependencyExtension", PurviewTypeLibrary.System.Boolean.AsTypeReference()),
-							new("className", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-							new("dependencyInjectionClassName", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("GenerateDependencyExtension", "generateDependencyExtension");
-						ctor.Assignment("ClassName", "className");
-						ctor.Assignment("DependencyInjectionClassName", "dependencyInjectionClassName");
-					}
-				);
+						"Constructs a new instance specifying whether a dependency-injection extension is generated, the generated class name and the dependency-injection class name."
+					)
+					.XmlParam("generateDependencyExtension", "Whether to generate a dependency-injection extension.")
+					.XmlParam("className", "The name of the generated telemetry class.")
+					.XmlParam("dependencyInjectionClassName", "The name of the generated dependency-injection class.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("generateDependencyExtension", TypeLibrary.System.Boolean),
+								new("className", TypeLibrary.System.String) { DefaultValue = "null" },
+								new("dependencyInjectionClassName", TypeLibrary.System.String)
+								{
+									DefaultValue = "null",
+								},
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("GenerateDependencyExtension", "generateDependencyExtension");
+							ctor.Assignment("ClassName", "className");
+							ctor.Assignment("DependencyInjectionClassName", "dependencyInjectionClassName");
+						}
+					);
 				body.XmlSummary(
-					"Constructs a new instance specifying the generated class name and the dependency-injection class name."
-				);
-				body.XmlParam("className", "The name of the generated telemetry class.");
-				body.XmlParam("dependencyInjectionClassName", "The name of the generated dependency-injection class.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("className", PurviewTypeLibrary.System.String.AsTypeReference()),
-							new("dependencyInjectionClassName", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("ClassName", "className");
-						ctor.Assignment("DependencyInjectionClassName", "dependencyInjectionClassName");
-					}
-				);
+						"Constructs a new instance specifying the generated class name and the dependency-injection class name."
+					)
+					.XmlParam("className", "The name of the generated telemetry class.")
+					.XmlParam("dependencyInjectionClassName", "The name of the generated dependency-injection class.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("className", TypeLibrary.System.String),
+								new("dependencyInjectionClassName", TypeLibrary.System.String)
+								{
+									DefaultValue = "null",
+								},
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("ClassName", "className");
+							ctor.Assignment("DependencyInjectionClassName", "dependencyInjectionClassName");
+						}
+					);
 
 				WritePublicProperty(
 					body,
 					"GenerateDependencyExtension",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether a dependency-injection extension method is generated."
+					TypeLibrary.System.Boolean,
+					"Determines whether a dependency-injection extension method is generated.",
+					"true"
 				);
 				WriteNullableStringProperty(body, "ClassName", "The name of the generated telemetry class.");
 				WriteNullableStringProperty(
@@ -534,22 +565,22 @@ static class GeneratedTypesEmitter
 				WritePublicProperty(
 					body,
 					"DependencyInjectionClassIsPublic",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					summary: "Determines whether the dependency-injection class is generated as public."
+					TypeLibrary.System.Boolean,
+					"Determines whether the dependency-injection class is generated as public."
 				);
 				WritePublicProperty(
 					body,
 					"NamingConvention",
-					namingConvention.AsTypeReference(),
-					$"{namingConvention.RenderFullName}.OpenTelemetry",
-					"Determines the naming convention used for generated telemetry names."
+					namingConvention,
+					"Determines the naming convention used for generated telemetry names.",
+					$"{namingConvention.RenderFullName}.OpenTelemetry"
 				);
 				WritePublicProperty(
 					body,
 					"GenerateTelemetryNamesClass",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether a telemetry names class is generated."
+					TypeLibrary.System.Boolean,
+					"Determines whether a telemetry names class is generated.",
+					"true"
 				);
 				WriteNullableStringProperty(
 					body,
@@ -562,13 +593,13 @@ static class GeneratedTypesEmitter
 					"The namespace of the generated telemetry names class."
 				);
 			},
-			summary: "Specifies the telemetry generation behaviour for an interface or assembly."
+			"Specifies the telemetry generation behaviour for an interface or assembly."
 		);
 	}
 
 	static void WriteExcludeTargetsAttribute(CodeWriter writer, TypeIdentity type)
 	{
-		var targets = TypeLibrary.TelemetryShared.Targets;
+		var targets = TypeLibrary.Purview.Telemetry.Targets;
 
 		EmitAttribute(
 			writer,
@@ -576,20 +607,21 @@ static class GeneratedTypesEmitter
 			AttributeTargets.Parameter,
 			body =>
 			{
-				body.XmlSummary("Constructs a new instance with the specified targets to exclude.");
-				body.XmlParam("targets", $"The {XmlSee("ExcludedTargets")}.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters = [new("targets", targets.AsTypeReference())],
-					},
-					ctor => ctor.Assignment("ExcludedTargets", "targets")
-				);
+				body.XmlSummary("Constructs a new instance with the specified targets to exclude.")
+					.XmlParam("targets", $"The {XmlSee("ExcludedTargets")}.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public) { Parameters = [new("targets", targets)] },
+						ctor => ctor.Assignment("ExcludedTargets", "targets")
+					);
 
-				body.XmlSummary("Gets or sets the targets to exclude for this parameter.");
-				WritePublicProperty(body, "ExcludedTargets", targets.AsTypeReference());
+				WritePublicProperty(
+					body,
+					"ExcludedTargets",
+					targets,
+					"Gets or sets the targets to exclude for this parameter."
+				);
 			},
-			summary: "Marks a parameter as excluded from the specified telemetry targets."
+			"Marks a parameter as excluded from the specified telemetry targets."
 		);
 	}
 
@@ -605,54 +637,48 @@ static class GeneratedTypesEmitter
 			AttributeTargets.Assembly,
 			body =>
 			{
-				body.XmlSummary("Constructs a new instance specifying the activity source name and default behaviour.");
-				body.XmlParam("name", "The name of the activity source.");
-				body.XmlParam("defaultToTags", "Whether parameters are inferred as tags by default.");
-				body.XmlParam(
-					"generateDiagnosticsForMissingActivity",
-					"Whether diagnostics are generated for missing activity definitions."
-				);
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("name", PurviewTypeLibrary.System.String.AsTypeReference()),
-							new("defaultToTags", PurviewTypeLibrary.System.Boolean.AsTypeReference())
-							{
-								DefaultValue = "true",
-							},
-							new(
-								"generateDiagnosticsForMissingActivity",
-								PurviewTypeLibrary.System.Boolean.AsTypeReference()
-							)
-							{
-								DefaultValue = "true",
-							},
-						],
-					},
-					ctor =>
-					{
-						ctor.IfBlock(
-							"string.IsNullOrWhiteSpace(name)",
-							static body => body.Throw("new System.ArgumentNullException(nameof(name))")
-						);
-						ctor.Assignment("Name", "name");
-						ctor.Assignment("DefaultToTags", "defaultToTags");
-						ctor.Assignment(
-							"GenerateDiagnosticsForMissingActivity",
-							"generateDiagnosticsForMissingActivity"
-						);
-					}
-				);
+				body.XmlSummary("Constructs a new instance specifying the activity source name and default behaviour.")
+					.XmlParam("name", "The name of the activity source.")
+					.XmlParam("defaultToTags", "Whether parameters are inferred as tags by default.")
+					.XmlParam(
+						"generateDiagnosticsForMissingActivity",
+						"Whether diagnostics are generated for missing activity definitions."
+					)
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("name", TypeLibrary.System.String),
+								new("defaultToTags", TypeLibrary.System.Boolean) { DefaultValue = "true" },
+								new("generateDiagnosticsForMissingActivity", TypeLibrary.System.Boolean)
+								{
+									DefaultValue = "true",
+								},
+							],
+						},
+						ctor =>
+						{
+							ctor.IfBlock(
+								"string.IsNullOrWhiteSpace(name)",
+								static body => body.Throw("new System.ArgumentNullException(nameof(name))")
+							);
+							ctor.Assignment("Name", "name");
+							ctor.Assignment("DefaultToTags", "defaultToTags");
+							ctor.Assignment(
+								"GenerateDiagnosticsForMissingActivity",
+								"generateDiagnosticsForMissingActivity"
+							);
+						}
+					);
 
 				WriteNullableStringProperty(body, "Name", "The name of the activity source.");
 				WritePublicProperty(
 					body,
 					"DefaultToTags",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether parameters are inferred as tags by default."
+					TypeLibrary.System.Boolean,
+					"Determines whether parameters are inferred as tags by default.",
+					"true"
 				);
 				WriteNullableStringProperty(
 					body,
@@ -662,25 +688,25 @@ static class GeneratedTypesEmitter
 				WritePlainStringProperty(
 					body,
 					"BaggageAndTagSeparator",
-					"\".\"",
-					"The separator used between baggage and tag name parts."
+					"The separator used between baggage and tag name parts.",
+					"\".\""
 				);
 				WritePublicProperty(
 					body,
 					"LowercaseBaggageAndTagKeys",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether baggage and tag keys are lowercased."
+					TypeLibrary.System.Boolean,
+					"Determines whether baggage and tag keys are lowercased.",
+					"true"
 				);
 				WritePublicProperty(
 					body,
 					"GenerateDiagnosticsForMissingActivity",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether diagnostics are generated for missing activity definitions."
+					TypeLibrary.System.Boolean,
+					"Determines whether diagnostics are generated for missing activity definitions.",
+					"true"
 				);
 			},
-			summary: "Specifies the default activity source generation behaviour for an assembly."
+			"Specifies the default activity source generation behaviour for an assembly."
 		);
 	}
 
@@ -692,43 +718,57 @@ static class GeneratedTypesEmitter
 			AttributeTargets.Interface,
 			body =>
 			{
-				body.XmlSummary($"Constructs a new instance of the {XmlSee("ActivitySourceAttribute")}.");
-				WriteEmptyConstructor(body, type);
+				WriteEmptyConstructor(
+					body,
+					type,
+					$"Constructs a new instance of the {XmlSee("ActivitySourceAttribute")}."
+				);
 
-				body.XmlSummary($"Constructs a new instance specifying the {XmlSee("Name")}.");
-				body.XmlParam("name", $"The {XmlSee("Name")}.");
-				WriteNameConstructor(body, type);
+				WriteNameConstructor(
+					body,
+					type,
+					$"Constructs a new instance specifying the {XmlSee("Name")}.",
+					w => w.XmlParam("name", $"The {XmlSee("Name")}.")
+				);
 
 				WriteNullableStringProperty(body, "Name", "Optional. Gets the name of the activity source.");
-				body.XmlSummary("Specifies the default when inferring between tag or baggage.");
-				WritePublicProperty(body, "DefaultToTags", PurviewTypeLibrary.System.Boolean.AsTypeReference(), "true");
+
+				WritePublicProperty(
+					body,
+					"DefaultToTags",
+					TypeLibrary.System.Boolean,
+					"Specifies the default when inferring between tag or baggage.",
+					"true"
+				);
 				WriteNullableStringProperty(
 					body,
 					"BaggageAndTagPrefix",
 					"The prefix applied to generated baggage and tag names."
 				);
-				body.XmlSummary("Determines if the name is used as a prefix.");
+
 				WritePublicProperty(
 					body,
 					"IncludeActivitySourcePrefix",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
+					TypeLibrary.System.Boolean,
+					"Determines if the name is used as a prefix.",
 					"true"
 				);
-				body.XmlSummary("Determines if tag/ baggage names are lowercased.");
+
 				WritePublicProperty(
 					body,
 					"LowercaseBaggageAndTagKeys",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
+					TypeLibrary.System.Boolean,
+					"Determines if tag/ baggage names are lowercased.",
 					"true"
 				);
 			},
-			summary: "Marks an interface as an activity source."
+			"Marks an interface as an activity source."
 		);
 	}
 
 	static void WriteActivityAttribute(CodeWriter writer, TypeIdentity type)
 	{
-		var activityKind = TypeLibrary.Activities.SystemDiagnostics.ActivityKind;
+		var activityKind = TypeLibrary.System.Diagnostics.ActivityKind;
 
 		EmitAttribute(
 			writer,
@@ -736,77 +776,68 @@ static class GeneratedTypesEmitter
 			AttributeTargets.Method,
 			body =>
 			{
-				body.XmlSummary($"Constructs a new instance of the {XmlSee("ActivityAttribute")}.");
-				WriteEmptyConstructor(body, type);
+				WriteEmptyConstructor(body, type, $"Constructs a new instance of the {XmlSee("ActivityAttribute")}.");
 
-				body.XmlSummary($"Constructs a new instance specifying the {XmlSee("Name")}.");
-				body.XmlParam("name", $"The {XmlSee("Name")}.");
-				WriteNameConstructor(body, type);
-
-				body.XmlSummary($"Constructs a new instance specifying the {XmlSee("Kind")}.");
-				body.XmlParam("kind", $"The {XmlSee("Kind")}.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters = [new("kind", activityKind.AsTypeReference())],
-					},
-					ctor => ctor.Assignment("Kind", "kind")
+				WriteNameConstructor(
+					body,
+					type,
+					$"Constructs a new instance specifying the {XmlSee("Name")}.",
+					w => w.XmlParam("name", $"The {XmlSee("Name")}.")
 				);
+
+				body.XmlSummary($"Constructs a new instance specifying the {XmlSee("Kind")}.")
+					.XmlParam("kind", $"The {XmlSee("Kind")}.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters = [new("kind", activityKind)],
+						},
+						ctor => ctor.Assignment("Kind", "kind")
+					);
 
 				body.XmlSummary(
-					$"Constructs a new instance specifying the {XmlSee("Name")}, {XmlSee("Kind")} and whether the activity is created without starting it."
-				);
-				body.XmlParam("name", $"The {XmlSee("Name")}.");
-				body.XmlParam("kind", $"The {XmlSee("Kind")}.");
-				body.XmlParam(
-					"createOnly",
-					$"Whether the activity is created without starting it ({XmlSee("CreateOnly")})."
-				);
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("name", PurviewTypeLibrary.System.String.AsTypeReference()),
-							new("kind", activityKind.AsTypeReference())
-							{
-								DefaultValue = $"{activityKind.RenderFullName}.Internal",
-							},
-							new("createOnly", PurviewTypeLibrary.System.Boolean.AsTypeReference())
-							{
-								DefaultValue = "false",
-							},
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("Name", "name");
-						ctor.Assignment("Kind", "kind");
-						ctor.Assignment("CreateOnly", "createOnly");
-					}
-				);
+						$"Constructs a new instance specifying the {XmlSee("Name")}, {XmlSee("Kind")} and whether the activity is created without starting it."
+					)
+					.XmlParam("name", $"The {XmlSee("Name")}.")
+					.XmlParam("kind", $"The {XmlSee("Kind")}.")
+					.XmlParam(
+						"createOnly",
+						$"Whether the activity is created without starting it ({XmlSee("CreateOnly")})."
+					)
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("name", TypeLibrary.System.String),
+								new("kind", activityKind) { DefaultValue = $"{activityKind.RenderFullName}.Internal" },
+								new("createOnly", TypeLibrary.System.Boolean) { DefaultValue = "false" },
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("Name", "name");
+							ctor.Assignment("Kind", "kind");
+							ctor.Assignment("CreateOnly", "createOnly");
+						}
+					);
 
 				WriteNullableStringProperty(body, "Name", "Optional. Gets the name of the activity.");
-				WritePublicProperty(
-					body,
-					"Kind",
-					activityKind.AsTypeReference(),
-					summary: "Gets the kind of the activity."
-				);
+				WritePublicProperty(body, "Kind", activityKind, "Gets the kind of the activity.");
 				WritePublicProperty(
 					body,
 					"CreateOnly",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					summary: "Determines whether the activity is created without starting it."
+					TypeLibrary.System.Boolean,
+					"Determines whether the activity is created without starting it."
 				);
 			},
-			summary: "Marks a method as an activity."
+			"Marks a method as an activity."
 		);
 	}
 
 	static void WriteEventAttribute(CodeWriter writer, TypeIdentity type)
 	{
-		var statusCode = TypeLibrary.Activities.SystemDiagnostics.ActivityStatusCode;
+		var statusCode = TypeLibrary.System.Diagnostics.ActivityStatusCode;
 
 		EmitAttribute(
 			writer,
@@ -814,91 +845,75 @@ static class GeneratedTypesEmitter
 			AttributeTargets.Method,
 			body =>
 			{
-				body.XmlSummary($"Constructs a new instance specifying the {XmlSee("StatusCode")}.");
-				body.XmlParam("statusCode", $"The {XmlSee("StatusCode")}.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("statusCode", statusCode.AsTypeReference())
-							{
-								DefaultValue = $"{statusCode.RenderFullName}.Unset",
-							},
-						],
-					},
-					ctor => ctor.Assignment("StatusCode", "statusCode")
-				);
+				body.XmlSummary($"Constructs a new instance specifying the {XmlSee("StatusCode")}.")
+					.XmlParam("statusCode", $"The {XmlSee("StatusCode")}.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("statusCode", statusCode) { DefaultValue = $"{statusCode.RenderFullName}.Unset" },
+							],
+						},
+						ctor => ctor.Assignment("StatusCode", "statusCode")
+					);
+
 				body.XmlSummary(
-					$"Constructs a new instance specifying the {XmlSee("Name")}, exception handling behaviour and {XmlSee("StatusCode")}."
-				);
-				body.XmlParam("name", $"The {XmlSee("Name")}.");
-				body.XmlParam(
-					"useRecordExceptionRules",
-					$"Whether to use record exception rules ({XmlSee("UseRecordExceptionRules")})."
-				);
-				body.XmlParam(
-					"recordExceptionAsEscaped",
-					$"Whether a recorded exception is escaped ({XmlSee("RecordExceptionAsEscaped")})."
-				);
-				body.XmlParam("statusCode", $"The {XmlSee("StatusCode")}.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("name", PurviewTypeLibrary.System.String.AsTypeReference()),
-							new("useRecordExceptionRules", PurviewTypeLibrary.System.Boolean.AsTypeReference())
-							{
-								DefaultValue = "true",
-							},
-							new("recordExceptionAsEscaped", PurviewTypeLibrary.System.Boolean.AsTypeReference())
-							{
-								DefaultValue = "true",
-							},
-							new("statusCode", statusCode.AsTypeReference())
-							{
-								DefaultValue = $"{statusCode.RenderFullName}.Unset",
-							},
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("Name", "name");
-						ctor.Assignment("UseRecordExceptionRules", "useRecordExceptionRules");
-						ctor.Assignment("RecordExceptionAsEscaped", "recordExceptionAsEscaped");
-						ctor.Assignment("StatusCode", "statusCode");
-					}
-				);
+						$"Constructs a new instance specifying the {XmlSee("Name")}, exception handling behaviour and {XmlSee("StatusCode")}."
+					)
+					.XmlParam("name", $"The {XmlSee("Name")}.")
+					.XmlParam(
+						"useRecordExceptionRules",
+						$"Whether to use record exception rules ({XmlSee("UseRecordExceptionRules")})."
+					)
+					.XmlParam(
+						"recordExceptionAsEscaped",
+						$"Whether a recorded exception is escaped ({XmlSee("RecordExceptionAsEscaped")})."
+					)
+					.XmlParam("statusCode", $"The {XmlSee("StatusCode")}.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("name", TypeLibrary.System.String),
+								new("useRecordExceptionRules", TypeLibrary.System.Boolean) { DefaultValue = "true" },
+								new("recordExceptionAsEscaped", TypeLibrary.System.Boolean) { DefaultValue = "true" },
+								new("statusCode", statusCode) { DefaultValue = $"{statusCode.RenderFullName}.Unset" },
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("Name", "name");
+							ctor.Assignment("UseRecordExceptionRules", "useRecordExceptionRules");
+							ctor.Assignment("RecordExceptionAsEscaped", "recordExceptionAsEscaped");
+							ctor.Assignment("StatusCode", "statusCode");
+						}
+					);
 
 				WriteNullableStringProperty(body, "Name", "Optional. Gets the name of the event.");
 				WritePublicProperty(
 					body,
 					"UseRecordExceptionRules",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether the default exception-handling rules are used."
+					TypeLibrary.System.Boolean,
+					"Determines whether the default exception-handling rules are used.",
+					"true"
 				);
 				WritePublicProperty(
 					body,
 					"RecordExceptionAsEscaped",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether a recorded exception is escaped."
+					TypeLibrary.System.Boolean,
+					"Determines whether a recorded exception is escaped.",
+					"true"
 				);
-				WritePublicProperty(
-					body,
-					"StatusCode",
-					statusCode.AsTypeReference(),
-					summary: "Gets the status code of the event."
-				);
+				WritePublicProperty(body, "StatusCode", statusCode, "Gets the status code of the event.");
 				WriteNullableStringProperty(
 					body,
 					"StatusDescription",
 					"Optional. Gets the status description of the event."
 				);
 			},
-			summary: "Marks a method as an activity event."
+			"Marks a method as an activity event."
 		);
 	}
 
@@ -908,7 +923,7 @@ static class GeneratedTypesEmitter
 
 	static void WriteLoggerGenerationAttribute(CodeWriter writer, TypeIdentity type)
 	{
-		var logLevel = TypeLibrary.Logging.MicrosoftExtensions.LogLevel;
+		var logLevel = TypeLibrary.Microsoft.Extensions.Logging.LogLevel;
 
 		EmitAttribute(
 			writer,
@@ -917,34 +932,34 @@ static class GeneratedTypesEmitter
 			body =>
 			{
 				WriteEmptyConstructor(body, type, $"Constructs a new instance of the {XmlSee(type.Name)}.");
-				body.XmlSummary($"Constructs a new instance specifying the default {XmlSee("DefaultLevel")}.");
-				body.XmlParam("defaultLevel", $"The default {XmlSee("DefaultLevel")}.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters = [new("defaultLevel", logLevel.AsTypeReference())],
-					},
-					ctor => ctor.Assignment("DefaultLevel", "defaultLevel")
-				);
+				body.XmlSummary($"Constructs a new instance specifying the default {XmlSee("DefaultLevel")}.")
+					.XmlParam("defaultLevel", $"The default {XmlSee("DefaultLevel")}.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters = [new("defaultLevel", logLevel)],
+						},
+						ctor => ctor.Assignment("DefaultLevel", "defaultLevel")
+					);
 
 				WritePublicProperty(
 					body,
 					"DefaultLevel",
-					logLevel.AsTypeReference(),
-					$"{logLevel.RenderFullName}.Information",
-					"Gets or sets the default log level used by generated log methods."
+					logLevel,
+					"Gets or sets the default log level used by generated log methods.",
+					$"{logLevel.RenderFullName}.Information"
 				);
 				WritePublicProperty(
 					body,
 					"GenerationMode",
-					TypeLibrary.Logging.LoggerGenerationMode.AsTypeReference(),
-					summary: "Gets or sets the log generation mode used for generated log methods."
+					TypeLibrary.Purview.Telemetry.LoggerGenerationMode,
+					"Gets or sets the log generation mode used for generated log methods."
 				);
 				WritePublicProperty(
 					body,
 					"DefaultPrefixType",
-					TypeLibrary.Logging.LogPrefixType.AsTypeReference(),
-					summary: "Gets or sets the default log prefix type used by generated log methods."
+					TypeLibrary.Purview.Telemetry.LogPrefixType,
+					"Gets or sets the default log prefix type used by generated log methods."
 				);
 			},
 			wrapInExcludeLoggingGuard: true,
@@ -954,8 +969,8 @@ static class GeneratedTypesEmitter
 
 	static void WriteLoggerAttribute(CodeWriter writer, TypeIdentity type)
 	{
-		var logLevel = TypeLibrary.Logging.MicrosoftExtensions.LogLevel;
-		var logPrefixType = TypeLibrary.Logging.LogPrefixType;
+		var logLevel = TypeLibrary.Microsoft.Extensions.Logging.LogLevel;
+		var logPrefixType = TypeLibrary.Purview.Telemetry.LogPrefixType;
 
 		EmitAttribute(
 			writer,
@@ -965,39 +980,36 @@ static class GeneratedTypesEmitter
 			{
 				WriteEmptyConstructor(body, type, $"Constructs a new instance of the {XmlSee(type.Name)}.");
 				body.XmlSummary(
-					$"Constructs a new instance specifying the default {XmlSee("DefaultLevel")} and an optional custom prefix."
-				);
-				body.XmlParam("defaultLevel", $"The default {XmlSee("DefaultLevel")}.");
-				body.XmlParam("customPrefix", $"The custom log prefix ({XmlSee("CustomPrefix")}).");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("defaultLevel", logLevel.AsTypeReference()),
-							new("customPrefix", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("DefaultLevel", "defaultLevel");
-						ctor.Assignment("CustomPrefix", "customPrefix");
-						ctor.IfBlock(
-							"!string.IsNullOrWhiteSpace(CustomPrefix)",
-							block => block.Assignment("PrefixType", $"{logPrefixType.RenderFullName}.Custom")
-						);
-					}
-				);
+						$"Constructs a new instance specifying the default {XmlSee("DefaultLevel")} and an optional custom prefix."
+					)
+					.XmlParam("defaultLevel", $"The default {XmlSee("DefaultLevel")}.")
+					.XmlParam("customPrefix", $"The custom log prefix ({XmlSee("CustomPrefix")}).")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("defaultLevel", logLevel),
+								new("customPrefix", TypeLibrary.System.String) { DefaultValue = "null" },
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("DefaultLevel", "defaultLevel");
+							ctor.Assignment("CustomPrefix", "customPrefix");
+							ctor.IfBlock(
+								"!string.IsNullOrWhiteSpace(CustomPrefix)",
+								block => block.Assignment("PrefixType", $"{logPrefixType.RenderFullName}.Custom")
+							);
+						}
+					);
 
 				WritePublicProperty(
 					body,
 					"DefaultLevel",
-					logLevel.AsTypeReference(),
-					$"{logLevel.RenderFullName}.Information",
-					"Gets or sets the default log level used by generated log methods."
+					logLevel,
+					"Gets or sets the default log level used by generated log methods.",
+					$"{logLevel.RenderFullName}.Information"
 				);
 				WriteNullableStringProperty(
 					body,
@@ -1007,14 +1019,14 @@ static class GeneratedTypesEmitter
 				WritePublicProperty(
 					body,
 					"PrefixType",
-					logPrefixType.AsTypeReference(),
-					summary: "Gets or sets the log prefix type used by generated log methods."
+					logPrefixType,
+					"Gets or sets the log prefix type used by generated log methods."
 				);
 				WritePublicProperty(
 					body,
 					"GenerationMode",
-					TypeLibrary.Logging.LoggerGenerationMode.AsTypeReference(),
-					summary: "Gets or sets the log generation mode used for generated log methods."
+					TypeLibrary.Purview.Telemetry.LoggerGenerationMode,
+					"Gets or sets the log generation mode used for generated log methods."
 				);
 			},
 			wrapInExcludeLoggingGuard: true,
@@ -1024,7 +1036,7 @@ static class GeneratedTypesEmitter
 
 	static void WriteLogAttribute(CodeWriter writer, TypeIdentity type)
 	{
-		var logLevel = TypeLibrary.Logging.MicrosoftExtensions.LogLevel;
+		var logLevel = TypeLibrary.Microsoft.Extensions.Logging.LogLevel;
 
 		EmitAttribute(
 			writer,
@@ -1040,67 +1052,61 @@ static class GeneratedTypesEmitter
 				);
 				WriteEventIdConstructor(body, type, $"Constructs a new instance specifying the {XmlSee("EventId")}.");
 				body.XmlSummary(
-					$"Constructs a new instance specifying the {XmlSee("Level")}, optional {XmlSee("MessageTemplate")} and {XmlSee("Name")}."
-				);
-				body.XmlParam("level", $"The {XmlSee("Level")}.");
-				body.XmlParam("messageTemplate", $"The {XmlSee("MessageTemplate")}.");
-				body.XmlParam("name", $"The {XmlSee("Name")}.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("level", logLevel.AsTypeReference()),
-							new("messageTemplate", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-							new("name", PurviewTypeLibrary.System.String.AsTypeReference()) { DefaultValue = "null" },
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("Level", "level");
-						ctor.Assignment("MessageTemplate", "messageTemplate");
-						ctor.Assignment("Name", "name");
-					}
-				);
+						$"Constructs a new instance specifying the {XmlSee("Level")}, optional {XmlSee("MessageTemplate")} and {XmlSee("Name")}."
+					)
+					.XmlParam("level", $"The {XmlSee("Level")}.")
+					.XmlParam("messageTemplate", $"The {XmlSee("MessageTemplate")}.")
+					.XmlParam("name", $"The {XmlSee("Name")}.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("level", logLevel),
+								new("messageTemplate", TypeLibrary.System.String) { DefaultValue = "null" },
+								new("name", TypeLibrary.System.String) { DefaultValue = "null" },
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("Level", "level");
+							ctor.Assignment("MessageTemplate", "messageTemplate");
+							ctor.Assignment("Name", "name");
+						}
+					);
 				body.XmlSummary(
-					$"Constructs a new instance specifying the {XmlSee("EventId")}, {XmlSee("Level")}, optional {XmlSee("MessageTemplate")} and {XmlSee("Name")}."
-				);
-				body.XmlParam("eventId", $"The {XmlSee("EventId")}.");
-				body.XmlParam("level", $"The {XmlSee("Level")}.");
-				body.XmlParam("messageTemplate", $"The {XmlSee("MessageTemplate")}.");
-				body.XmlParam("name", $"The {XmlSee("Name")}.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("eventId", PurviewTypeLibrary.System.Int32.AsTypeReference()),
-							new("level", logLevel.AsTypeReference()),
-							new("messageTemplate", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-							new("name", PurviewTypeLibrary.System.String.AsTypeReference()) { DefaultValue = "null" },
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("Level", "level");
-						ctor.Assignment("MessageTemplate", "messageTemplate");
-						ctor.Assignment("EventId", "eventId");
-						ctor.Assignment("Name", "name");
-					}
-				);
+						$"Constructs a new instance specifying the {XmlSee("EventId")}, {XmlSee("Level")}, optional {XmlSee("MessageTemplate")} and {XmlSee("Name")}."
+					)
+					.XmlParam("eventId", $"The {XmlSee("EventId")}.")
+					.XmlParam("level", $"The {XmlSee("Level")}.")
+					.XmlParam("messageTemplate", $"The {XmlSee("MessageTemplate")}.")
+					.XmlParam("name", $"The {XmlSee("Name")}.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("eventId", TypeLibrary.System.Int32),
+								new("level", logLevel),
+								new("messageTemplate", TypeLibrary.System.String) { DefaultValue = "null" },
+								new("name", TypeLibrary.System.String) { DefaultValue = "null" },
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("Level", "level");
+							ctor.Assignment("MessageTemplate", "messageTemplate");
+							ctor.Assignment("EventId", "eventId");
+							ctor.Assignment("Name", "name");
+						}
+					);
 
 				WritePublicProperty(
 					body,
 					"Level",
-					logLevel.AsTypeReference(),
-					$"{logLevel.RenderFullName}.Information",
-					"Gets or sets the log level of the log entry."
+					logLevel,
+					"Gets or sets the log level of the log entry.",
+					$"{logLevel.RenderFullName}.Information"
 				);
 				WriteNullableStringProperty(
 					body,
@@ -1110,15 +1116,15 @@ static class GeneratedTypesEmitter
 				WritePublicProperty(
 					body,
 					"EventId",
-					PurviewTypeLibrary.System.Int32.MakeNullable(writer),
-					summary: "Gets or sets the event identifier of the log entry."
+					TypeLibrary.System.Int32.MakeNullable(writer),
+					"Gets or sets the event identifier of the log entry."
 				);
 				WriteNullableStringProperty(body, "Name", "Gets or sets the name of the log entry.");
 				WritePublicProperty(
 					body,
 					"GenerationMode",
-					TypeLibrary.Logging.LoggerGenerationMode.AsTypeReference(),
-					summary: "Gets or sets the log generation mode used for the log entry."
+					TypeLibrary.Purview.Telemetry.LoggerGenerationMode,
+					"Gets or sets the log generation mode used for the log entry."
 				);
 			},
 			wrapInExcludeLoggingGuard: true,
@@ -1126,8 +1132,13 @@ static class GeneratedTypesEmitter
 		);
 	}
 
-	static void WriteSpecificLogAttribute(CodeWriter writer, TypeIdentity type, string? summary = null)
+	static void WriteSpecificLogAttribute(CodeWriter writer, TypeIdentity type, string summary)
 	{
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary must be provided for public properties.", nameof(summary));
+#endif
+
 		EmitAttribute(
 			writer,
 			type,
@@ -1141,54 +1152,49 @@ static class GeneratedTypesEmitter
 				);
 				WriteEventIdConstructor(body, type, $"Constructs a new instance specifying the {XmlSee("EventId")}.");
 				body.XmlSummary(
-					$"Constructs a new instance specifying an optional {XmlSee("MessageTemplate")} and {XmlSee("Name")}."
-				);
-				body.XmlParam("messageTemplate", $"The {XmlSee("MessageTemplate")}.");
-				body.XmlParam("name", $"The {XmlSee("Name")}.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("messageTemplate", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-							new("name", PurviewTypeLibrary.System.String.AsTypeReference()) { DefaultValue = "null" },
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("MessageTemplate", "messageTemplate");
-						ctor.Assignment("Name", "name");
-					}
-				);
+						$"Constructs a new instance specifying an optional {XmlSee("MessageTemplate")} and {XmlSee("Name")}."
+					)
+					.XmlParam("messageTemplate", $"The {XmlSee("MessageTemplate")}.")
+					.XmlParam("name", $"The {XmlSee("Name")}.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("messageTemplate", TypeLibrary.System.String) { DefaultValue = "null" },
+								new("name", TypeLibrary.System.String) { DefaultValue = "null" },
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("MessageTemplate", "messageTemplate");
+							ctor.Assignment("Name", "name");
+						}
+					);
+
 				body.XmlSummary(
-					$"Constructs a new instance specifying the {XmlSee("EventId")}, optional {XmlSee("MessageTemplate")} and {XmlSee("Name")}."
-				);
-				body.XmlParam("eventId", $"The {XmlSee("EventId")}.");
-				body.XmlParam("messageTemplate", $"The {XmlSee("MessageTemplate")}.");
-				body.XmlParam("name", $"The {XmlSee("Name")}.");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("eventId", PurviewTypeLibrary.System.Int32.AsTypeReference()),
-							new("messageTemplate", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-							new("name", PurviewTypeLibrary.System.String.AsTypeReference()) { DefaultValue = "null" },
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("MessageTemplate", "messageTemplate");
-						ctor.Assignment("EventId", "eventId");
-						ctor.Assignment("Name", "name");
-					}
-				);
+						$"Constructs a new instance specifying the {XmlSee("EventId")}, optional {XmlSee("MessageTemplate")} and {XmlSee("Name")}."
+					)
+					.XmlParam("eventId", $"The {XmlSee("EventId")}.")
+					.XmlParam("messageTemplate", $"The {XmlSee("MessageTemplate")}.")
+					.XmlParam("name", $"The {XmlSee("Name")}.")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("eventId", TypeLibrary.System.Int32),
+								new("messageTemplate", TypeLibrary.System.String) { DefaultValue = "null" },
+								new("name", TypeLibrary.System.String) { DefaultValue = "null" },
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("MessageTemplate", "messageTemplate");
+							ctor.Assignment("EventId", "eventId");
+							ctor.Assignment("Name", "name");
+						}
+					);
 
 				WriteNullableStringProperty(
 					body,
@@ -1198,15 +1204,15 @@ static class GeneratedTypesEmitter
 				WritePublicProperty(
 					body,
 					"EventId",
-					PurviewTypeLibrary.System.Int32.MakeNullable(writer),
-					summary: "Gets or sets the event identifier of the log entry."
+					TypeLibrary.System.Int32.MakeNullable(writer),
+					"Gets or sets the event identifier of the log entry."
 				);
 				WriteNullableStringProperty(body, "Name", "Gets or sets the name of the log entry.");
 				WritePublicProperty(
 					body,
 					"GenerationMode",
-					TypeLibrary.Logging.LoggerGenerationMode.AsTypeReference(),
-					summary: "Gets or sets the log generation mode used for the log entry."
+					TypeLibrary.Purview.Telemetry.LoggerGenerationMode,
+					"Gets or sets the log generation mode used for the log entry."
 				);
 			},
 			wrapInExcludeLoggingGuard: true,
@@ -1223,28 +1229,26 @@ static class GeneratedTypesEmitter
 			body =>
 			{
 				body.XmlSummary(
-					$"Constructs a new instance specifying the maximum number of values to expand ({XmlSee("MaximumValueCount")})."
-				);
-				body.XmlParam(
-					"maximumValueCount",
-					$"The maximum number of values to include ({XmlSee("MaximumValueCount")})."
-				);
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("maximumValueCount", PurviewTypeLibrary.System.Int32.AsTypeReference())
-							{
-								DefaultValue = "5",
-							},
-						],
-					},
-					ctor => ctor.Assignment("MaximumValueCount", "maximumValueCount")
-				);
+						$"Constructs a new instance specifying the maximum number of values to expand ({XmlSee("MaximumValueCount")})."
+					)
+					.XmlParam(
+						"maximumValueCount",
+						$"The maximum number of values to include ({XmlSee("MaximumValueCount")})."
+					)
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters = [new("maximumValueCount", TypeLibrary.System.Int32) { DefaultValue = "5" }],
+						},
+						ctor => ctor.Assignment("MaximumValueCount", "maximumValueCount")
+					);
 
-				body.XmlSummary("Gets or sets the maximum number of values to include when expanding an enumerable.");
-				WritePublicProperty(body, "MaximumValueCount", PurviewTypeLibrary.System.Int32.AsTypeReference());
+				WritePublicProperty(
+					body,
+					"MaximumValueCount",
+					TypeLibrary.System.Int32,
+					"Gets or sets the maximum number of values to include when expanding an enumerable."
+				);
 			},
 			wrapInExcludeLoggingGuard: true,
 			summary: "Marks an enumerable parameter to be expanded into multiple log entries."
@@ -1257,7 +1261,7 @@ static class GeneratedTypesEmitter
 
 	static void WriteMeterGenerationAttribute(CodeWriter writer, TypeIdentity type)
 	{
-		var nameGenerationType = TypeLibrary.Metrics.MeterNameGenerationType;
+		var nameGenerationType = TypeLibrary.Purview.Telemetry.MeterNameGenerationType;
 
 		EmitAttribute(
 			writer,
@@ -1267,60 +1271,48 @@ static class GeneratedTypesEmitter
 			{
 				WriteEmptyConstructor(body, type, $"Constructs a new instance of the {XmlSee(type.Name)}.");
 				body.XmlSummary(
-					"Constructs a new instance specifying the meter name, name-generation type, instrument prefix and name casing defaults."
-				);
-				body.XmlParam("meterName", $"The {XmlSee("MeterName")}.");
-				body.XmlParam("nameGenerationType", $"The {XmlSee("MeterNameGenerationType")}.");
-				body.XmlParam("instrumentPrefix", $"The {XmlSee("InstrumentPrefix")}.");
-				body.XmlParam(
-					"lowercaseInstrumentName",
-					$"Whether instrument names are lowercased ({XmlSee("LowercaseInstrumentName")})."
-				);
-				body.XmlParam("lowercaseTagKeys", $"Whether tag keys are lowercased ({XmlSee("LowercaseTagKeys")}).");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters =
-						[
-							new("meterName", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-							new("nameGenerationType", nameGenerationType.AsTypeReference())
-							{
-								DefaultValue = $"{nameGenerationType.RenderFullName}.DotNet",
-							},
-							new("instrumentPrefix", PurviewTypeLibrary.System.String.AsTypeReference())
-							{
-								DefaultValue = "null",
-							},
-							new("lowercaseInstrumentName", PurviewTypeLibrary.System.Boolean.AsTypeReference())
-							{
-								DefaultValue = "true",
-							},
-							new("lowercaseTagKeys", PurviewTypeLibrary.System.Boolean.AsTypeReference())
-							{
-								DefaultValue = "true",
-							},
-						],
-					},
-					ctor =>
-					{
-						ctor.Assignment("MeterName", "meterName");
-						ctor.Assignment("MeterNameGenerationType", "nameGenerationType");
-						ctor.Assignment("InstrumentPrefix", "instrumentPrefix");
-						ctor.Assignment("LowercaseInstrumentName", "lowercaseInstrumentName");
-						ctor.Assignment("LowercaseTagKeys", "lowercaseTagKeys");
-					}
-				);
+						"Constructs a new instance specifying the meter name, name-generation type, instrument prefix and name casing defaults."
+					)
+					.XmlParam("meterName", $"The {XmlSee("MeterName")}.")
+					.XmlParam("nameGenerationType", $"The {XmlSee("MeterNameGenerationType")}.")
+					.XmlParam("instrumentPrefix", $"The {XmlSee("InstrumentPrefix")}.")
+					.XmlParam(
+						"lowercaseInstrumentName",
+						$"Whether instrument names are lowercased ({XmlSee("LowercaseInstrumentName")})."
+					)
+					.XmlParam("lowercaseTagKeys", $"Whether tag keys are lowercased ({XmlSee("LowercaseTagKeys")}).")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters =
+							[
+								new("meterName", TypeLibrary.System.String) { DefaultValue = "null" },
+								new("nameGenerationType", nameGenerationType)
+								{
+									DefaultValue = $"{nameGenerationType.RenderFullName}.DotNet",
+								},
+								new("instrumentPrefix", TypeLibrary.System.String) { DefaultValue = "null" },
+								new("lowercaseInstrumentName", TypeLibrary.System.Boolean) { DefaultValue = "true" },
+								new("lowercaseTagKeys", TypeLibrary.System.Boolean) { DefaultValue = "true" },
+							],
+						},
+						ctor =>
+						{
+							ctor.Assignment("MeterName", "meterName");
+							ctor.Assignment("MeterNameGenerationType", "nameGenerationType");
+							ctor.Assignment("InstrumentPrefix", "instrumentPrefix");
+							ctor.Assignment("LowercaseInstrumentName", "lowercaseInstrumentName");
+							ctor.Assignment("LowercaseTagKeys", "lowercaseTagKeys");
+						}
+					);
 
 				WriteNullableStringProperty(body, "MeterName", "Gets or sets the name of the meter.");
 				WritePublicProperty(
 					body,
 					"MeterNameGenerationType",
-					nameGenerationType.AsTypeReference(),
-					$"{nameGenerationType.RenderFullName}.DotNet",
-					"Gets or sets how meter names are generated when not explicitly specified."
+					nameGenerationType,
+					"Gets or sets how meter names are generated when not explicitly specified.",
+					$"{nameGenerationType.RenderFullName}.DotNet"
 				);
 				WriteNullableStringProperty(
 					body,
@@ -1330,25 +1322,25 @@ static class GeneratedTypesEmitter
 				WritePlainStringProperty(
 					body,
 					"InstrumentSeparator",
-					"\".\"",
-					"Gets or sets the separator used between instrument name parts."
+					"Gets or sets the separator used between instrument name parts.",
+					"\".\""
 				);
 				WritePublicProperty(
 					body,
 					"LowercaseInstrumentName",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether instrument names are lowercased."
+					TypeLibrary.System.Boolean,
+					"Determines whether instrument names are lowercased.",
+					"true"
 				);
 				WritePublicProperty(
 					body,
 					"LowercaseTagKeys",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether tag keys are lowercased."
+					TypeLibrary.System.Boolean,
+					"Determines whether tag keys are lowercased.",
+					"true"
 				);
 			},
-			summary: "Specifies the default meter generation behaviour for an assembly."
+			"Specifies the default meter generation behaviour for an assembly."
 		);
 	}
 
@@ -1372,31 +1364,36 @@ static class GeneratedTypesEmitter
 				WritePublicProperty(
 					body,
 					"IncludeAssemblyInstrumentPrefix",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether the assembly-level instrument prefix is included."
+					TypeLibrary.System.Boolean,
+					"Determines whether the assembly-level instrument prefix is included.",
+					"true"
 				);
 				WritePublicProperty(
 					body,
 					"LowercaseInstrumentName",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether instrument names are lowercased."
+					TypeLibrary.System.Boolean,
+					"Determines whether instrument names are lowercased.",
+					"true"
 				);
 				WritePublicProperty(
 					body,
 					"LowercaseTagKeys",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					"true",
-					"Determines whether tag keys are lowercased."
+					TypeLibrary.System.Boolean,
+					"Determines whether tag keys are lowercased.",
+					"true"
 				);
 			},
-			summary: "Marks an interface as a meter."
+			"Marks an interface as a meter."
 		);
 	}
 
-	static void WriteAutoCounterAttribute(CodeWriter writer, TypeIdentity type, string? summary = null)
+	static void WriteAutoCounterAttribute(CodeWriter writer, TypeIdentity type, string summary)
 	{
+#if DEUBG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary cannot be null or whitespace.", nameof(summary));
+#endif
+
 		EmitAttribute(
 			writer,
 			type,
@@ -1407,19 +1404,24 @@ static class GeneratedTypesEmitter
 				WriteNameUnitDescriptionConstructor(
 					body,
 					type,
-					summary: $"Constructs a new instance specifying the {XmlSee("Name")}, {XmlSee("Unit")} and {XmlSee("Description")}."
+					$"Constructs a new instance specifying the {XmlSee("Name")}, {XmlSee("Unit")} and {XmlSee("Description")}."
 				);
 
 				WriteNullableStringProperty(body, "Name", "Gets or sets the name of the instrument.");
 				WriteNullableStringProperty(body, "Unit", "Gets or sets the measurement unit of the instrument.");
 				WriteNullableStringProperty(body, "Description", "Gets or sets the description of the instrument.");
 			},
-			summary: summary
+			summary
 		);
 	}
 
-	static void WriteCounterLikeAttribute(CodeWriter writer, TypeIdentity type, string? summary = null)
+	static void WriteCounterLikeAttribute(CodeWriter writer, TypeIdentity type, string summary)
 	{
+#if DEUBG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary cannot be null or whitespace.", nameof(summary));
+#endif
+
 		EmitAttribute(
 			writer,
 			type,
@@ -1428,16 +1430,16 @@ static class GeneratedTypesEmitter
 			{
 				WriteEmptyConstructor(body, type, $"Constructs a new instance of the {XmlSee(type.Name)}.");
 				body.XmlSummary(
-					$"Constructs a new instance specifying whether the counter auto-increments ({XmlSee("AutoIncrement")})."
-				);
-				body.XmlParam("autoIncrement", $"Whether the counter auto-increments ({XmlSee("AutoIncrement")}).");
-				body.Constructor(
-					new(type.Name, TypeDeclarationAccessibility.Public)
-					{
-						Parameters = [new("autoIncrement", PurviewTypeLibrary.System.Boolean.AsTypeReference())],
-					},
-					ctor => ctor.Assignment("AutoIncrement", "autoIncrement")
-				);
+						$"Constructs a new instance specifying whether the counter auto-increments ({XmlSee("AutoIncrement")})."
+					)
+					.XmlParam("autoIncrement", $"Whether the counter auto-increments ({XmlSee("AutoIncrement")}).")
+					.Constructor(
+						new(type.Name, TypeDeclarationAccessibility.Public)
+						{
+							Parameters = [new("autoIncrement", TypeLibrary.System.Boolean)],
+						},
+						ctor => ctor.Assignment("AutoIncrement", "autoIncrement")
+					);
 				WriteNameUnitDescriptionConstructor(
 					body,
 					type,
@@ -1448,19 +1450,24 @@ static class GeneratedTypesEmitter
 				WritePublicProperty(
 					body,
 					"AutoIncrement",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					summary: "Determines whether the counter auto-increments."
+					TypeLibrary.System.Boolean,
+					"Determines whether the counter auto-increments."
 				);
 				WriteNullableStringProperty(body, "Name", "Gets or sets the name of the instrument.");
 				WriteNullableStringProperty(body, "Unit", "Gets or sets the measurement unit of the instrument.");
 				WriteNullableStringProperty(body, "Description", "Gets or sets the description of the instrument.");
 			},
-			summary: summary
+			summary
 		);
 	}
 
-	static void WriteObservableCounterLikeAttribute(CodeWriter writer, TypeIdentity type, string? summary = null)
+	static void WriteObservableCounterLikeAttribute(CodeWriter writer, TypeIdentity type, string summary)
 	{
+#if DEUBG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary cannot be null or whitespace.", nameof(summary));
+#endif
+
 		EmitAttribute(
 			writer,
 			type,
@@ -1477,8 +1484,8 @@ static class GeneratedTypesEmitter
 				WritePublicProperty(
 					body,
 					"AutoIncrement",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					summary: "Determines whether the counter auto-increments."
+					TypeLibrary.System.Boolean,
+					"Determines whether the counter auto-increments."
 				);
 				WriteNullableStringProperty(body, "Name", "Gets or sets the name of the instrument.");
 				WriteNullableStringProperty(body, "Unit", "Gets or sets the measurement unit of the instrument.");
@@ -1486,36 +1493,43 @@ static class GeneratedTypesEmitter
 				WritePublicProperty(
 					body,
 					"ThrowOnAlreadyInitialized",
-					PurviewTypeLibrary.System.Boolean.AsTypeReference(),
-					summary: "Determines whether an exception is thrown when the instrument is initialized more than once."
+					TypeLibrary.System.Boolean,
+					"Determines whether an exception is thrown when the instrument is initialized more than once."
 				);
 			},
-			summary: summary
+			summary
 		);
 	}
 
 	static void WriteNameUnitDescriptionConstructor(
 		CodeWriter writer,
 		TypeIdentity type,
+		string summary,
 		bool appendAutoIncrement = false,
-		bool appendThrowOnAlreadyInitialized = false,
-		string? summary = null
+		bool appendThrowOnAlreadyInitialized = false
 	)
 	{
-		if (summary != null)
+#if DEBUG
+		if (string.IsNullOrWhiteSpace(summary))
+			throw new ArgumentException("Summary cannot be null or whitespace.", nameof(summary));
+#endif
+
+		writer
+			.XmlSummary(summary)
+			.XmlParam("name", "The name of the instrument.")
+			.XmlParam("unit", "The measurement unit of the instrument.")
+			.XmlParam("description", "The description of the instrument.");
+
+		if (appendAutoIncrement)
+			writer.XmlParam("autoIncrement", "Whether the counter should auto-increment.");
+		if (appendThrowOnAlreadyInitialized)
 		{
-			writer.XmlSummary(summary);
-			writer.XmlParam("name", "The name of the instrument.");
-			writer.XmlParam("unit", "The measurement unit of the instrument.");
-			writer.XmlParam("description", "The description of the instrument.");
-			if (appendAutoIncrement)
-				writer.XmlParam("autoIncrement", "Whether the counter should auto-increment.");
-			if (appendThrowOnAlreadyInitialized)
-				writer.XmlParam(
-					"throwOnAlreadyInitialized",
-					"Whether to throw if the instrument has already been initialized."
-				);
+			writer.XmlParam(
+				"throwOnAlreadyInitialized",
+				"Whether to throw if the instrument has already been initialized."
+			);
 		}
+
 		writer.Constructor(
 			new(type.Name, TypeDeclarationAccessibility.Public)
 			{
@@ -1540,23 +1554,14 @@ static class GeneratedTypesEmitter
 	)
 	{
 		var parameters = ImmutableArray<ParameterDeclarationOptions>.Empty;
-		parameters = parameters.Add(new("name", PurviewTypeLibrary.System.String.AsTypeReference()));
-		parameters = parameters.Add(
-			new("unit", PurviewTypeLibrary.System.String.AsTypeReference()) { DefaultValue = "null" }
-		);
-		parameters = parameters.Add(
-			new("description", PurviewTypeLibrary.System.String.AsTypeReference()) { DefaultValue = "null" }
-		);
+		parameters = parameters.Add(new("name", TypeLibrary.System.String));
+		parameters = parameters.Add(new("unit", TypeLibrary.System.String) { DefaultValue = "null" });
+		parameters = parameters.Add(new("description", TypeLibrary.System.String) { DefaultValue = "null" });
 		if (appendAutoIncrement)
-			parameters = parameters.Add(
-				new("autoIncrement", PurviewTypeLibrary.System.Boolean.AsTypeReference()) { DefaultValue = "false" }
-			);
+			parameters = parameters.Add(new("autoIncrement", TypeLibrary.System.Boolean) { DefaultValue = "false" });
 		if (appendThrowOnAlreadyInitialized)
 			parameters = parameters.Add(
-				new("throwOnAlreadyInitialized", PurviewTypeLibrary.System.Boolean.AsTypeReference())
-				{
-					DefaultValue = "false",
-				}
+				new("throwOnAlreadyInitialized", TypeLibrary.System.Boolean) { DefaultValue = "false" }
 			);
 
 		return parameters;
@@ -1569,7 +1574,7 @@ static class GeneratedTypesEmitter
 	static void WriteTargetsEnum(CodeWriter writer, TypeIdentity type)
 	{
 		writer
-			.FileScopedNamespace(TypeLibrary.PurviewTelemetryNamespace)
+			.FileScopedNamespace(TypeLibrary.Purview.Telemetry.Namespace)
 			.XmlSummary("Determines which telemetry targets a parameter is excluded from.")
 			.Enum(
 				type.Name,
@@ -1589,7 +1594,7 @@ static class GeneratedTypesEmitter
 	static void WriteNamingConventionEnum(CodeWriter writer, TypeIdentity type)
 	{
 		writer
-			.FileScopedNamespace(TypeLibrary.PurviewTelemetryNamespace)
+			.FileScopedNamespace(TypeLibrary.Purview.Telemetry.Namespace)
 			.XmlSummary("Determines the naming convention used for generated telemetry names.")
 			.Enum(
 				type.Name,
@@ -1608,7 +1613,7 @@ static class GeneratedTypesEmitter
 			"!EXCLUDE_PURVIEW_TELEMETRY_LOGGING",
 			hashWriter =>
 				hashWriter
-					.FileScopedNamespace(TypeLibrary.PurviewTelemetryNamespace)
+					.FileScopedNamespace(TypeLibrary.Purview.Telemetry.Namespace)
 					.XmlSummary("Determines the mode used to generate or override the prefix for the log entry.")
 					.Enum(
 						type.Name,
@@ -1631,7 +1636,7 @@ static class GeneratedTypesEmitter
 			"!EXCLUDE_PURVIEW_TELEMETRY_LOGGING",
 			hashWriter =>
 				hashWriter
-					.FileScopedNamespace(TypeLibrary.PurviewTelemetryNamespace)
+					.FileScopedNamespace(TypeLibrary.Purview.Telemetry.Namespace)
 					.XmlSummary("Controls the generation mode used for log methods.")
 					.Enum(
 						type.Name,
@@ -1649,7 +1654,7 @@ static class GeneratedTypesEmitter
 	static void WriteMeterNameGenerationTypeEnum(CodeWriter writer, TypeIdentity type)
 	{
 		writer
-			.FileScopedNamespace(TypeLibrary.PurviewTelemetryNamespace)
+			.FileScopedNamespace(TypeLibrary.Purview.Telemetry.Namespace)
 			.XmlSummary("Determines how meter names are generated when not explicitly specified.")
 			.Enum(
 				type.Name,

@@ -33,7 +33,6 @@ public interface ITestMetrics {
 		await Assert
 			.That(
 				metricsClass.HasMethod(
-					query,
 					"Histogram",
 					TypeReference.Create<int>(),
 					TypeReference.Create<int>(),
@@ -45,7 +44,6 @@ public interface ITestMetrics {
 		await Assert
 			.That(
 				metricsClass.HasMethod(
-					query,
 					"Histogram1",
 					TypeReference.Create<int>(),
 					TypeReference.Create<int>(),

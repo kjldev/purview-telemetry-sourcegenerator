@@ -112,7 +112,7 @@ readonly partial record struct TraceAttributeData([NestedModel] LogAttributeData
 	public LogAttributeData ToLogAttribute() =>
 		Log with
 		{
-			Level = TypeLibrary.Logging.LogLevelMap[TypeLibrary.Logging.TraceAttribute].Value,
+			Level = TypeLibrary.Purview.Telemetry.LogLevelMap[TypeLibrary.Purview.Telemetry.TraceAttribute].Value,
 			MessageTemplate = SharedHelpers.NullIfWhitespace(Log.MessageTemplate),
 			Name = SharedHelpers.NullIfWhitespace(Log.Name),
 		};
@@ -124,7 +124,7 @@ readonly partial record struct DebugAttributeData([NestedModel] LogAttributeData
 	public LogAttributeData ToLogAttribute() =>
 		Log with
 		{
-			Level = TypeLibrary.Logging.LogLevelMap[TypeLibrary.Logging.DebugAttribute].Value,
+			Level = TypeLibrary.Purview.Telemetry.LogLevelMap[TypeLibrary.Purview.Telemetry.DebugAttribute].Value,
 			MessageTemplate = SharedHelpers.NullIfWhitespace(Log.MessageTemplate),
 			Name = SharedHelpers.NullIfWhitespace(Log.Name),
 		};
@@ -136,7 +136,7 @@ readonly partial record struct InfoAttributeData([NestedModel] LogAttributeData 
 	public LogAttributeData ToLogAttribute() =>
 		Log with
 		{
-			Level = TypeLibrary.Logging.LogLevelMap[TypeLibrary.Logging.InfoAttribute].Value,
+			Level = TypeLibrary.Purview.Telemetry.LogLevelMap[TypeLibrary.Purview.Telemetry.InfoAttribute].Value,
 			MessageTemplate = SharedHelpers.NullIfWhitespace(Log.MessageTemplate),
 			Name = SharedHelpers.NullIfWhitespace(Log.Name),
 		};
@@ -148,7 +148,7 @@ readonly partial record struct WarningAttributeData([NestedModel] LogAttributeDa
 	public LogAttributeData ToLogAttribute() =>
 		Log with
 		{
-			Level = TypeLibrary.Logging.LogLevelMap[TypeLibrary.Logging.WarningAttribute].Value,
+			Level = TypeLibrary.Purview.Telemetry.LogLevelMap[TypeLibrary.Purview.Telemetry.WarningAttribute].Value,
 			MessageTemplate = SharedHelpers.NullIfWhitespace(Log.MessageTemplate),
 			Name = SharedHelpers.NullIfWhitespace(Log.Name),
 		};
@@ -160,7 +160,7 @@ readonly partial record struct ErrorAttributeData([NestedModel] LogAttributeData
 	public LogAttributeData ToLogAttribute() =>
 		Log with
 		{
-			Level = TypeLibrary.Logging.LogLevelMap[TypeLibrary.Logging.ErrorAttribute].Value,
+			Level = TypeLibrary.Purview.Telemetry.LogLevelMap[TypeLibrary.Purview.Telemetry.ErrorAttribute].Value,
 		};
 }
 
@@ -170,7 +170,7 @@ readonly partial record struct CriticalAttributeData([NestedModel] LogAttributeD
 	public LogAttributeData ToLogAttribute() =>
 		Log with
 		{
-			Level = TypeLibrary.Logging.LogLevelMap[TypeLibrary.Logging.CriticalAttribute].Value,
+			Level = TypeLibrary.Purview.Telemetry.LogLevelMap[TypeLibrary.Purview.Telemetry.CriticalAttribute].Value,
 			MessageTemplate = SharedHelpers.NullIfWhitespace(Log.MessageTemplate),
 			Name = SharedHelpers.NullIfWhitespace(Log.Name),
 		};

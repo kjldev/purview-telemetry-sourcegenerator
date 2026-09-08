@@ -15,7 +15,7 @@ partial class TelemetrySourceGenerator
 		// Register
 		var loggerTargetsPredicate = IncrementalPipeline.ForAttributeWithMetadataName(
 			context,
-			TypeLibrary.Logging.LoggerAttribute,
+			TypeLibrary.Purview.Telemetry.LoggerAttribute,
 			transform: static (context, cancellationToken) =>
 				PipelineHelpers.BuildLoggerTransform(context, cancellationToken),
 			predicate: static (node, token) => PipelineHelpers.HasLoggerTargetAttribute(node, token),
@@ -33,6 +33,14 @@ partial class TelemetrySourceGenerator
 			source: outputContexts,
 			action: static (spc, output) =>
 			{
+				if (output.Context.Settings.IsSourceGeneratorDisabled)
+				{
+					output.Context.Debug(
+						$"Logger generation skipped for {output.Target.FullyQualifiedName} because the generator is disabled"
+					);
+					return;
+				}
+
 				output.Context.Debug($"Logger generation target: {output.Target.FullyQualifiedName}");
 
 				if (output.Target.UseMSLoggingTelemetryBasedGeneration)

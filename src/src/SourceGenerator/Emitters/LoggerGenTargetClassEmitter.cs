@@ -84,7 +84,7 @@ static partial class LoggerGenTargetClassEmitter
 			.Field(
 				new FieldDeclarationOptions(
 					PropertyLibrary.Logging.LoggerFieldName,
-					TypeLibrary.Logging.MicrosoftExtensions.ILogger.MakeGeneric(target.InterfaceType).AsTypeReference()
+					TypeLibrary.Microsoft.Extensions.Logging.ILogger.MakeGeneric(target.InterfaceType).AsTypeReference()
 				)
 				{
 					IsReadOnly = true,

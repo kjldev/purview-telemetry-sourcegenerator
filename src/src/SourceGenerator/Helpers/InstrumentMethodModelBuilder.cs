@@ -34,7 +34,7 @@ static class InstrumentMethodModelBuilder
 		{
 			token.ThrowIfCancellationRequested();
 
-			if (TypeHelpers.HasAttribute(method, TypeLibrary.TelemetryShared.ExcludeAttribute))
+			if (TypeHelpers.HasAttribute(method, TypeLibrary.Purview.Telemetry.ExcludeAttribute))
 				continue;
 
 			if (method.Arity > 0)
@@ -80,7 +80,7 @@ static class InstrumentMethodModelBuilder
 				GenerationType.Metrics
 			);
 
-			var instrumentMeasurementType = measurementParameter?.InstrumentType ?? PurviewTypeLibrary.System.Int32;
+			var instrumentMeasurementType = measurementParameter?.InstrumentType ?? TypeLibrary.System.Int32;
 
 			methodTargets.Add(
 				new(
@@ -168,10 +168,10 @@ static class InstrumentMethodModelBuilder
 			// Skip Activity-related parameters - they are not valid for metrics
 			var paramType = TypeReference.Create(parameter.Type);
 			if (
-				paramType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity)
-				|| paramType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityContext)
-				|| paramType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityLink)
-				|| paramType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityLinkArray)
+				paramType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity)
+				|| paramType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityContext)
+				|| paramType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityLink)
+				|| paramType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityLinkArray)
 			)
 			{
 				continue;
@@ -238,7 +238,7 @@ static class InstrumentMethodModelBuilder
 		if (
 			Utilities.TryContainsAttribute(
 				parameter,
-				TypeLibrary.TelemetryShared.TagAttribute,
+				TypeLibrary.Purview.Telemetry.TagAttribute,
 				token,
 				out var attribute
 			)
@@ -248,7 +248,7 @@ static class InstrumentMethodModelBuilder
 			return SharedHelpers.GetTagOrBaggageAttribute(attribute!, token);
 		}
 
-		if (TypeHelpers.HasAttribute(parameter, TypeLibrary.Metrics.InstrumentMeasurementAttribute))
+		if (TypeHelpers.HasAttribute(parameter, TypeLibrary.Purview.Telemetry.InstrumentMeasurementAttribute))
 			destination = InstrumentParameterDestination.Measurement;
 
 		return null;
@@ -284,14 +284,14 @@ static class InstrumentMethodModelBuilder
 
 		if (
 			funcArg is INamedTypeSymbol enumerableType
-			&& TypeLibrary.System.GenericIEnumerable.Equals(enumerableType.ConstructedFrom)
+			&& TypeLibrary.System.Collections.Generic.IEnumerable.Equals(enumerableType.ConstructedFrom)
 		)
 		{
 			// Func<IEnumerable<...>>
 			var enumerableArg = enumerableType.TypeArguments[0];
 			if (
 				enumerableArg is INamedTypeSymbol measurementContainer
-				&& TypeLibrary.Metrics.SystemDiagnostics.Measurement.Equals(measurementContainer.ConstructedFrom)
+				&& TypeLibrary.System.Diagnostics.Metrics.Measurement.Equals(measurementContainer.ConstructedFrom)
 			)
 			{
 				// Func<IEnumerable<Measurement<T>>>
@@ -311,7 +311,7 @@ static class InstrumentMethodModelBuilder
 
 		if (
 			funcArg is INamedTypeSymbol funcMeasurementType
-			&& TypeLibrary.Metrics.SystemDiagnostics.Measurement.Equals(funcMeasurementType.ConstructedFrom)
+			&& TypeLibrary.System.Diagnostics.Metrics.Measurement.Equals(funcMeasurementType.ConstructedFrom)
 		)
 		{
 			// Func<Measurement<T>>

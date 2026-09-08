@@ -15,7 +15,7 @@ partial class SharedHelpers
 		if (
 			!Utilities.TryContainsAttribute(
 				symbol,
-				TypeLibrary.Activities.ActivitySourceAttribute,
+				TypeLibrary.Purview.Telemetry.ActivitySourceAttribute,
 				token,
 				out var attributeData
 			)
@@ -42,7 +42,7 @@ partial class SharedHelpers
 		if (
 			!Utilities.TryContainsAttribute(
 				symbol,
-				TypeLibrary.Activities.ActivitySourceGenerationAttribute,
+				TypeLibrary.Purview.Telemetry.ActivitySourceGenerationAttribute,
 				token,
 				out var attributeData
 			)
@@ -67,7 +67,7 @@ partial class SharedHelpers
 		if (
 			!Utilities.TryContainsAttribute(
 				symbol,
-				TypeLibrary.Activities.ActivityAttribute,
+				TypeLibrary.Purview.Telemetry.ActivityAttribute,
 				token,
 				out var attributeData
 			)
@@ -83,7 +83,12 @@ partial class SharedHelpers
 	public static EventAttributeData? GetActivityEventAttribute(ISymbol symbol, CancellationToken token)
 	{
 		if (
-			!Utilities.TryContainsAttribute(symbol, TypeLibrary.Activities.EventAttribute, token, out var attributeData)
+			!Utilities.TryContainsAttribute(
+				symbol,
+				TypeLibrary.Purview.Telemetry.EventAttribute,
+				token,
+				out var attributeData
+			)
 		)
 		{
 			return null;
@@ -101,8 +106,8 @@ partial class SharedHelpers
 
 	public static bool IsActivityMethod(IMethodSymbol method, CancellationToken token)
 	{
-		return Utilities.ContainsAttribute(method, TypeLibrary.Activities.ActivityAttribute, token)
-			|| Utilities.ContainsAttribute(method, TypeLibrary.Activities.EventAttribute, token)
-			|| Utilities.ContainsAttribute(method, TypeLibrary.Activities.ContextAttribute, token);
+		return Utilities.ContainsAttribute(method, TypeLibrary.Purview.Telemetry.ActivityAttribute, token)
+			|| Utilities.ContainsAttribute(method, TypeLibrary.Purview.Telemetry.EventAttribute, token)
+			|| Utilities.ContainsAttribute(method, TypeLibrary.Purview.Telemetry.ContextAttribute, token);
 	}
 }

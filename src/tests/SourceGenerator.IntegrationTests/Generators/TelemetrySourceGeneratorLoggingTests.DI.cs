@@ -36,7 +36,6 @@ public interface ITestLogger {
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -47,7 +46,7 @@ public interface ITestLogger {
 			.Because("the generated logger must contain the log method");
 		var diClass = query.GetClass("TestLoggerCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestLogger", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestLogger", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the DI extension must register the logger via AddTestLogger");
 	}
@@ -82,7 +81,6 @@ public interface ITestLogger {
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -93,7 +91,7 @@ public interface ITestLogger {
 			.Because("the generated logger must contain the log method");
 		var diClass = query.GetClass("TestLoggerCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestLogger", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestLogger", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the DI extension must be generated when the interface opts in");
 	}
@@ -132,7 +130,6 @@ public interface ITestLogger {
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -143,7 +140,7 @@ public interface ITestLogger {
 			.Because("the generated logger must contain the log method");
 		var diClass = query.GetClass("TestLoggerCoreDIExtension", "Microsoft.Extensions.DependencyInjection");
 		await Assert
-			.That(diClass.HasMethod(query, "AddTestLogger", TypeReference.Create<IServiceCollection>()))
+			.That(diClass.HasMethod("AddTestLogger", TypeReference.Create<IServiceCollection>()))
 			.IsTrue()
 			.Because("the DI extension must be generated when the interface overrides the disabled assembly default");
 	}
@@ -182,7 +179,6 @@ public interface ITestLogger {
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),

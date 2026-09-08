@@ -34,7 +34,6 @@ public interface ITestLogger {
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -86,7 +85,6 @@ public interface ITestLogger {
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),

@@ -32,11 +32,11 @@ public interface ITestLogger {{
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", @namespace);
 		await Assert
-			.That(loggerClass.HasMethod(query, "Log", TypeReference.Create<string>(), TypeReference.Create<int>()))
+			.That(loggerClass.HasMethod("Log", TypeReference.Create<string>(), TypeReference.Create<int>()))
 			.IsTrue()
 			.Because("the generated logger must contain the scoped log method");
 		await Assert
-			.That(loggerClass.HasMethodReturnType(query, "Log", TypeReference.Create<IDisposable>()))
+			.That(loggerClass.HasMethodReturnType("Log", TypeReference.Create<IDisposable>()))
 			.IsTrue()
 			.Because("the scoped log method must return IDisposable");
 	}
@@ -71,11 +71,11 @@ public partial class TestClass1 {{
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", @namespace);
 		await Assert
-			.That(loggerClass.HasMethod(query, "Log", TypeReference.Create<string>(), TypeReference.Create<int>()))
+			.That(loggerClass.HasMethod("Log", TypeReference.Create<string>(), TypeReference.Create<int>()))
 			.IsTrue()
 			.Because("the generated logger must contain the scoped log method");
 		await Assert
-			.That(loggerClass.HasMethodReturnType(query, "Log", TypeReference.Create<IDisposable>()))
+			.That(loggerClass.HasMethodReturnType("Log", TypeReference.Create<IDisposable>()))
 			.IsTrue()
 			.Because("the scoped log method must return IDisposable");
 	}
@@ -114,11 +114,11 @@ public partial class TestClass1 {{
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", @namespace);
 		await Assert
-			.That(loggerClass.HasMethod(query, "Log", TypeReference.Create<string>(), TypeReference.Create<int>()))
+			.That(loggerClass.HasMethod("Log", TypeReference.Create<string>(), TypeReference.Create<int>()))
 			.IsTrue()
 			.Because("the generated logger must contain the scoped log method");
 		await Assert
-			.That(loggerClass.HasMethodReturnType(query, "Log", TypeReference.Create<IDisposable>()))
+			.That(loggerClass.HasMethodReturnType("Log", TypeReference.Create<IDisposable>()))
 			.IsTrue()
 			.Because("the scoped log method must return IDisposable");
 	}

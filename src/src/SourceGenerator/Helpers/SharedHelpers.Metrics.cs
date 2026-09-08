@@ -12,7 +12,14 @@ partial class SharedHelpers
 
 	public static MeterAttributeData? GetMeterAttribute(ISymbol symbol, CancellationToken token)
 	{
-		if (!Utilities.TryContainsAttribute(symbol, TypeLibrary.Metrics.MeterAttribute, token, out var attributeData))
+		if (
+			!Utilities.TryContainsAttribute(
+				symbol,
+				TypeLibrary.Purview.Telemetry.MeterAttribute,
+				token,
+				out var attributeData
+			)
+		)
 		{
 			return null;
 		}
@@ -32,7 +39,7 @@ partial class SharedHelpers
 		if (
 			!Utilities.TryContainsAttribute(
 				symbol,
-				TypeLibrary.Metrics.MeterGenerationAttribute,
+				TypeLibrary.Purview.Telemetry.MeterGenerationAttribute,
 				token,
 				out var attributeData
 			)

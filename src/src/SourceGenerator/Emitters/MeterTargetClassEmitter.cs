@@ -7,9 +7,9 @@ namespace Purview.Telemetry.SourceGenerator.Emitters;
 static partial class MeterTargetClassEmitter
 {
 	static TypeReference GetDictionaryType(CodeWriter writer) =>
-		TypeLibrary.System.Dictionary.MakeGeneric(
-			PurviewTypeLibrary.System.String.AsTypeReference(),
-			PurviewTypeLibrary.System.Object.AsTypeReference().Nullable(writer)
+		TypeLibrary.System.Collections.Generic.Dictionary.MakeGeneric(
+			TypeLibrary.System.String.AsTypeReference(),
+			TypeLibrary.System.Object.AsTypeReference().Nullable(writer)
 		);
 
 	const string MeterFieldName = "_meter";

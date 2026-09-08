@@ -33,7 +33,7 @@ public interface ITestMetrics {
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "Metric"))
+			.That(metricsClass.HasMethod("Metric"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the instrument method");
 

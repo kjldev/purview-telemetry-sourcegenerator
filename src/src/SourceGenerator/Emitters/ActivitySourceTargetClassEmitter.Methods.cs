@@ -49,7 +49,7 @@ partial class ActivitySourceTargetClassEmitter
 			writer.MethodScope(
 				new MethodDeclarationOptions(
 					PropertyLibrary.Activities.RecordExceptionMethodName,
-					PurviewTypeLibrary.System.Void.AsTypeReference()
+					TypeLibrary.System.Void.AsTypeReference()
 				)
 				{
 					IsStatic = true,
@@ -57,10 +57,10 @@ partial class ActivitySourceTargetClassEmitter
 					[
 						new ParameterDeclarationOptions(
 							"activity",
-							TypeLibrary.Activities.SystemDiagnostics.Activity.MakeNullable(writer)
+							TypeLibrary.System.Diagnostics.Activity.MakeNullable(writer)
 						),
 						new ParameterDeclarationOptions("exception", TypeLibrary.System.Exception.MakeNullable(writer)),
-						new ParameterDeclarationOptions("escape", PurviewTypeLibrary.System.Boolean.AsTypeReference()),
+						new ParameterDeclarationOptions("escape", TypeLibrary.System.Boolean.AsTypeReference()),
 					],
 					IncludeGeneratedAttributes = false,
 				}
@@ -73,9 +73,9 @@ partial class ActivitySourceTargetClassEmitter
 
 			const string tagsListVariableName = "tagsCollection";
 			writer.Assignment(
-				TypeLibrary.Activities.SystemDiagnostics.ActivityTagsCollection,
+				TypeLibrary.System.Diagnostics.ActivityTagsCollection,
 				tagsListVariableName,
-				"new " + TypeLibrary.Activities.SystemDiagnostics.ActivityTagsCollection + "()"
+				"new " + TypeLibrary.System.Diagnostics.ActivityTagsCollection + "()"
 			);
 
 			EmitExceptionParam(writer, tagsListVariableName, "escape", "exception");
@@ -84,11 +84,11 @@ partial class ActivitySourceTargetClassEmitter
 
 			writer
 				.NewLine()
-				.Write(TypeLibrary.Activities.SystemDiagnostics.ActivityEvent)
+				.Write(TypeLibrary.System.Diagnostics.ActivityEvent)
 				.Write(' ')
 				.Write(eventVariableName)
 				.Write(" = new ")
-				.Write(TypeLibrary.Activities.SystemDiagnostics.ActivityEvent)
+				.Write(TypeLibrary.System.Diagnostics.ActivityEvent)
 				// name:
 				.Write("(name: ")
 				.Write(PropertyLibrary.Activities.Tag_ExceptionEventName.Wrap())
@@ -299,9 +299,7 @@ partial class ActivitySourceTargetClassEmitter
 			)
 		)
 		{
-			var returnsActivity = methodTarget.ReturnType.Identity.Equals(
-				TypeLibrary.Activities.SystemDiagnostics.Activity
-			);
+			var returnsActivity = methodTarget.ReturnType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity);
 			var paramList = string.Join(", ", methodTarget.Parameters.Select(p => p.ParameterName));
 
 			// Create filtered parameter list for Logging/Metrics (excludes Activity-related types)
@@ -309,11 +307,11 @@ partial class ActivitySourceTargetClassEmitter
 				", ",
 				methodTarget
 					.Parameters.Where(p =>
-						!p.ParameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity)
-						&& !p.ParameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityContext)
-						&& !p.ParameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityLink)
-						&& !p.ParameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.ActivityLinkArray)
-						&& !p.ParameterType.Identity.Equals(TypeLibrary.System.TagList)
+						!p.ParameterType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity)
+						&& !p.ParameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityContext)
+						&& !p.ParameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityLink)
+						&& !p.ParameterType.Identity.Equals(TypeLibrary.System.Diagnostics.ActivityLinkArray)
+						&& !p.ParameterType.Identity.Equals(TypeLibrary.System.Diagnostics.TagList)
 					)
 					.Select(p => p.ParameterName)
 			);
@@ -423,7 +421,7 @@ partial class ActivitySourceTargetClassEmitter
 		var isValidReturnType = isEvent
 			? methodTarget.ReturnType.Identity.SpecialType == SpecialType.System_Void
 			: methodTarget.ReturnType.Identity.SpecialType == SpecialType.System_Void
-				|| methodTarget.ReturnType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity);
+				|| methodTarget.ReturnType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity);
 
 		if (!isValidReturnType)
 		{
@@ -439,7 +437,7 @@ partial class ActivitySourceTargetClassEmitter
 			// Here we're opting in to generate diagnostics for missing activity return/ params.
 			if (methodTarget.MethodType == ActivityMethodType.Activity)
 			{
-				if (!methodTarget.ReturnType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity))
+				if (!methodTarget.ReturnType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity))
 				{
 					output.Context.Diagnostic($"No Activity returned for {methodTarget.MethodName}.");
 				}
@@ -455,9 +453,7 @@ partial class ActivitySourceTargetClassEmitter
 					output.Context.Diagnostic($"No Activity parameter is defined on {methodTarget.MethodName}.");
 				}
 				else if (
-					!methodTarget
-						.Parameters[0]
-						.ParameterType.Identity.Equals(TypeLibrary.Activities.SystemDiagnostics.Activity)
+					!methodTarget.Parameters[0].ParameterType.Identity.Equals(TypeLibrary.System.Diagnostics.Activity)
 				)
 				{
 					output.Context.Diagnostic(

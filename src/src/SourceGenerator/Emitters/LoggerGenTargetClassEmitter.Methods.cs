@@ -106,7 +106,7 @@ partial class LoggerGenTargetClassEmitter
 
 		var returnType = methodTarget.IsScoped
 			? TypeLibrary.System.IDisposable.AsTypeReference().Nullable(writer)
-			: PurviewTypeLibrary.System.Void.AsTypeReference();
+			: TypeLibrary.System.Void.AsTypeReference();
 
 		writer.NewLine();
 
@@ -303,7 +303,7 @@ partial class LoggerGenTargetClassEmitter
 			.Write(
 				writer.IsNullableContextEnabled is null or true
 					? "new ("
-					: "new " + TypeLibrary.Logging.MicrosoftExtensions.EventId + "("
+					: "new " + TypeLibrary.Microsoft.Extensions.Logging.EventId + "("
 			)
 			.Write(eventId.ToString(CultureInfo.InvariantCulture))
 			.Write(", nameof(")
@@ -378,7 +378,7 @@ partial class LoggerGenTargetClassEmitter
 			.Write(
 				writer.IsNullableContextEnabled is null or true
 					? "new ("
-					: "new " + TypeLibrary.Logging.MicrosoftExtensions.EventId + "("
+					: "new " + TypeLibrary.Microsoft.Extensions.Logging.EventId + "("
 			)
 			.Write(eventId.ToString(CultureInfo.InvariantCulture))
 			.Write(", nameof(")
@@ -453,7 +453,7 @@ partial class LoggerGenTargetClassEmitter
 			.Write("var ")
 			.Write(stateVarName)
 			.Write(" = ")
-			.Write(TypeLibrary.Logging.MicrosoftExtensions.LoggerMessageHelper)
+			.Write(TypeLibrary.Microsoft.Extensions.Logging.LoggerMessageHelper)
 			.Write('.')
 			.Line("ThreadLocalState;")
 			.Write(stateVarName)
@@ -604,7 +604,7 @@ partial class LoggerGenTargetClassEmitter
 			writer
 				.Write(value)
 				.Write(" == null ? null : ")
-				.Write(TypeLibrary.Logging.MicrosoftExtensions.LoggerMessageHelper)
+				.Write(TypeLibrary.Microsoft.Extensions.Logging.LoggerMessageHelper)
 				.Write(".Stringify(")
 				.Write(value)
 				.Write(')');
@@ -853,7 +853,7 @@ partial class LoggerGenTargetClassEmitter
 		var count = nonExceptionParams.Count + 1; // +1 for {OriginalFormat}
 
 		var kvpType =
-			$"global::System.Collections.Generic.KeyValuePair<string, {PurviewTypeLibrary.System.Object.MakeNullable(writer)}>";
+			$"global::System.Collections.Generic.KeyValuePair<string, {TypeLibrary.System.Object.MakeNullable(writer)}>";
 		var iReadOnlyListType = $"global::System.Collections.Generic.IReadOnlyList<{kvpType}>";
 		var ienumeratorType = $"global::System.Collections.Generic.IEnumerator<{kvpType}>";
 		var ienumerableKvpType = $"global::System.Collections.Generic.IEnumerable<{kvpType}>";
@@ -873,7 +873,7 @@ partial class LoggerGenTargetClassEmitter
 		)
 		{
 			writer.Field(
-				new FieldDeclarationOptions("s_originalFormat", PurviewTypeLibrary.System.String.AsTypeReference())
+				new FieldDeclarationOptions("s_originalFormat", TypeLibrary.System.String.AsTypeReference())
 				{
 					IsStatic = true,
 					IsReadOnly = true,
@@ -929,7 +929,7 @@ partial class LoggerGenTargetClassEmitter
 				.Property(
 					new PropertyDeclarationOptions(
 						"Count",
-						PurviewTypeLibrary.System.Int32.AsTypeReference(),
+						TypeLibrary.System.Int32.AsTypeReference(),
 						TypeDeclarationAccessibility.Public
 					)
 					{
@@ -942,7 +942,7 @@ partial class LoggerGenTargetClassEmitter
 			writer.Indexer(
 				new IndexerDeclarationOptions(
 					new TypeReference(new TypeIdentity(kvpType, null)),
-					new ParameterDeclarationOptions("index", PurviewTypeLibrary.System.Int32.AsTypeReference())
+					new ParameterDeclarationOptions("index", TypeLibrary.System.Int32.AsTypeReference())
 				)
 				{
 					Accessibility = TypeDeclarationAccessibility.Public,
@@ -1036,7 +1036,7 @@ partial class LoggerGenTargetClassEmitter
 			);
 
 			writer.Field(
-				new FieldDeclarationOptions("_index", PurviewTypeLibrary.System.Int32.AsTypeReference())
+				new FieldDeclarationOptions("_index", TypeLibrary.System.Int32.AsTypeReference())
 				{
 					IncludeGeneratedAttributes = false,
 				}
@@ -1075,7 +1075,7 @@ partial class LoggerGenTargetClassEmitter
 				)
 				.NewLine()
 				.NewLine()
-				.Write(PurviewTypeLibrary.System.Object.MakeNullable(writer))
+				.Write(TypeLibrary.System.Object.MakeNullable(writer))
 				.Write(" global::System.Collections.IEnumerator.Current")
 				.Line(" => Current;")
 				.NewLine()
@@ -1083,7 +1083,7 @@ partial class LoggerGenTargetClassEmitter
 				.MethodExpression(
 					new MethodDeclarationOptions(
 						"MoveNext",
-						PurviewTypeLibrary.System.Boolean.AsTypeReference(),
+						TypeLibrary.System.Boolean.AsTypeReference(),
 						TypeDeclarationAccessibility.Public
 					)
 					{
@@ -1096,7 +1096,7 @@ partial class LoggerGenTargetClassEmitter
 				.MethodExpression(
 					new MethodDeclarationOptions(
 						"Reset",
-						PurviewTypeLibrary.System.Void.AsTypeReference(),
+						TypeLibrary.System.Void.AsTypeReference(),
 						TypeDeclarationAccessibility.Public
 					)
 					{
@@ -1109,7 +1109,7 @@ partial class LoggerGenTargetClassEmitter
 				.Method(
 					new MethodDeclarationOptions(
 						"Dispose",
-						PurviewTypeLibrary.System.Void.AsTypeReference(),
+						TypeLibrary.System.Void.AsTypeReference(),
 						TypeDeclarationAccessibility.Public
 					)
 					{
@@ -1150,7 +1150,7 @@ partial class LoggerGenTargetClassEmitter
 		var count = nonExceptionParams.Count + 1; // +1 for {OriginalFormat}
 
 		var kvpType =
-			$"global::System.Collections.Generic.KeyValuePair<string, {PurviewTypeLibrary.System.Object.MakeNullable(writer)}>";
+			$"global::System.Collections.Generic.KeyValuePair<string, {TypeLibrary.System.Object.MakeNullable(writer)}>";
 		var iReadOnlyListType = $"global::System.Collections.Generic.IReadOnlyList<{kvpType}>";
 		var ienumeratorType = $"global::System.Collections.Generic.IEnumerator<{kvpType}>";
 		var ienumerableKvpType = $"global::System.Collections.Generic.IEnumerable<{kvpType}>";
@@ -1170,7 +1170,7 @@ partial class LoggerGenTargetClassEmitter
 		)
 		{
 			writer.Field(
-				new FieldDeclarationOptions("s_originalFormat", PurviewTypeLibrary.System.String.AsTypeReference())
+				new FieldDeclarationOptions("s_originalFormat", TypeLibrary.System.String.AsTypeReference())
 				{
 					IsStatic = true,
 					IsReadOnly = true,
@@ -1234,7 +1234,7 @@ partial class LoggerGenTargetClassEmitter
 				.Method(
 					new MethodDeclarationOptions(
 						"ToString",
-						PurviewTypeLibrary.System.String.AsTypeReference(),
+						TypeLibrary.System.String.AsTypeReference(),
 						TypeDeclarationAccessibility.Public
 					)
 					{
@@ -1264,7 +1264,7 @@ partial class LoggerGenTargetClassEmitter
 				.Property(
 					new PropertyDeclarationOptions(
 						"Count",
-						PurviewTypeLibrary.System.Int32.AsTypeReference(),
+						TypeLibrary.System.Int32.AsTypeReference(),
 						TypeDeclarationAccessibility.Public
 					)
 					{
@@ -1277,7 +1277,7 @@ partial class LoggerGenTargetClassEmitter
 			writer.Indexer(
 				new IndexerDeclarationOptions(
 					new TypeReference(new TypeIdentity(kvpType, null)),
-					new ParameterDeclarationOptions("index", PurviewTypeLibrary.System.Int32.AsTypeReference())
+					new ParameterDeclarationOptions("index", TypeLibrary.System.Int32.AsTypeReference())
 				)
 				{
 					Accessibility = TypeDeclarationAccessibility.Public,
@@ -1352,7 +1352,7 @@ partial class LoggerGenTargetClassEmitter
 
 		var returnType = methodTarget.IsScoped
 			? TypeLibrary.System.IDisposable.MakeNullable(writer)
-			: PurviewTypeLibrary.System.Void.AsTypeReference();
+			: TypeLibrary.System.Void.AsTypeReference();
 
 		writer.NewLine();
 

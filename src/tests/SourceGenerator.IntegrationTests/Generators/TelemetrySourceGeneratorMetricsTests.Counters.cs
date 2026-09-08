@@ -32,7 +32,7 @@ public interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "AutoCounter", TypeReference.Create<int>()))
+			.That(metricsClass.HasMethod("AutoCounter", TypeReference.Create<int>()))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 	}
@@ -93,9 +93,7 @@ public interface ITestMetrics
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(
-				metricsClass.HasMethod(query, "AutoCounter", TypeReference.Create<int>(), TypeReference.Create<bool>())
-			)
+			.That(metricsClass.HasMethod("AutoCounter", TypeReference.Create<int>(), TypeReference.Create<bool>()))
 			.IsTrue()
 			.Because("the generated metrics class must contain the auto-counter method");
 	}
@@ -176,7 +174,7 @@ public interface ITestMetrics {
 		foreach (var methodName in counterMethods)
 		{
 			await Assert
-				.That(metricsClass.HasMethod(query, methodName))
+				.That(metricsClass.HasMethod(methodName))
 				.IsTrue()
 				.Because($"the generated metrics class must contain the {methodName} method");
 		}
@@ -215,7 +213,7 @@ public interface ITestMetrics {
 		foreach (var methodName in counterMethods)
 		{
 			await Assert
-				.That(metricsClass.HasMethod(query, methodName))
+				.That(metricsClass.HasMethod(methodName))
 				.IsTrue()
 				.Because($"the generated metrics class must contain the {methodName} method");
 		}
@@ -253,15 +251,15 @@ public interface ITestMetrics {
 		var query = generationResult.Generated();
 		var metricsClass = query.GetClass("TestMetricsCore", "Testing");
 		await Assert
-			.That(metricsClass.HasMethod(query, "ObservableCounter"))
+			.That(metricsClass.HasMethod("ObservableCounter"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the observable counter method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "ObservableCounter2"))
+			.That(metricsClass.HasMethod("ObservableCounter2"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the second observable counter method");
 		await Assert
-			.That(metricsClass.HasMethod(query, "ObservableCounter3"))
+			.That(metricsClass.HasMethod("ObservableCounter3"))
 			.IsTrue()
 			.Because("the generated metrics class must contain the third observable counter method");
 	}

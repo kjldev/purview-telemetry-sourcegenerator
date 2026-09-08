@@ -138,7 +138,7 @@ partial class MeterTargetClassEmitter
 
 		var returnType =
 			isMultiTarget && !metricsOwnsPublicMethod
-				? PurviewTypeLibrary.System.Void.AsTypeReference()
+				? TypeLibrary.System.Void.AsTypeReference()
 				: methodTarget.ReturnType;
 
 		var parameters = BuildParameters(methodTarget);
@@ -212,12 +212,12 @@ partial class MeterTargetClassEmitter
 
 				var type = methodTarget.InstrumentMeasurementType;
 				if (methodTarget.MeasurementParameter!.IsMeasurement)
-					type = TypeLibrary.Metrics.SystemDiagnostics.Measurement.MakeGeneric(type);
+					type = TypeLibrary.System.Diagnostics.Metrics.Measurement.MakeGeneric(type);
 
 				if (methodTarget.MeasurementParameter!.IsIEnumerable)
-					type = TypeLibrary.System.GenericIEnumerable.MakeGeneric(type);
+					type = TypeLibrary.System.Collections.Generic.IEnumerable.MakeGeneric(type);
 
-				type = PurviewTypeLibrary.System.Func.MakeGeneric(type);
+				type = TypeLibrary.System.Func.MakeGeneric(type);
 
 				return new ParameterDeclarationOptions(p.ParameterName, new TypeReference(type));
 			}),
@@ -373,7 +373,7 @@ partial class MeterTargetClassEmitter
 		}
 
 		var tagVariableName = Utilities.LowercaseFirstChar(methodTarget.MethodName + "TagList");
-		writer.Assignment(TypeLibrary.System.TagList, tagVariableName, "new()").NewLine();
+		writer.Assignment(TypeLibrary.System.Diagnostics.TagList, tagVariableName, "new()").NewLine();
 
 		foreach (var param in methodTarget.Tags)
 		{

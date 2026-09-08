@@ -31,11 +31,11 @@ public interface ITestLogger {
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
-			.That(loggerClass.HasMethod(query, "RegularV2LogEntry", TypeReference.Create<int>()))
+			.That(loggerClass.HasMethod("RegularV2LogEntry", TypeReference.Create<int>()))
 			.IsTrue()
 			.Because("the generated logger must contain the regular V2 log method");
 		await Assert
-			.That(loggerClass.HasMethod(query, "HotPathV1LogEntry", TypeReference.Create<int>()))
+			.That(loggerClass.HasMethod("HotPathV1LogEntry", TypeReference.Create<int>()))
 			.IsTrue()
 			.Because("the generated logger must contain the V1-overridden log method");
 	}
@@ -66,11 +66,11 @@ public interface ITestLogger {
 		var query = generationResult.Generated();
 		var loggerClass = query.GetClass("TestLoggerCore", "Testing");
 		await Assert
-			.That(loggerClass.HasMethod(query, "RegularV2LogEntry", TypeReference.Create<string>()))
+			.That(loggerClass.HasMethod("RegularV2LogEntry", TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated logger must contain the regular V2 log method");
 		await Assert
-			.That(loggerClass.HasMethod(query, "HotPathDebugEntry", TypeReference.Create<string>()))
+			.That(loggerClass.HasMethod("HotPathDebugEntry", TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated logger must contain the V1-overridden debug log method");
 	}

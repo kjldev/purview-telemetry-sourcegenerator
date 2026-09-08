@@ -40,13 +40,12 @@ public interface ITestActivities
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity"))
+			.That(implClass.HasMethod("Activity"))
 			.IsTrue()
 			.Because("the generated implementation must contain the activity method");
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"ThisIsAMethod",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -87,13 +86,12 @@ public interface ITestActivities
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity"))
+			.That(implClass.HasMethod("Activity"))
 			.IsTrue()
 			.Because("the generated implementation must contain the activity method");
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Event",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -136,13 +134,12 @@ public interface ITestActivities
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity"))
+			.That(implClass.HasMethod("Activity"))
 			.IsTrue()
 			.Because("the generated implementation must contain the activity method");
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Event",
 					TypeReference.Create<Activity>(),
 					TypeReference.Create<string>(),
@@ -185,11 +182,11 @@ public interface ITestActivities
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity"))
+			.That(implClass.HasMethod("Activity"))
 			.IsTrue()
 			.Because("the generated implementation must contain the activity method");
 		await Assert
-			.That(implClass.HasMethod(query, "Event", TypeReference.Create<Activity>()))
+			.That(implClass.HasMethod("Event", TypeReference.Create<Activity>()))
 			.IsTrue()
 			.Because("the generated implementation must contain the event method");
 	}
@@ -225,11 +222,11 @@ public interface ITestActivities
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Activity"))
+			.That(implClass.HasMethod("Activity"))
 			.IsTrue()
 			.Because("the generated implementation must contain the activity method");
 		await Assert
-			.That(implClass.HasMethod(query, "Event", TypeReference.Create<Activity>()))
+			.That(implClass.HasMethod("Event", TypeReference.Create<Activity>()))
 			.IsTrue()
 			.Because("the generated implementation must contain the error-status event method");
 	}
@@ -330,13 +327,11 @@ public interface ITestActivities
 		var query = generationResult.Generated();
 		var implClass = query.GetClass("TestActivitiesCore", "Testing");
 		await Assert
-			.That(implClass.HasMethod(query, "Event", TypeReference.Create<Activity>(), TypeReference.Create<string>()))
+			.That(implClass.HasMethod("Event", TypeReference.Create<Activity>(), TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated implementation must contain the first status-description event method");
 		await Assert
-			.That(
-				implClass.HasMethod(query, "Event2", TypeReference.Create<Activity>(), TypeReference.Create<string>())
-			)
+			.That(implClass.HasMethod("Event2", TypeReference.Create<Activity>(), TypeReference.Create<string>()))
 			.IsTrue()
 			.Because("the generated implementation must contain the second status-description event method");
 	}

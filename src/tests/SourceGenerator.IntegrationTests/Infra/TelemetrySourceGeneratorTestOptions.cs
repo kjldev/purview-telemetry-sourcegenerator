@@ -2,9 +2,7 @@ using System.Diagnostics;
 using System.Diagnostics.Metrics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Purview.SourceGeneratorFramework;
 using Purview.Telemetry.SourceGenerator.Analyzers;
-using Purview.Telemetry.SourceGenerator.Helpers;
 
 namespace Purview.Telemetry.SourceGenerator.Infra;
 
@@ -33,11 +31,8 @@ public sealed record TelemetrySourceGeneratorTestOptions : SourceGeneratorTestOp
 
 		ExcludeGeneratedSourceHintNames =
 		[
-			PurviewTypeLibrary.Microsoft.CodeAnalysis.EmbeddedAttribute,
-			.. TypeLibrary.TelemetryShared.GetGeneratedTypes().Select(c => c.MetadataFullName),
-			.. TypeLibrary.Activities.GetGeneratedTypes().Select(c => c.MetadataFullName),
-			.. TypeLibrary.Logging.GetGeneratedTypes().Select(c => c.MetadataFullName),
-			.. TypeLibrary.Metrics.GetGeneratedTypes().Select(c => c.MetadataFullName),
+			TypeLibrary.Microsoft.CodeAnalysis.EmbeddedAttribute,
+			.. TypeLibrary.Purview.Telemetry.GetTypes().Select(c => c.Identity.MetadataFullName),
 		];
 	}
 

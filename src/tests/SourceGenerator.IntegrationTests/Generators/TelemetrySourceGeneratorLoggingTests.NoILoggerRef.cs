@@ -39,7 +39,6 @@ public interface ITestActivities {
 		await Assert
 			.That(
 				implClass.HasMethod(
-					query,
 					"Activity",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),

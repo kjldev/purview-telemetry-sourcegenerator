@@ -44,13 +44,13 @@ public sealed partial class TelemetrySourceGenerator : IIncrementalGenerator
 		var generationContext = IncrementalPipeline.GenerationContextValueProvider<
 			TelemetryCapabilities,
 			TelemetrySourceGenerator
-		>(context, BuildCapabilities, null);
+		>(context, BuildCapabilities, PropertyLibrary.DisableTelemetryGenerator);
 
 		// Create shared providers so Activities/Metrics pipelines aren't registered twice.
 		var activityProvider = IncrementalPipeline
 			.ForAttributeWithMetadataName(
 				context,
-				TypeLibrary.Activities.ActivitySourceAttribute,
+				TypeLibrary.Purview.Telemetry.ActivitySourceAttribute,
 				transform: static (ctx, cancellationToken) =>
 					PipelineHelpers.BuildActivityTransform(ctx, cancellationToken),
 				predicate: static (node, token) => PipelineHelpers.HasActivityTargetAttribute(node, token),
@@ -61,7 +61,7 @@ public sealed partial class TelemetrySourceGenerator : IIncrementalGenerator
 		var meterProvider = IncrementalPipeline
 			.ForAttributeWithMetadataName(
 				context,
-				TypeLibrary.Metrics.MeterAttribute,
+				TypeLibrary.Purview.Telemetry.MeterAttribute,
 				transform: static (ctx, cancellationToken) =>
 					PipelineHelpers.BuildMeterTransform(ctx, cancellationToken),
 				predicate: static (node, token) => PipelineHelpers.HasMeterTargetAttribute(node, token),

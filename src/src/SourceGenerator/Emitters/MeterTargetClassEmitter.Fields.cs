@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Purview.Telemetry.SourceGenerator.Helpers;
 using Purview.Telemetry.SourceGenerator.Records;
 
 namespace Purview.Telemetry.SourceGenerator.Emitters;
@@ -26,7 +25,7 @@ partial class MeterTargetClassEmitter
 				.Field(
 					new FieldDeclarationOptions(
 						MeterFieldName,
-						TypeLibrary.Metrics.SystemDiagnostics.Meter.AsTypeReference()
+						TypeLibrary.System.Diagnostics.Metrics.Meter.AsTypeReference()
 					)
 					{
 						IsReadOnly = true,
@@ -41,7 +40,7 @@ partial class MeterTargetClassEmitter
 				.Field(
 					new FieldDeclarationOptions(
 						MeterFieldName,
-						TypeLibrary.Metrics.SystemDiagnostics.Meter.AsTypeReference()
+						TypeLibrary.System.Diagnostics.Metrics.Meter.AsTypeReference()
 					)
 					{
 						Initializer = writer.IsNullableContextEnabled is null or true ? "default!" : "default",
@@ -66,7 +65,7 @@ partial class MeterTargetClassEmitter
 			}
 
 			var type = TypeLibrary
-				.Metrics.InstrumentTypeMap[method.InstrumentAttribute.InstrumentType]
+				.Purview.Telemetry.InstrumentTypeMap[method.InstrumentAttribute.InstrumentType]
 				.MakeGeneric(method.InstrumentMeasurementType);
 
 			// Observable instruments are registered via callback, not assigned in the constructor,

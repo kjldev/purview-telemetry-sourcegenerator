@@ -34,7 +34,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -91,7 +90,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -103,7 +101,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log_EventId_1",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -115,7 +112,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log_EventId_3",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -127,7 +123,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log_MessageTemplate_1",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -139,7 +134,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log_MessageTemplate_2",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
@@ -151,7 +145,6 @@ public interface ITestLogger
 		await Assert
 			.That(
 				loggerClass.HasMethod(
-					query,
 					"Log_MessageTemplate_3",
 					TypeReference.Create<string>(),
 					TypeReference.Create<int>(),
